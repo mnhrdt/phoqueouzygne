@@ -22,9 +22,9 @@ export OS=`uname -p`
 #
 #  this is the gmt4 setup when mac ports is used
 #
-export GMTHOME=/usr/lib/gmt
+export GMTHOME=/opt/gmt4
 export NETCDFHOME=/usr/lib
-export GMTSARHOME=/usr/local/GMTSAR
+export GMTSARHOME=`pwd`
 #
 #  don't change the next line
 #

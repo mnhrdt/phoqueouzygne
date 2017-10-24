@@ -17,7 +17,7 @@ all:
 	cd $(ERSPRE); make
 	cd $(GMTSAR); make 
 	cd $(SNAPHU); make clean ; make ; make clean
-#	cd $(S1APRE); make
+	cd $(S1APRE); make
 #	cd $(TSXPRE); make
 #	cd $(CSKPRE); make
 #	cd $(RS2PRE); make
