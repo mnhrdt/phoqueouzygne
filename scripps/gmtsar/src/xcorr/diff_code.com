@@ -1,0 +1,11 @@
+diff  cfft2d_1d.c  /scratch/rjm_xcorr/xcorr/cfft2d_1d.c
+diff  do_freq_xcorr.c  /scratch/rjm_xcorr/xcorr/do_freq_xcorr.c
+diff  do_time_int_xcorr.c  /scratch/rjm_xcorr/xcorr/do_time_int_xcorr.c
+diff  fft_interpolate_routines.c  /scratch/rjm_xcorr/xcorr/fft_interpolate_routines.c
+diff  get_locations.c  /scratch/rjm_xcorr/xcorr/get_locations.c
+diff  highres.c  /scratch/rjm_xcorr/xcorr/highres.c
+diff  parse_xcorr_input.c  /scratch/rjm_xcorr/xcorr/parse_xcorr_input.c
+diff  read_xcorr_data.c  /scratch/rjm_xcorr/xcorr/read_xcorr_data.c
+diff  transpose.c  /scratch/rjm_xcorr/xcorr/transpose.c
+diff  xcorr.c  /scratch/rjm_xcorr/xcorr/xcorr.c
+diff  xcorr_utils.c  /scratch/rjm_xcorr/xcorr/xcorr_utils.c

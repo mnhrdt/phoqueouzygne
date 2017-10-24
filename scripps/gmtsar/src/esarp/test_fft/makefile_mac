@@ -1,0 +1,20 @@
+#
+OS = `arch`
+SLIB = ../../../lib/$(OS)/libgmtsar.a
+#CFLAGS = -O -dalign -Bstatic $(M64)
+CFLAGS = -O -dalign -m64
+VEC     = -framework veclib
+ACC	= -framework Accelerate
+FW	= /sw/lib/libfftw3f.3.dylib
+
+#testcfft1d:	testcfft1d.o cfft1d_fftw.o
+#	cc $(CFLAGS) testcfft1d.o cfft1d_fftw.o $(FW) -lm -o testcfft1d_fftw
+#	rm -f *.o *.*.*
+
+testcfft1d:	testcfft1d.o cfft1d_veclib.o
+	cc $(CFLAGS) testcfft1d.o cfft1d_veclib.o -lm $(ACC) -lm -o testcfft1d_veclib
+	rm -f *.o *.*.*
+
+#testcfft1d:	testcfft1d.o
+#	cc $(CFLAGS) testcfft1d.o $(SLIB) $(ACC) -lm -o testcfft1d
+#	rm -f *.o *.*.*

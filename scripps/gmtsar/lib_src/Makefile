@@ -1,0 +1,74 @@
+# Makefile for lib_src 
+LIB = libgmtsar.a
+INC = -I../include -I$(GMTHOME)/include -I$(NETCDFHOME)/include
+CC = gcc 
+CFLAGS = -O2  -Bstatic $(INC) $(M64) -w
+FFLAGS =  -O2 
+#
+#  set the default style for Debian LINUX to classic
+#
+	LINK = ar cru
+	STYLE = classic
+ifeq ($(OS),i686)
+	LINK = ar cru
+	STYLE = classic
+endif
+ifeq ($(OS),ia64)
+	LINK = ar cru
+	STYLE = classic
+endif
+ifeq ($(OS),x86_64)
+	LINK = ar cru
+	STYLE = classic
+endif
+ifeq ($(OS),sparc)
+	LINK = ar cru
+	STYLE = classic
+endif
+ifeq ($(OS),powerpc)
+	STYLE = modern
+endif
+ifeq ($(OS),i386)
+	STYLE = modern
+endif
+
+SRCS =	utils.c \
+	sio_struct.c \
+	grdfile_util.c \
+	grdfile_binary_utils.c \
+	readgrd.c \
+	writegrd.c \
+	siocomplex.c \
+	get_params.c \
+	cfft1d.c \
+	spline.c \
+	fftpack.c \
+	plxyz.c \
+	ldr_orbit.c \
+	interpolate_orbit.c \
+	read_orb.c \
+	write_orb.c \
+	utils.c \
+	hermite_c.c \
+	polyfit.c \
+	calc_dop.c \
+	set_prm_defaults.c
+
+OBJS= $(SRCS:.f=.o) $(SRCS:.c=.o)
+
+$(LIB) : $(OBJS)
+ifeq ($(STYLE),classic)
+	ar rv $(LIB) $?
+endif
+ifeq ($(STYLE),modern)
+	libtool -static  *.o -o $(LIB)
+endif
+	ranlib  $(LIB)
+
+install:
+	mv *.a ../lib
+	chmod 644 ../lib/$(LIB)
+	ranlib  ../lib/$(LIB)
+
+clean:
+	\rm *.o 

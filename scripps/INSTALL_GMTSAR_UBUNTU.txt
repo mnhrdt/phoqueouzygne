@@ -1,0 +1,72 @@
+#
+#  Instructions for installing and testing GMTSAR V4 on UBUNTU
+#
+#  David Sandwell
+#  April 11, 2015
+#
+#   install csh
+#
+sudo apt install csh
+#
+#   install geotiff
+#
+sudo apt install libgeotiff-dev
+#
+#   install hdf5
+#
+sudo apt install libhdf5-dev
+#
+#   install boost
+#
+sudo apt install libboost-all-dev
+#
+#   install gdal
+#
+sudo apt install libgdal-dev
+sudo apt install gdal-bin
+#
+#   install gmt4
+#
+sudo apt install libgmt-dev
+sudo apt install gmt
+#
+# download GMTSAR
+#
+cd /usr/local
+mkdir GMTSAR
+mkdir orbits
+sudo chown -R class GMTSAR
+sudo chown -R class orbits
+cd gmtsar
+#
+# use the gmtsar web site to download the code ad orbits
+#http://topex.ucsd.edu/gmtsar
+#
+cd /usr/local/GMTSAR
+tar xvf /home/class/Downloads/GMTSAR.tar .
+cd /usr/local/orbits
+tar xvf /home/class/Downloads/ORBITS.tar .
+cd /home/class/Downloads
+rm *.tar
+#
+#
+#  edit your .bashrc file and insert the following lines at the end
+export PATH=$PATH:/usr/bin:/usr/lib/gmt/bin
+source /usr/local/GMTSAR/gmtsar_config_linux_bash
+#
+#  get a new terminal window and make sure the .bashrc files works
+#  then go to the GMTSAR directory and make te programs
+#
+cd /usr/local/GMTSAR
+make -f Makefile_all_preproc
+#
+#  check log for errors
+#
+# get a new window and type
+#
+grdinfo
+esarp
+gmtsar.csh
+ALOS_baseline
+make_slc_s1a
+

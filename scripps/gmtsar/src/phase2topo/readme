@@ -1,0 +1,11 @@
+the old phase2topo from siosar is accurate but it assumes alpha = 0, 
+which is not suitable for DEM error recovery after stacking. 
+
+the linear correction of phase2topo is suitable for DEM 
+error recovery after stacking and is good enough from my 
+calculations because the starting SRTM DEM is quite accurate. 
+
+I will use this linear relationship between residual phase and topo error. 
+
+Xiaopeng Nov 23 2010
+

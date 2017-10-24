@@ -1,0 +1,57 @@
+/************************************************************************
+* bi-cubic interpolation algorithm modified from GMT                    *
+************************************************************************/
+/************************************************************************
+* Creator: David Sandwell       (Scripps Institution of Oceanography)   *
+* Date   : 03/22/13                                                     *
+************************************************************************/
+#include <math.h>
+#include <stdio.h>
+
+double cubic_kernel( double, double);
+
+void bicubic_one(double *rdata, double *idata, double x, double y, double *cz)
+{
+	int i, j, ij;
+	double wx[4], wy[4];
+        double arg0, arg1, arg2, arg3, w, wsum, rsum, isum;
+	double a = -0.3;
+
+	/* These weights are based on the cubic convolution kernel, see for example
+	   http://undergraduate.csse.uwa.edu.au/units/CITS4241/Handouts/Lecture04.html
+	   These weights include a free parameter (a).
+	*/
+
+	arg0=1.+x;
+	arg1=x;
+	arg2=1.-x;
+	arg3=2.-x;
+	wx[0] = cubic_kernel(arg0,a);
+	wx[1] = cubic_kernel(arg1,a);
+	wx[2] = cubic_kernel(arg2,a);
+	wx[3] = cubic_kernel(arg3,a);
+
+	arg0=1.+y;
+	arg1=y;
+	arg2=1.-y;
+	arg3=2.-y;
+	wy[0] = cubic_kernel(arg0,a);
+	wy[1] = cubic_kernel(arg1,a);
+	wy[2] = cubic_kernel(arg2,a);
+	wy[3] = cubic_kernel(arg3,a);
+
+	rsum = isum = wsum = 0.0;
+	ij = 0;
+	for (j = 0; j < 4; j++) {
+		for (i = 0; i < 4; i++) {
+		w = wx[i] * wy[j];
+		rsum += rdata[ij+i] * w;
+		isum += idata[ij+i] * w;
+		wsum += w;
+		}
+		ij += 4;
+	}
+	if(wsum <= 0.0) printf(" error wsum is zero \n"); 
+	cz[0] = rsum/wsum;
+	cz[1] = isum/wsum;
+}
