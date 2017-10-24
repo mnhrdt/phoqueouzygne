@@ -21,6 +21,7 @@ along with roipac2grdfile.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef IMAGE_HH
 #define IMAGE_HH 1
 
+#include <unistd.h>
 #include <sys/fcntl.h>
 #include <sys/mman.h>
 #include <string>
