@@ -1,0 +1,92 @@
+FOCUSING
+--------
+
+(en reprennant mon mail intitulé "sinus cardinaux sur Rotterdam", du
+6 mai 2017)
+
+Les "sinus cardinaux" que nous observons sur les images SLC gênent
+probablement la localisation précise (sous pixellique) des points
+brillants des images.  Ce problème est bien connu en traitement
+d'images radar, et on connait ces trois possibles solutions :
+
+(1) L'article https://hal-imt.archives-ouvertes.fr/hal-01447608/ de
+l'équipe de JMN, basé sur le re-échantillonnage local de l'image SLC.
+
+(2) La minimisation de la variation totale de l'image réconstruite, en
+utilisant la donnée brute comme contrainte (similairement à
+Guichard-Malgouyres).
+
+(3) La méthode de reconstruction "CLEAN", basée sur la localisation
+de réponses impulsionnelles directement sur la donnée brute.
+
+Bibliographie sur CLEAN:
+
+* "Aperture Synthesis with a Non-Regular Distribution of
+  Interferometer Baselines"
+J. A. Högbom, 1974
+(article original)
+
+* Multi-Scale CLEAN deconvolution of radio synthesis images
+T.J. Cornwell
+(contient un bon review de l'état de l'art)
+
+
+*  Speckle reduction in microwave imaging by the CLEAN technique
+Tsao, J.; Steinberg, B. D.
+http://adsabs.harvard.edu/abs/1985SPIE..556..210T
+
+(et aussi "Reduction of sidelobe and speckle artifacts in microwave imaging:
+  the CLEAN technique" Tsao et Steinberg)
+
+
+
+
+L'avantage de la méthode (1) est qu'elle peut travailler directement
+sur l'image SLC.  Par contre, les méthodes qui travaillent sur la
+donnée brute ont deux avantages.  Le premier : on ne vise pas à
+enlever des artefacts, mais on vise à ne pas en créer.  Le deuxième :
+on est obligé à apprendre à travailler avec la donnée brute et à
+maitriser l'algorithme de focusing, ce qui est un acquis très
+important pour notre labo.
+
+
+Programme de travail:
+
+0. Assets
+0.1. Le livre rouge du focusing
+0.2. Les articles sur la méthode CLEAN
+0.3. La documentation officielle de Sentinel 1 :
+https://sentinel.esa.int/web/sentinel/user-guides/sentinel-1-sar/data-formats/sar-formats
+(see this URL and the links therein, until the final pdf docs)
+0.4. Le code du "Scripps Institution of Oceanography", qui est censé
+à ouvrir des images Sentinel1/L0 et calculer le focusing par un
+algorithme standard : http://topex.ucsd.edu/gmtsar/
+
+1. Ouverture des fichiers niveau 0
+1.1. Essayer d'ouvrir les fichiers avec GMSTAR (je n'ai pas réussi,
+c'est un code assez bizarre).  S'il est possible, extraire
+la méthode d'ouverture afin de pouvoir l'utiliser séparément.
+1.2. Autrement, implémenter la lecture des fichiers binaires selon la
+documentation de l'ESA (pénible, mais faisable).
+1.3. Visualisation de la donné brute comme signal 1D (on devrait
+y deviner quelques structures)
+
+2. Implémentation du Focusing
+2.1. Une fois les fichiers ouverts, faire le focusing selon une
+méthode standard
+2.2. Essayer d'obtenir une image qui ressemble le plus possible au
+SLC (ramping, recalage, etc).
+
+3. Implémentation de l'algorithme CLEAN
+3.1. Implémentation "greedy" naïve (trouver le max de corrélation dans
+le temps/fréquence itérativement ).
+3.3. Implementation CLEAN raffinée (selon Tsao/Steinberg)
+3.2. Implementation CLEAN multi-échelle (selon  Cornwell)
+
+4. Évaluation
+4.1. Évaluation visuelle des images retrouvées par CLEAN et par
+focusing global
+4.2. Comparaison des détecteurs de maxima locaux sous-pixelliens sur
+les images CLEAN et les images niveau 1.
+4.3. Comparaison de la précision des courbes de stockage obtenues
+dans chaque cas.

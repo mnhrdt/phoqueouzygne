@@ -1,0 +1,103 @@
+Chers tous,
+
+je ne peux plus le cacher : je m'ennuie pendant les réunions avec Kayrros...
+
+Donc je passe ce temps à me poser des questions bêtes sur le sujet,
+voici un résumé.
+
+Ce qui m'inquiète le plus sont les "sinus cardinaux" que l'on observe
+autour des points très brillants.  Il me paraît qu'ils gênent le
+traitement de ces images.  Est-il vraiment nécessaire de vivre avec
+eux ?  J'ai entendu plusieurs fois la phrase "ces images sont
+sur-échantillonnées" pour justifier ces artefacts, mais je voudrais
+comprendre EXACTEMENT ce qu'elle veut dire.
+
+L'interprétation la plus élémentaire possible de cette phrase est que
+ces images ne contiennent pas des hautes fréquences.  Mais c'est
+faux : on a regardé hier avec Carlo et Mariano la DFT de l'image de
+Rotterdam et on voit bien qu'elle contient du signal non-négligeable
+à toutes les fréquences.  Si la phrase était vraie, je m'attendrait
+plutôt à une transformée de Fourier égale a zéro (ou presque), en
+dehors d'un rectangle central de fréquences.  D'où viennent donc ces
+hautes fréquences ?
+
+Cette partie, inexpliquée, du signal, peut provenir de traitements
+différents appliqués sur l'image : le calcul du valeur absolu d'une
+image complexe, le fait que on utilise un crop et pas l'image entière
+(ce qui devrait créer des hautes amplitudes seulement pour les
+fréquences horizontales et verticales), des normalisations des
+intensités, changements de contraste, quantifications,
+ré-échantillonnages (?).  Chacune de ces opérations peut augmenter le
+support spectral d'une image.
+
+Enfin, admettons qu'il y a un signal acquis idéal qui est à bande
+limité et sur lequel on est capable de revenir (cette hypothèse,
+est-elle trop ?).  Ce signal est donc une combinaison linéaire finie
+d'ondes sinusoïdales, et on peut le représenter par une image
+échantillonné à Nyquist, et dans ce cas on n'observe pas des
+artefacts sinc (mais l'image sera à plus basse résolution).  Si on
+fait un zoom par zero-padding, on observe bien des sinc quand il y a
+des échantillons très élevés.  Mais, le zero-padding es seulement un
+des interpolateurs possibles pour reconstituer l'image à haute
+résolution.  Il y en a d'autres, pouvons nous les utiliser ?
+
+L'interpolation par zero-padding suppose un modèle d'image initiale à
+bande limitée, mais c'est un modèle arbitraire, et probablement pas
+le meilleur.  Étant données les basses fréquences de l'image, on peut
+extrapoler les autres fréquences selon critères divers, pour
+s'adapter à un modèle différent que la bande limitée.
+
+Je connais deux exemples dans la littérature, mais il y en a bien sur
+d'autres.
+
+Le premier exemple est le modèle "CLEAN" utilisé en astronomie radio
+depuis 1974 (voir "clean_deconvolution.pdf").  On suppose que le
+signal original est une combinaison linéaire finie de N Diracs à des
+positions et poids inconnus.  Ensuite, on trouve ces positions et
+poids de façon "greedy" : on met le premier dirac sur le max de
+l'image, et son intensité est la valeur du max, et on sustrait le
+sinc correspondant à ce dirac de l'image, etc.  Cette méthode
+fonctionne très bien pour des signaux typiques en astronomie
+(étoiles) et de façon surprenante aussi pour des images constantes
+par morceaux, comme décrit dans l'article en pièce jointe.
+
+Le deuxième modèle est la variation totale.  Elle est utilisée par
+exemple en reconstruction de tomographies.  L'idée est que on connait
+le transformée de Fourier du signal sur quelques fréquences, mais pas
+sur d'autres.  On veut trouver les coefficients qui manquent en
+minimisant la TV de l'image reconstruite.  C'est un problème
+d'optimisation convexe à des contraintes linéaires, bien connu par
+notre labo ;)  Voir "guichard_malgouyres.pdf".
+
+Enfin, il me parait que si nous connaissons un signal sur une bande
+de fréquences, cela n'implique pas du tout que nous devons voir des
+sinc sur le signal interpolé.  Il suffit d'utiliser un autre modèle
+du signal original que la bande limitée (les exemples de CLEAN et TV
+ne donnent pas des artefacts sinc).  Il se peut que ces autres
+modèles d'interpolation donnent des images plus faciles à traiter par
+nos algorithmes de détection.
+
+Je vois deux options :
+
+1. Tout est plus compliqué que "on connait le signal sur une bande de
+fréquences", et les sinc sont inévitables pour des raisons qui
+m'échappent.
+
+2. On connait le signal sur une bande de fréquences, et on peut
+extrapoler aux autres fréquences de façon arbitraire, qui est à nous
+de choisir.
+
+Dans le premier cas, je voudrais comprendre bien la production de ces
+images, et me convaincre que les artefacts sinc sont inévitables.
+
+Dans le deuxième cas, il faut absolument extrapoler les fréquences
+inconnues des images avec un autre modèle que la bande limitée, et
+regarder si les images ainsi obtenues sont plus agréables à traiter.
+
+
+Avez-vous d'autres idées sur ces maudits "sinc" ?  Ce message est
+seulement un rapport de mes pensées lors des dernières réunions,
+pendant lesquelles je n'avait pas grande chose à faire.
+
+Amitiés,
+enric
