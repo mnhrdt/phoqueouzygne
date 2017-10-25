@@ -15,3 +15,5 @@ struct s1a_file { // Measurement Data Component, page 64
 	int n;
 	struct s1a_isp *t;
 };
+
+struct s1a_file *s1a_load_whole_datafile(char *fname);
