@@ -8,72 +8,73 @@ struct s1a_isp { // Instrument Source Packet
 	int packet_data_length; // 2 bytes
 
 	// packet data field
-	unsigned char secondary_header[62];
+	union { // secondary_header, accessible via bytes or fields
+		unsigned char byte[62];
+		struct { // field
+			// datation service
+			unsigned coarse_time                 : 32 ;
+			unsigned fine_time                   : 16 ;
+
+			// fixed ancillary data service
+			unsigned sync_marker                 : 32 ;
+			unsigned data_take_id                : 32 ;
+			unsigned ecc_number                  :  8 ;
+			unsigned first_spare_bit             :  1 ;
+			unsigned test_mode                   :  3 ;
+			unsigned rx_channel_id               :  4 ;
+			unsigned instrument_configuration_id : 32 ;
+
+			// sub commutation ancillary data service
+			unsigned data_word_index             :  8 ;
+			unsigned data_word                   : 16 ;
+
+			// counter service
+			unsigned space_packet_count          : 32 ;
+			unsigned pri_count                   : 32 ;
+
+			// radar configuration support service
+			unsigned first_spare_3bit            :  3 ;
+			unsigned baq_mode                    :  5 ;
+			unsigned baq_block_length            :  8 ;
+			unsigned spare_byte                  :  8 ;
+			unsigned range_decimation            :  8 ;
+			unsigned rx_gain                     :  8 ;
+			unsigned tx_ramp_rate                : 16 ;
+			unsigned tx_pulse_start_frequency    : 16 ;
+			unsigned tx_pulse_length             : 24 ;
+			unsigned second_spare_3bit           :  3 ;
+			unsigned rank                        :  5 ;
+			unsigned PRI                         : 24 ;
+			unsigned SWST                        : 24 ;
+			unsigned SWL                         : 24 ;
+
+			// SAS SSB message
+			unsigned ssb_flag                    :  1 ;
+			unsigned polarisation                :  3 ;
+			unsigned temperature_compensation    :  2 ;
+			unsigned first_spare_2bit            :  2 ;
+			unsigned elevation_beam_address      :  4 ;
+			unsigned second_spare_2bit           :  2 ;
+			unsigned beam_address                : 10 ;
+
+			// SES SSB message
+			unsigned cal_mode                    :  2 ;
+			unsigned second_spare_bit            :  1 ;
+			unsigned tx_pulse_number             :  5 ;
+			unsigned signal_type                 :  4 ;
+			unsigned third_spare_3bit            :  3 ;
+			unsigned swap                        :  1 ;
+			unsigned swath_number                :  8 ;
+
+			// radar sample count service
+			unsigned num_of_quads                : 16 ;
+			unsigned filler_octet                :  8 ;
+		} field;
+	} secondary_header;
 	unsigned char *data;
 	int data_size;
 
 
-	// the secondary header can be parsed into the following fields
-	// by the function "extract_secondary_header"
-
-	// datation service
-	unsigned long coarse_time;                 // 4 BYTES
-	unsigned long fine_time;                   // 2 BYTES
-
-	// fixed ancillary data service
-	unsigned long sync_marker;                 // 4 BYTES
-	unsigned long data_take_id;                // 4 BYTES
-	unsigned long ecc_number;                  // 1 BYTE
-	unsigned long first_spare_bit;             // 1 bit
-	unsigned long test_mode;                   // 3 bits
-	unsigned long rx_channel_id;               // 4 bits
-	unsigned long instrument_configuration_id; // 4 BYTES
-
-	// sub commutation ancillary data service
-	unsigned long data_word_index;             // 1 BYTE
-	unsigned long data_word;                   // 2 BYTES
-
-	// counter service
-	unsigned long space_packet_count;          // 4 BYTES
-	unsigned long pri_count;                   // 4 BYTES
-
-	// radar configuration support service
-	unsigned long first_spare_3bit;            // 3 bits
-	unsigned long baq_mode;                    // 5 bits
-	unsigned long baq_block_length;            // 1 BYTE
-	unsigned long spare_byte;                  // 1 BYTE
-	unsigned long range_decimation;            // 1 BYTE
-	unsigned long rx_gain;                     // 1 BYTE
-	unsigned long tx_ramp_rate;                // 2 BYTES
-	unsigned long tx_pulse_start_frequency;    // 2 BYTES
-	unsigned long tx_pulse_length;             // 3 BYTES
-	unsigned long second_spare_3bit;           // 3 bits
-	unsigned long rank;                        // 5 bits
-	unsigned long PRI;                         // 3 BYTES
-	unsigned long SWST;                        // 3 BYTES
-	unsigned long SWL;                         // 3 BYTES
-
-	// SAS SSB message
-	unsigned long ssb_flag;                    // 1 bit
-	unsigned long polarisation;                // 3 bits
-	unsigned long temperature_compensation;    // 2 bits
-	unsigned long first_spare_2bit;            // 2 bits
-	unsigned long elevation_beam_address;      // 4 bits
-	unsigned long second_spare_2bit;           // 2 bits
-	unsigned long beam_address;                // 10 bits
-
-	// SES SSB message
-	unsigned long cal_mode;                    // 2 bits
-	unsigned long second_spare_bit;            // 1 bit
-	unsigned long tx_pulse_number;             // 5 bits
-	unsigned long signal_type;                 // 4 bits
-	unsigned long third_spare_3bit;            // 3 bits
-	unsigned long swap;                        // 1 bit
-	unsigned long swath_number;                // 1 BYTE
-
-	// radar sample count service
-	unsigned long num_of_quads;                // 2 BYTES
-	unsigned long filler_octet;                // 1 BYTE
 };
 
 struct s1a_file { // Measurement Data Component, page 64
@@ -115,7 +116,7 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 	s->sequence_control   = header[2]*0x100 + header[3];
 	s->packet_data_length = header[4]*0x100 + header[5];
 	for (int i = 0; i < 62; i++)
-		s->secondary_header[i] = xget_byte(f);
+		s->secondary_header.byte[i] = xget_byte(f);
 
 	if (s->packet_data_length > 65534)
 		fail("packed data length %d too big\n", s->packet_data_length);
