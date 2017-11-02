@@ -1,3 +1,4 @@
+#include <stdint.h>
 
 struct s1a_isp { // Instrument Source Packet
 
@@ -9,66 +10,66 @@ struct s1a_isp { // Instrument Source Packet
 
 	// packet data field
 	union { // secondary_header, accessible via bytes or fields
-		unsigned char byte[62];
-		struct { // field
-			// datation service
-			unsigned coarse_time                 : 32 ;
-			unsigned fine_time                   : 16 ;
+		unsigned char byte[6];
+		struct __attribute__((packed)) { // field
+			// datation service (6 bytes, 0-5)
+			uint32_t coarse_time                 : 32 ; // 0
+			uint16_t fine_time                   : 16 ; // 4
 
-			// fixed ancillary data service
-			unsigned sync_marker                 : 32 ;
-			unsigned data_take_id                : 32 ;
-			unsigned ecc_number                  :  8 ;
-			unsigned first_spare_bit             :  1 ;
-			unsigned test_mode                   :  3 ;
-			unsigned rx_channel_id               :  4 ;
-			unsigned instrument_configuration_id : 32 ;
+			// fixed ancillary data service (14 bytes, 6-19)
+			uint32_t sync_marker                 : 32 ; // 6
+			uint32_t data_take_id                : 32 ; // 10
+			uint8_t  ecc_number                  :  8 ; // 14
+			uint8_t  first_spare_bit             :  1 ; // 15
+			uint8_t  test_mode                   :  3 ;
+			uint8_t  rx_channel_id               :  4 ;
+			uint32_t instrument_configuration_id : 32 ; // 16
 
-			// sub commutation ancillary data service
-			unsigned data_word_index             :  8 ;
-			unsigned data_word                   : 16 ;
+			// sub commutation ancill. data service (3 bytes, 20-22)
+			uint8_t  data_word_index             :  8 ; // 20
+			uint16_t data_word                   : 16 ; // 21
 
-			// counter service
-			unsigned space_packet_count          : 32 ;
-			unsigned pri_count                   : 32 ;
+			// counter service (8 bytes, 23-30)
+			uint32_t space_packet_count          : 32 ; // 23
+			uint32_t pri_count                   : 32 ; // 27
 
-			// radar configuration support service
-			unsigned first_spare_3bit            :  3 ;
-			unsigned baq_mode                    :  5 ;
-			unsigned baq_block_length            :  8 ;
-			unsigned spare_byte                  :  8 ;
-			unsigned range_decimation            :  8 ;
-			unsigned rx_gain                     :  8 ;
-			unsigned tx_ramp_rate                : 16 ;
-			unsigned tx_pulse_start_frequency    : 16 ;
-			unsigned tx_pulse_length             : 24 ;
-			unsigned second_spare_3bit           :  3 ;
-			unsigned rank                        :  5 ;
-			unsigned PRI                         : 24 ;
-			unsigned SWST                        : 24 ;
-			unsigned SWL                         : 24 ;
+			// radar configuration support service (22 bytes, 31-52)
+			uint8_t  first_spare_3bit            :  3 ; // 31
+			uint8_t  baq_mode                    :  5 ;
+			uint8_t  baq_block_length            :  8 ; // 32
+			uint8_t  spare_byte                  :  8 ; // 33 
+			uint8_t  range_decimation            :  8 ; // 34
+			uint8_t  rx_gain                     :  8 ; // 35
+			uint16_t tx_ramp_rate                : 16 ; // 36
+			uint16_t tx_pulse_start_frequency    : 16 ; // 38
+			uint32_t tx_pulse_length             : 24 ; // 40
+			uint8_t  second_spare_3bit           :  3 ; // 43
+			uint8_t  rank                        :  5 ;
+			uint32_t PRI                         : 24 ; // 44
+			uint32_t SWST                        : 24 ; // 47
+			uint32_t SWL                         : 24 ; // 50
 
-			// SAS SSB message
-			unsigned ssb_flag                    :  1 ;
-			unsigned polarisation                :  3 ;
-			unsigned temperature_compensation    :  2 ;
-			unsigned first_spare_2bit            :  2 ;
-			unsigned elevation_beam_address      :  4 ;
-			unsigned second_spare_2bit           :  2 ;
-			unsigned beam_address                : 10 ;
+			// SAS SSB message (3 bytes, 53-55)
+			uint8_t  ssb_flag                    :  1 ; // 53
+			uint8_t  polarisation                :  3 ;
+			uint8_t  temperature_compensation    :  2 ;
+			uint8_t  first_spare_2bit            :  2 ;
+			uint8_t  elevation_beam_address      :  4 ; // 54
+			uint8_t  second_spare_2bit           :  2 ;
+			uint16_t beam_address                : 10 ;
 
-			// SES SSB message
-			unsigned cal_mode                    :  2 ;
-			unsigned second_spare_bit            :  1 ;
-			unsigned tx_pulse_number             :  5 ;
-			unsigned signal_type                 :  4 ;
-			unsigned third_spare_3bit            :  3 ;
-			unsigned swap                        :  1 ;
-			unsigned swath_number                :  8 ;
+			// SES SSB message (3 bytes, 56-58)
+			uint8_t  cal_mode                    :  2 ; // 56
+			uint8_t  second_spare_bit            :  1 ;
+			uint8_t  tx_pulse_number             :  5 ;
+			uint8_t  signal_type                 :  4 ; // 57
+			uint8_t  third_spare_3bit            :  3 ;
+			uint8_t  swap                        :  1 ;
+			uint8_t  swath_number                :  8 ; // 58
 
-			// radar sample count service
-			unsigned num_of_quads                : 16 ;
-			unsigned filler_octet                :  8 ;
+			// radar sample count service (3 bytes, 59-61)
+			uint16_t num_of_quads                : 16 ; // 59
+			uint8_t  filler_octet                :  8 ; // 61
 		} field;
 	} secondary_header;
 	unsigned char *data;
@@ -80,6 +81,40 @@ struct s1a_isp { // Instrument Source Packet
 struct s1a_file { // Measurement Data Component, page 64
 	int n;
 	struct s1a_isp *t;
+};
+
+struct s1a_annot { // Annotation Data Component record, page 65
+	union {
+		unsigned char byte[26];
+		struct {
+			uint64_t sensing_time     : 64 ;
+			uint64_t downlink_time    : 64 ;
+			uint16_t packet_length    : 16 ;
+			uint16_t frames           : 16 ;
+			uint16_t missing_frames   : 16 ;
+			uint8_t  CRC_flag         :  8 ;
+			uint8_t  VCID             :  8 ;
+			uint8_t  channel          :  8 ;
+			uint8_t  spare            :  8 ;
+
+		} field;
+	} record;
+};
+
+struct s1a_index { // Index Data Component block descriptor, page 67
+	union {
+		unsigned char byte[36];
+		struct {
+			uint64_t date_and_time_uint  : 64 ;
+			uint64_t delta_time_uint     : 64 ;
+			uint32_t delta_size          : 32 ;
+			uint32_t data_units_offset   : 32 ;
+			uint64_t byte_offset         : 64 ;
+			uint8_t  variable_size_flag  :  8 ;
+			uint32_t spare               : 24 ;
+
+		} field;
+	} record;
 };
 
 #include <stdlib.h>
@@ -141,36 +176,36 @@ void s1a_print_info(struct s1a_file *x)
 		printf("\tsequence_control   = %d\n", s->sequence_control);
 		printf("\tpacket_data_length = %d\n", s->packet_data_length);
 #define P(x) printf("\t\t" #x " = %u\n", s->secondary_header.field.x)
-		printf("datation service\n");
+		printf("\tdatation service:\n");
 		P(coarse_time); P(fine_time);
-		printf("fixed ancillary data service\n");
+		printf("\tfixed ancillary data service:\n");
 		P(sync_marker); P(data_take_id); P(ecc_number);
 		P(first_spare_bit);
 		P(test_mode); P(rx_channel_id); P(instrument_configuration_id);
-		printf("sub commutation ancillary data service\n");
+		printf("\tsub commutation ancillary data service:\n");
 		P(data_word_index); P(data_word);
-		printf("counter service\n");
+		printf("\tcounter service:\n");
 		P(space_packet_count); P(pri_count);
-		printf("radar configuration support service\n");
+		printf("\tradar configuration support service:\n");
 		P(first_spare_3bit);
 		P(baq_mode); P(baq_block_length); P(spare_byte);
 		P(range_decimation); P(rx_gain); P(tx_ramp_rate);
 		P(tx_pulse_start_frequency); P(tx_pulse_length);
 		P(second_spare_3bit);
 		P(rank); P(PRI); P(SWST); P(SWL);
-		printf("SAS SSB message\n");
+		printf("\tSAS SSB message:\n");
 		P(ssb_flag); P(polarisation); P(temperature_compensation);
 		P(first_spare_2bit);
 		P(elevation_beam_address);
 		P(second_spare_2bit);
 		P(beam_address);
-		printf("SES SSB message\n");
+		printf("\tSES SSB message:\n");
 		P(cal_mode);
 		P(second_spare_bit);
 		P(tx_pulse_number); P(signal_type);
 		P(third_spare_3bit);
 		P(swap); P(swath_number);
-		printf("radar sample count service\n");
+		printf("\tradar sample count service:\n");
 		P(num_of_quads); P(filler_octet);
 	}
 }
@@ -182,6 +217,8 @@ int main(int c, char *v[])
 	char *filename_in = v[1];
 
 	struct s1a_file x[1];
+	fprintf(stderr, "sizeof secondary header = %zu\n",
+			sizeof(x->t[0].secondary_header));
 	s1a_load_whole_datafile(x, filename_in);
 	s1a_print_info(x);
 
