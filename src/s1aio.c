@@ -140,6 +140,38 @@ void s1a_print_info(struct s1a_file *x)
 		printf("\tid                 = %d\n", s->id);
 		printf("\tsequence_control   = %d\n", s->sequence_control);
 		printf("\tpacket_data_length = %d\n", s->packet_data_length);
+#define P(x) printf("\t\t" #x " = %u\n", s->secondary_header.field.x)
+		printf("datation service\n");
+		P(coarse_time); P(fine_time);
+		printf("fixed ancillary data service\n");
+		P(sync_marker); P(data_take_id); P(ecc_number);
+		P(first_spare_bit);
+		P(test_mode); P(rx_channel_id); P(instrument_configuration_id);
+		printf("sub commutation ancillary data service\n");
+		P(data_word_index); P(data_word);
+		printf("counter service\n");
+		P(space_packet_count); P(pri_count);
+		printf("radar configuration support service\n");
+		P(first_spare_3bit);
+		P(baq_mode); P(baq_block_length); P(spare_byte);
+		P(range_decimation); P(rx_gain); P(tx_ramp_rate);
+		P(tx_pulse_start_frequency); P(tx_pulse_length);
+		P(second_spare_3bit);
+		P(rank); P(PRI); P(SWST); P(SWL);
+		printf("SAS SSB message\n");
+		P(ssb_flag); P(polarisation); P(temperature_compensation);
+		P(first_spare_2bit);
+		P(elevation_beam_address);
+		P(second_spare_2bit);
+		P(beam_address);
+		printf("SES SSB message\n");
+		P(cal_mode);
+		P(second_spare_bit);
+		P(tx_pulse_number); P(signal_type);
+		P(third_spare_3bit);
+		P(swap); P(swath_number);
+		printf("radar sample count service\n");
+		P(num_of_quads); P(filler_octet);
 	}
 }
 
