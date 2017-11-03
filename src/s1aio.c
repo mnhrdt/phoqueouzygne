@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdint.h>
 
 struct s1a_isp { // Instrument Source Packet
@@ -10,7 +11,7 @@ struct s1a_isp { // Instrument Source Packet
 
 	// packet data field
 	union { // secondary_header, accessible via bytes or fields
-		unsigned char byte[6];
+		unsigned char byte[62];
 		struct __attribute__((packed)) { // field
 			// datation service (6 bytes, 0-5)
 			uint32_t coarse_time                 : 32 ; // 0
@@ -37,7 +38,7 @@ struct s1a_isp { // Instrument Source Packet
 			uint8_t  first_spare_3bit            :  3 ; // 31
 			uint8_t  baq_mode                    :  5 ;
 			uint8_t  baq_block_length            :  8 ; // 32
-			uint8_t  spare_byte                  :  8 ; // 33 
+			uint8_t  spare_byte                  :  8 ; // 33
 			uint8_t  range_decimation            :  8 ; // 34
 			uint8_t  rx_gain                     :  8 ; // 35
 			uint16_t tx_ramp_rate                : 16 ; // 36
@@ -74,8 +75,6 @@ struct s1a_isp { // Instrument Source Packet
 	} secondary_header;
 	unsigned char *data;
 	int data_size;
-
-
 };
 
 struct s1a_file { // Measurement Data Component, page 64
@@ -86,16 +85,16 @@ struct s1a_file { // Measurement Data Component, page 64
 struct s1a_annot { // Annotation Data Component record, page 65
 	union {
 		unsigned char byte[26];
-		struct {
-			uint64_t sensing_time     : 64 ;
-			uint64_t downlink_time    : 64 ;
-			uint16_t packet_length    : 16 ;
-			uint16_t frames           : 16 ;
-			uint16_t missing_frames   : 16 ;
-			uint8_t  CRC_flag         :  8 ;
-			uint8_t  VCID             :  8 ;
-			uint8_t  channel          :  8 ;
-			uint8_t  spare            :  8 ;
+		struct __attribute__((packed)) {
+			uint64_t sensing_time     : 64 ; // 0
+			uint64_t downlink_time    : 64 ; // 8
+			uint16_t packet_length    : 16 ; // 16
+			uint16_t frames           : 16 ; // 18
+			uint16_t missing_frames   : 16 ; // 20
+			uint8_t  CRC_flag         :  8 ; // 22
+			uint8_t  VCID             :  8 ; // 23
+			uint8_t  channel          :  8 ; // 24
+			uint8_t  spare            :  8 ; // 25
 
 		} field;
 	} record;
@@ -104,17 +103,29 @@ struct s1a_annot { // Annotation Data Component record, page 65
 struct s1a_index { // Index Data Component block descriptor, page 67
 	union {
 		unsigned char byte[36];
-		struct {
-			uint64_t date_and_time_uint  : 64 ;
-			uint64_t delta_time_uint     : 64 ;
-			uint32_t delta_size          : 32 ;
-			uint32_t data_units_offset   : 32 ;
-			uint64_t byte_offset         : 64 ;
-			uint8_t  variable_size_flag  :  8 ;
-			uint32_t spare               : 24 ;
+		struct __attribute__((packed)) {
+			//uint64_t date_and_time  : 64 ; // 0
+			//uint64_t delta_time     : 64 ; // 8
+			double   date_and_time;             // 0
+			double   delta_time;                // 8
+			uint32_t delta_size          : 32 ; // 16
+			uint32_t data_units_offset   : 32 ; // 20
+			uint64_t byte_offset         : 64 ; // 24
+			uint8_t  variable_size_flag  :  8 ; // 32
+			uint32_t spare               : 24 ; // 33
 
 		} field;
 	} record;
+};
+
+struct s1a_annot_file {
+	int n;
+	struct s1a_annot *t;
+};
+
+struct s1a_index_file {
+	int n;
+	struct s1a_index *t;
 };
 
 #include <stdlib.h>
@@ -123,6 +134,7 @@ struct s1a_index { // Index Data Component block descriptor, page 67
 #include "fail.c"
 #include "xmalloc.c"
 #include "xfopen.c"
+#include "endianness.c"
 
 static unsigned char xget_byte(FILE *f)
 {
@@ -131,6 +143,7 @@ static unsigned char xget_byte(FILE *f)
 		fail("could not read another char from file");
 	return r;
 }
+
 
 void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 {
@@ -162,6 +175,67 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 		s->data[i] = xget_byte(f);
 
 	xfclose(f);
+
+	// correct byte endianness of some fields
+	for (int i = 0; i < x->n; i++)
+	{
+		switch_4endianness(x->t[i].secondary_header.byte +  0, 1);
+		switch_2endianness(x->t[i].secondary_header.byte +  4, 1);
+		switch_4endianness(x->t[i].secondary_header.byte +  6, 2);
+		switch_4endianness(x->t[i].secondary_header.byte + 16, 1);
+		switch_2endianness(x->t[i].secondary_header.byte + 21, 1);
+		switch_4endianness(x->t[i].secondary_header.byte + 23, 2);
+		switch_2endianness(x->t[i].secondary_header.byte + 36, 2);
+		switch_3endianness(x->t[i].secondary_header.byte + 40, 1);
+		switch_3endianness(x->t[i].secondary_header.byte + 44, 3);
+		// TODO: what happens with bytes 54 and 55? it seems ambiguous
+		switch_2endianness(x->t[i].secondary_header.byte + 59, 1);
+	}
+}
+
+static long get_file_size(FILE *f)
+{
+	fseek(f, 0, SEEK_END);
+	long r = ftell(f);
+	rewind(f);
+	return r;
+}
+
+void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)
+{
+	FILE *f = xfopen(fname, "r");
+	int fs = get_file_size(f);
+	x->n = fs / 26;
+	if (x->n * 26 != fs) fail("bad annotation file size %d\n", fs);
+	x->t = xmalloc(x->n * 26);
+	fread(x->t, 26, x->n, f);
+	xfclose(f);
+
+	// correct byte endianness of some fields
+	for (int i = 0; i < x->n; i++)
+	{
+		switch_8endianness(x->t[i].record.byte +  0, 2);
+		switch_2endianness(x->t[i].record.byte + 16, 3);
+	}
+}
+
+void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname)
+{
+	FILE *f = xfopen(fname, "r");
+	int fs = get_file_size(f);
+	x->n = fs / 36;
+	if (x->n * 36 != fs) fail("bad index file size %d\n", fs);
+	x->t = xmalloc(x->n * 36);
+	fread(x->t, 36, x->n, f);
+	xfclose(f);
+
+	// correct byte endianness of some fields
+	for (int i = 0; i < x->n; i++)
+	{
+		switch_8endianness(x->t[i].record.byte +  0, 2);
+		switch_4endianness(x->t[i].record.byte + 16, 2);
+		switch_8endianness(x->t[i].record.byte + 24, 1);
+	}
 }
 
 void s1a_print_info(struct s1a_file *x)
@@ -207,20 +281,99 @@ void s1a_print_info(struct s1a_file *x)
 		P(swap); P(swath_number);
 		printf("\tradar sample count service:\n");
 		P(num_of_quads); P(filler_octet);
+#undef P
 	}
 }
 
 
+void s1a_annot_dump(struct s1a_annot_file *x)
+{
+#define P(f) printf("annot[%d]." #f " = %lu\n", \
+	       i, (unsigned long)x->t[i].record.field.f)
+	for (int i = 0; i < x->n; i++)
+	{
+		P(sensing_time);
+		P(downlink_time);
+		P(packet_length);
+		P(frames);
+		P(missing_frames);
+		P(CRC_flag);
+		P(VCID);
+		P(channel);
+		P(spare);
+	}
+#undef P
+}
+
+
+void s1a_index_dump(struct s1a_index_file *x)
+{
+#define P(f) printf("index[%d]." #f " = %lu\n", \
+	       i, (unsigned long)x->t[i].record.field.f)
+	for (int i = 0; i < x->n; i++)
+	{
+		P(date_and_time);
+		P(delta_time);
+		P(delta_size);
+		P(data_units_offset);
+		P(byte_offset);
+		P(variable_size_flag);
+		P(spare);
+	}
+#undef P
+}
+
+// (from page 119)
+//
+// The Measurement Data Component is a single binary file, including X-Band
+// Recorded HKTM data in the form of transfer frames according to the following
+// specification.
+//
+// * The binary file includes HKTM transfer frames as received in X-Band from
+//   the 4 on-board memory Packet Stores allocated to HKTM storage.
+//
+// * The transfer frames sequence is as per Packet Stores downlink order,
+//   starting with the PS with associated lower VC ID.
+//
+// * Transfer frames do not include the Attached Synchronisation Marker (ASM)
+//   and the Reed-Solomon (R-S) code block (a single transfer frame is 1912
+//   octets).
+//
+// * Transfer frames are concatenated with no separator between consecutive
+//   frames.
+//
+// * Transfer frames are not randomised.
+//
+// * Only transfer frames that have passed the R-S decoding are included in the
+//   binary file.
+
 int main(int c, char *v[])
 {
-	if (c != 2) return fprintf(stderr, "usage:\n\t%s raw\n", *v);
-	char *filename_in = v[1];
+	if (c != 4) return fprintf(stderr, "usage:\n\t"
+	             "%s raw annot index\n", *v);
+	//             0 1   2     3
+	char *filename_x  = v[1];
+	char *filename_xa = v[2];
+	char *filename_xi = v[3];
 
-	struct s1a_file x[1];
-	fprintf(stderr, "sizeof secondary header = %zu\n",
-			sizeof(x->t[0].secondary_header));
-	s1a_load_whole_datafile(x, filename_in);
+	struct s1a_file        x[1];
+	struct s1a_annot_file xa[1];
+	struct s1a_index_file xi[1];
+
+	assert(62 == sizeof x->t[0].secondary_header);
+	assert(26 == sizeof xa->t[0]);
+	assert(36 == sizeof xi->t[0]);
+
+	s1a_load_whole_datafile  (x , filename_x );
+	s1a_load_whole_annot_file(xa, filename_xa);
+	s1a_load_whole_index_file(xi, filename_xi);
+
+	printf("%s: %d records\n", filename_xa, xa->n);
+	printf("%s: %d records\n", filename_xi, xi->n);
+
 	s1a_print_info(x);
+	s1a_annot_dump(xa);
+	s1a_index_dump(xi);
 
 
 	return 0;
