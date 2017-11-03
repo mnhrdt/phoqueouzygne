@@ -144,35 +144,63 @@ static unsigned char xget_byte(FILE *f)
 	return r;
 }
 
+static long get_file_size(FILE *f)
+{
+	fseek(f, 0, SEEK_END);
+	long r = ftell(f);
+	rewind(f);
+	return r;
+}
+
 
 void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 {
 	FILE *f = xfopen(fname, "r");
+	long sf = get_file_size(f);
 
 	// for now, we only read the first ISP
-	x->n = 1;
-	x->t = xmalloc(x->n * sizeof*x->t);
+	x->n = 0;
+	x->t = xmalloc(10000+sf);
 
-	struct s1a_isp *s = x->t + 0;
+	int cx = 0;
+	while (1) {
+		struct s1a_isp *s = x->t + cx;
+		//fprintf(stderr, "ftell(%d) = %zx\n", cx, ftell(f));
 
-	unsigned char header[6];
-	for (int i = 0; i < 6; i++)
-		header[i] = xget_byte(f);
+		unsigned char header[6];
+		for (int i = 0; i < 6; i++)
+			header[i] = xget_byte(f);
 
-	s->version_number     = header[0] / 0x40;
-	s->id                 = (header[0] % 0x40)*0x100 + header[1];
-	s->sequence_control   = header[2]*0x100 + header[3];
-	s->packet_data_length = header[4]*0x100 + header[5];
-	for (int i = 0; i < 62; i++)
-		s->secondary_header.byte[i] = xget_byte(f);
+		s->version_number     = header[0] / 0x40;
+		s->id                 = (header[0] % 0x40)*0x100 + header[1];
+		s->sequence_control   = header[2]*0x100 + header[3];
+		s->packet_data_length = header[4]*0x100 + header[5];
+		for (int i = 0; i < 62; i++)
+			s->secondary_header.byte[i] = xget_byte(f);
 
-	if (s->packet_data_length > 65534)
-		fail("packed data length %d too big\n", s->packet_data_length);
-	s->data_size = s->packet_data_length + 1 - 62; // table 11, p.61, bottom
+		if (s->packet_data_length > 65534)
+			fail("packet len %d too big\n",s->packet_data_length);
+		if (s->packet_data_length < 100)
+			fail("packet len %d too small\n",s->packet_data_length);
 
-	s->data = xmalloc(s->data_size);
-	for (int i = 0; i < s->data_size; i++)
-		s->data[i] = xget_byte(f);
+		// table 11, p.61, bottom
+		s->data_size = s->packet_data_length + 1 - 62;
+
+		s->data = xmalloc(s->data_size);
+		for (int i = 0; i < s->data_size; i++)
+			s->data[i] = xget_byte(f);
+
+		cx += 1;
+		x->n = cx;
+
+		{
+			int c = fgetc(f);
+			if (c == EOF)
+				break;
+			else
+				ungetc(c, f);
+		}
+	}
 
 	xfclose(f);
 
@@ -191,14 +219,6 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 		// TODO: what happens with bytes 54 and 55? it seems ambiguous
 		switch_2endianness(x->t[i].secondary_header.byte + 59, 1);
 	}
-}
-
-static long get_file_size(FILE *f)
-{
-	fseek(f, 0, SEEK_END);
-	long r = ftell(f);
-	rewind(f);
-	return r;
 }
 
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)
@@ -285,12 +305,43 @@ void s1a_print_info(struct s1a_file *x)
 	}
 }
 
+void s1a_dump_headers(struct s1a_file *x)
+{
+#define P(f) printf("mdc[%d]." #f " = %lx\n", i, (unsigned long)x->t[i].f)
+#define P2(f) printf("mdc[%d]." #f " = %lx\n", i, \
+		(unsigned long)x->t[i].secondary_header.field.f)
+	for (int i = 0; i < x->n; i++)
+	{
+		P(version_number);
+		P(id);
+		P(sequence_control);
+		P(packet_data_length);
+
+		P2(coarse_time); P2(fine_time); P2(sync_marker);
+		P2(data_take_id); P2(ecc_number); P2(first_spare_bit);
+		P2(test_mode); P2(rx_channel_id);
+		P2(instrument_configuration_id); P2(data_word_index);
+		P2(data_word); P2(space_packet_count); P2(pri_count);
+		P2(first_spare_3bit); P2(baq_mode); P2(baq_block_length);
+		P2(spare_byte); P2(range_decimation); P2(rx_gain);
+		P2(tx_ramp_rate); P2(tx_pulse_start_frequency);
+		P2(tx_pulse_length); P2(second_spare_3bit); P2(rank); P2(PRI);
+		P2(SWST); P2(SWL); P2(ssb_flag); P2(polarisation);
+		P2(temperature_compensation); P2(first_spare_2bit);
+		P2(elevation_beam_address); P2(second_spare_2bit);
+		P2(beam_address); P2(cal_mode); P2(second_spare_bit);
+		P2(tx_pulse_number); P2(signal_type); P2(third_spare_3bit);
+		P2(swap); P2(swath_number); P2(num_of_quads); P2(filler_octet);
+	}
+#undef P
+#undef P2
+}
 
 void s1a_annot_dump(struct s1a_annot_file *x)
 {
 #define P(f) printf("annot[%d]." #f " = %lu\n", \
 	       i, (unsigned long)x->t[i].record.field.f)
-	for (int i = 0; i < x->n; i++)
+	for (int i = 0; i < 1+0*x->n; i++)
 	{
 		P(sensing_time);
 		P(downlink_time);
@@ -310,7 +361,7 @@ void s1a_index_dump(struct s1a_index_file *x)
 {
 #define P(f) printf("index[%d]." #f " = %lu\n", \
 	       i, (unsigned long)x->t[i].record.field.f)
-	for (int i = 0; i < x->n; i++)
+	for (int i = 0; i < 1+0*x->n; i++)
 	{
 		P(date_and_time);
 		P(delta_time);
@@ -368,10 +419,12 @@ int main(int c, char *v[])
 	s1a_load_whole_annot_file(xa, filename_xa);
 	s1a_load_whole_index_file(xi, filename_xi);
 
+	printf("%s: %d records\n", filename_x , x ->n);
 	printf("%s: %d records\n", filename_xa, xa->n);
 	printf("%s: %d records\n", filename_xi, xi->n);
 
-	s1a_print_info(x);
+	//s1a_print_info(x);
+	s1a_dump_headers(x);
 	s1a_annot_dump(xa);
 	s1a_index_dump(xi);
 
