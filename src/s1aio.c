@@ -228,7 +228,8 @@ void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)
 	x->n = fs / 26;
 	if (x->n * 26 != fs) fail("bad annotation file size %d\n", fs);
 	x->t = xmalloc(x->n * 26);
-	fread(x->t, 26, x->n, f);
+	int r = fread(x->t, 26, x->n, f);
+	if (r != x->n) fail("inconsistent annot file size\n");
 	xfclose(f);
 
 	// correct byte endianness of some fields
@@ -246,7 +247,8 @@ void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname)
 	x->n = fs / 36;
 	if (x->n * 36 != fs) fail("bad index file size %d\n", fs);
 	x->t = xmalloc(x->n * 36);
-	fread(x->t, 36, x->n, f);
+	int r = fread(x->t, 36, x->n, f);
+	if (r != x->n) fail("inconsistent index file size\n");
 	xfclose(f);
 
 	// correct byte endianness of some fields
@@ -307,8 +309,8 @@ void s1a_print_info(struct s1a_file *x)
 
 void s1a_dump_headers(struct s1a_file *x)
 {
-#define P(f) printf("mdc[%d]." #f " = %lx\n", i, (unsigned long)x->t[i].f)
-#define P2(f) printf("mdc[%d]." #f " = %lx\n", i, \
+#define P(f) printf("mdc[%d]." #f " = %lu\n", i, (unsigned long)x->t[i].f)
+#define P2(f) printf("mdc[%d]." #f " = %lu\n", i, \
 		(unsigned long)x->t[i].secondary_header.field.f)
 	for (int i = 0; i < x->n; i++)
 	{
@@ -341,7 +343,7 @@ void s1a_annot_dump(struct s1a_annot_file *x)
 {
 #define P(f) printf("annot[%d]." #f " = %lu\n", \
 	       i, (unsigned long)x->t[i].record.field.f)
-	for (int i = 0; i < 1+0*x->n; i++)
+	for (int i = 0; i < x->n; i++)
 	{
 		P(sensing_time);
 		P(downlink_time);
@@ -356,12 +358,44 @@ void s1a_annot_dump(struct s1a_annot_file *x)
 #undef P
 }
 
+#include "iio.h"
+void s1a_dump_some_data(struct s1a_file *x)
+{
+	int h = x->n;
+	int w = 0;
+	//if (h > 1000) h = 1000;
+	for (int i = 0; i < h; i++)
+	{
+		struct s1a_isp *s = x->t + i;
+		if (s->data_size > w)
+			w = s->data_size;
+	}
+	uint8_t *t = xmalloc(w*h);
+	memset(t, 0, w*h);
+
+	for (int j = 0; j < h; j++)
+	for (int i = 0; i < w; i++)
+		t[j*w+i] = x->t[j].data[i];
+
+	iio_write_image_uint8_vec("/tmp/rawblock.tiff", t, w, h, 1);
+
+	//for (int i = 0; i < x->n; i++)
+	//{
+	//	if (i > 100) break;
+	//	char fname[FILENAME_MAX];
+	//	snprintf(fname, FILENAME_MAX, "/tmp/rawline_%07d.tiff", i);
+
+	//	struct s1a_isp *s = x->t + i;
+	//	iio_write_image_uint8_vec(fname, s->data, s->data_size, 1, 1);
+	//}
+}
+
 
 void s1a_index_dump(struct s1a_index_file *x)
 {
 #define P(f) printf("index[%d]." #f " = %lu\n", \
 	       i, (unsigned long)x->t[i].record.field.f)
-	for (int i = 0; i < 1+0*x->n; i++)
+	for (int i = 0; i < x->n; i++)
 	{
 		P(date_and_time);
 		P(delta_time);
@@ -427,6 +461,8 @@ int main(int c, char *v[])
 	s1a_dump_headers(x);
 	s1a_annot_dump(xa);
 	s1a_index_dump(xi);
+
+	//s1a_dump_some_data(x);
 
 
 	return 0;

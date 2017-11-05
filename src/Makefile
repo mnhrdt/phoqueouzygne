@@ -1,7 +1,7 @@
-CFLAGS = -g -Wall
+CFLAGS   = -march=native -O3
 
-BIN = s1aio
+LDLIBS   = -lpng -ltiff -ljpeg -lm
 
-all    : $(BIN)
+s1aio    : iio.o
 
-clean  : ; $(RM) $(BIN)
+clean    : ; rm -f *.o s1aio
