@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdint.h>
 
 struct s1a_isp { // Instrument Source Packet
@@ -160,7 +159,7 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 
 	// for now, we only read the first ISP
 	x->n = 0;
-	x->t = xmalloc(10000+sf);
+	x->t = xmalloc(10000+(long)(1.1*sf));
 
 	int cx = 0;
 	while (1) {
@@ -260,53 +259,6 @@ void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname)
 	}
 }
 
-void s1a_print_info(struct s1a_file *x)
-{
-	printf("S1A %d ISP\n", x->n);
-	for (int i = 0; i < x->n; i++)
-	{
-		struct s1a_isp *s = x->t + i;
-		printf("packet number %d:\n", 1+i);
-		printf("\tversion_number     = %d\n", s->version_number);
-		printf("\tid                 = %d\n", s->id);
-		printf("\tsequence_control   = %d\n", s->sequence_control);
-		printf("\tpacket_data_length = %d\n", s->packet_data_length);
-#define P(x) printf("\t\t" #x " = %u\n", s->secondary_header.field.x)
-		printf("\tdatation service:\n");
-		P(coarse_time); P(fine_time);
-		printf("\tfixed ancillary data service:\n");
-		P(sync_marker); P(data_take_id); P(ecc_number);
-		P(first_spare_bit);
-		P(test_mode); P(rx_channel_id); P(instrument_configuration_id);
-		printf("\tsub commutation ancillary data service:\n");
-		P(data_word_index); P(data_word);
-		printf("\tcounter service:\n");
-		P(space_packet_count); P(pri_count);
-		printf("\tradar configuration support service:\n");
-		P(first_spare_3bit);
-		P(baq_mode); P(baq_block_length); P(spare_byte);
-		P(range_decimation); P(rx_gain); P(tx_ramp_rate);
-		P(tx_pulse_start_frequency); P(tx_pulse_length);
-		P(second_spare_3bit);
-		P(rank); P(PRI); P(SWST); P(SWL);
-		printf("\tSAS SSB message:\n");
-		P(ssb_flag); P(polarisation); P(temperature_compensation);
-		P(first_spare_2bit);
-		P(elevation_beam_address);
-		P(second_spare_2bit);
-		P(beam_address);
-		printf("\tSES SSB message:\n");
-		P(cal_mode);
-		P(second_spare_bit);
-		P(tx_pulse_number); P(signal_type);
-		P(third_spare_3bit);
-		P(swap); P(swath_number);
-		printf("\tradar sample count service:\n");
-		P(num_of_quads); P(filler_octet);
-#undef P
-	}
-}
-
 void s1a_dump_headers(struct s1a_file *x)
 {
 #define P(f) printf("mdc[%d]." #f " = %lu\n", i, (unsigned long)x->t[i].f)
@@ -358,36 +310,30 @@ void s1a_annot_dump(struct s1a_annot_file *x)
 #undef P
 }
 
-#include "iio.h"
-void s1a_dump_some_data(struct s1a_file *x)
+static void pgm_write(char *fname, uint8_t *x, int w, int h)
+{
+	FILE *f = xfopen(fname, "w");
+	fprintf(f, "P5\n%d %d\n255\n", w, h);
+	fwrite(x, h, w, f);
+	xfclose(f);
+}
+
+void s1a_dump_image_to_tmp_rawblock_pgm(struct s1a_file *x)
 {
 	int h = x->n;
 	int w = 0;
-	//if (h > 1000) h = 1000;
 	for (int i = 0; i < h; i++)
-	{
-		struct s1a_isp *s = x->t + i;
-		if (s->data_size > w)
-			w = s->data_size;
-	}
+		if (x->t[i].data_size > w)
+			w = x->t[i].data_size;
 	uint8_t *t = xmalloc(w*h);
 	memset(t, 0, w*h);
 
 	for (int j = 0; j < h; j++)
 	for (int i = 0; i < w; i++)
+	if (i < x->t[j].data_size)
 		t[j*w+i] = x->t[j].data[i];
 
-	iio_write_image_uint8_vec("/tmp/rawblock.tiff", t, w, h, 1);
-
-	//for (int i = 0; i < x->n; i++)
-	//{
-	//	if (i > 100) break;
-	//	char fname[FILENAME_MAX];
-	//	snprintf(fname, FILENAME_MAX, "/tmp/rawline_%07d.tiff", i);
-
-	//	struct s1a_isp *s = x->t + i;
-	//	iio_write_image_uint8_vec(fname, s->data, s->data_size, 1, 1);
-	//}
+	pgm_write("/tmp/rawblock.pgm", t, w, h);
 }
 
 
@@ -432,6 +378,8 @@ void s1a_index_dump(struct s1a_index_file *x)
 // * Only transfer frames that have passed the R-S decoding are included in the
 //   binary file.
 
+#include <assert.h>
+
 int main(int c, char *v[])
 {
 	if (c != 4) return fprintf(stderr, "usage:\n\t"
@@ -457,13 +405,11 @@ int main(int c, char *v[])
 	printf("%s: %d records\n", filename_xa, xa->n);
 	printf("%s: %d records\n", filename_xi, xi->n);
 
-	//s1a_print_info(x);
 	s1a_dump_headers(x);
 	s1a_annot_dump(xa);
 	s1a_index_dump(xi);
 
-	//s1a_dump_some_data(x);
-
+	s1a_dump_image_to_tmp_rawblock_pgm(x);
 
 	return 0;
 }
