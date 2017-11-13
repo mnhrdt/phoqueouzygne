@@ -318,7 +318,7 @@ static void pgm_write(char *fname, uint8_t *x, int w, int h)
 	xfclose(f);
 }
 
-void s1a_dump_image_to_tmp_rawblock_pgm(struct s1a_file *x)
+void s1a_dump_image_to_blocks_pgm(char *fname, struct s1a_file *x)
 {
 	int h = x->n;
 	int w = 0;
@@ -333,7 +333,7 @@ void s1a_dump_image_to_tmp_rawblock_pgm(struct s1a_file *x)
 	if (i < x->t[j].data_size)
 		t[j*w+i] = x->t[j].data[i];
 
-	pgm_write("/tmp/rawblock.pgm", t, w, h);
+	pgm_write(fname, t, w, h);
 }
 
 
@@ -382,12 +382,13 @@ void s1a_index_dump(struct s1a_index_file *x)
 
 int main(int c, char *v[])
 {
-	if (c != 4) return fprintf(stderr, "usage:\n\t"
-	             "%s raw annot index\n", *v);
-	//             0 1   2     3
-	char *filename_x  = v[1];
-	char *filename_xa = v[2];
-	char *filename_xi = v[3];
+	if (c != 5) return fprintf(stderr, "usage:\n\t"
+	             "%s in-raw in-annot in-index out.pgm >meta.txt\n", *v);
+	//             0 1      2        3        4
+	char *filename_x   = v[1];
+	char *filename_xa  = v[2];
+	char *filename_xi  = v[3];
+	char *filename_out = v[4];
 
 	struct s1a_file        x[1];
 	struct s1a_annot_file xa[1];
@@ -409,7 +410,7 @@ int main(int c, char *v[])
 	s1a_annot_dump(xa);
 	s1a_index_dump(xi);
 
-	s1a_dump_image_to_tmp_rawblock_pgm(x);
+	s1a_dump_image_to_blocks_pgm(filename_out, x);
 
 	return 0;
 }
