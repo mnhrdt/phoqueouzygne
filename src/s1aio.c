@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <math.h>
 
 struct s1a_isp { // Instrument Source Packet
 
@@ -127,6 +128,58 @@ struct s1a_index_file {
 	struct s1a_index *t;
 };
 
+static const char *table_ecc_names[48] = {
+	[0]  = "contingency (0)", // reserved for ground test or mode upgrading
+	[1]  = "stripmap 1",
+	[2]  = "stripmap 2",
+	[3]  = "stripmap 3",
+	[4]  = "stripmap 4",
+	[5]  = "stripmap 5-N", // stripmap 5 imaging on northern hemisphere
+	[6]  = "stripmap 6",
+	[7]  = "contingency (7)", // reserved for ground test or mode upgrading
+	[8]  = "interferometric wide swath",
+	[9]  = "wave mode", // leapfrog mode
+	[10] = "stripmap 5-S", // stripmap 5 imaging on southern hemisphere
+	[11] = "stripmap 1 w/0 interl.Cal",
+	[12] = "stripmap 2 w/0 interl.Cal",
+	[13] = "stripmap 3 w/0 interl.Cal",
+	[14] = "stripmap 4 w/0 interl.Cal",
+	[15] = "RFC mode", // RF char. mode based on PCC sequences
+	[16] = "test mode oper/bypass",
+	[17] = "elevation notch S3",
+	[18] = "azimuth notch S1",
+	[19] = "azimuth notch S2",
+	[20] = "azimuth notch S3",
+	[21] = "azimuth notch S4",
+	[22] = "azimuth notch S5-N",
+	[23] = "azimuth notch S5-S",
+	[24] = "azimuth notch S6",
+	[25] = "stripmap 5-N w/o interl.Cal",
+	[26] = "stripmap 5-S w/o interl.Cal",
+	[27] = "stripmap 6 w/o interl.Cal",
+	[28]  = "contingency (28)", // ground testing or mode upgrading
+	[29]  = "contingency (29)", // ground testing or mode upgrading
+	[30]  = "contingency (30)", // ground testing or mode upgrading
+	[31]  = "elevation notch S3 w/o interl.Cal",
+	[32]  = "extra wide swath",
+	[33] = "azimuth notch S1 w/o interl.Cal",
+	[34] = "azimuth notch S3 w/o interl.Cal",
+	[35] = "azimuth notch S6 w/o interl.Cal",
+	[36]  = "contingency (36)", // ground testing or mode upgrading
+	[37]  = "noise characterisation S1",
+	[38]  = "noise characterisation S2",
+	[39]  = "noise characterisation S3",
+	[40]  = "noise characterisation S4",
+	[41]  = "noise characterisation S5-N",
+	[42]  = "noise characterisation S5-S",
+	[43]  = "noise characterisation S6",
+	[44]  = "noise characterisation EWS",
+	[45]  = "noise characterisation IWS",
+	[46]  = "noise characterisation Wave",
+	[47]  = "contingency (47)", // ground testing or mode upgrading
+};
+
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -191,6 +244,8 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 
 		cx += 1;
 		x->n = cx;
+
+		//if (cx < 1000) break;
 
 		{
 			int c = fgetc(f);
@@ -330,8 +385,11 @@ void s1a_dump_image_to_blocks_pgm(char *fname, struct s1a_file *x)
 
 	for (int j = 0; j < h; j++)
 	for (int i = 0; i < w; i++)
-	if (i < x->t[j].data_size)
-		t[j*w+i] = x->t[j].data[i];
+	if (i < x->t[j].data_size-1)
+		//t[j*w+i] = x->t[j].data[i];
+		t[j*w+i] = ((i%2) == 0) ?
+			hypot(x->t[j].data[i], x->t[j].data[i+1])/1.4
+			: 0;
 
 	pgm_write(fname, t, w, h);
 }
@@ -407,8 +465,8 @@ int main(int c, char *v[])
 	printf("%s: %d records\n", filename_xi, xi->n);
 
 	s1a_dump_headers(x);
-	s1a_annot_dump(xa);
-	s1a_index_dump(xi);
+	//s1a_annot_dump(xa);
+	//s1a_index_dump(xi);
 
 	s1a_dump_image_to_blocks_pgm(filename_out, x);
 
