@@ -128,7 +128,33 @@ struct s1a_index_file {
 	struct s1a_index *t;
 };
 
-static const char *table_ecc_names[48] = {
+// S1-IF-ASD-PL-0007 page 35
+#define FILTER_REF_FREQ 37.53472224
+static struct { // decimation filter
+	int id;
+	double decimation_filter_bandwith;
+	int decimation_ratio_num;
+	int decimation_ratio_den;
+	double sampling_frequency_after_decimation;
+	int filter_length;
+	char *sar_swath;
+} s1a_table_decimation_filter[12] = {
+	[0]  = {0, 100.00, 3,4,  3*4*FILTER_REF_FREQ/4 , 28, "full bandwith" },
+	[1]  = {1,  87.71, 2,3,  2*4*FILTER_REF_FREQ/3 , 28, "s1,wv1" },
+	[2]  = {2,  0    , 0,0,  0,                       0,   "" },
+	[3]  = {3,  74.25, 5,9,  5*4*FILTER_REF_FREQ/9 , 32, "s2" },
+	[4]  = {4,  59.44, 4,9,  4*4*FILTER_REF_FREQ/9 , 40, "s3" },
+	[5]  = {5,  50.62, 3,8,  3*4*FILTER_REF_FREQ/8 , 48, "s4" },
+	[6]  = {6,  44.89, 1,3,  1*4*FILTER_REF_FREQ/3 , 52, "s5" },
+	[7]  = {7,  22.2 , 1,6,  1*4*FILTER_REF_FREQ/6 , 92, "ew1" },
+	[8]  = {8,  56.59, 3,7,  3*4*FILTER_REF_FREQ/7 , 36, "iw1" },
+	[9]  = {9,  42.86, 5,16, 5*4*FILTER_REF_FREQ/16, 68, "s6,iw3" },
+	[10] = {10, 15.1 , 3,26, 3*4*FILTER_REF_FREQ/26,120, "ew2,ew3,ew4,ew5"},
+	[11] = {11, 48.35, 4,11, 4*4*FILTER_REF_FREQ/11, 44, "iw1,wv2" }
+};
+
+// S1-IF-ASD-PL-0007 page 19
+static const char *s1a_table_ecc_names[48] = {
 	[0]  = "contingency (0)", // reserved for ground test or mode upgrading
 	[1]  = "stripmap 1",
 	[2]  = "stripmap 2",
@@ -202,6 +228,72 @@ static long get_file_size(FILE *f)
 	long r = ftell(f);
 	rewind(f);
 	return r;
+}
+
+static double s1a_extract_datum_TFINE(struct s1a_isp *t)
+{
+	return (t->secondary_header.field.fine_time + 0.5) / 0x10000;
+}
+
+// S1-IF-ASD-PL-0007 page 36
+static double s1a_extract_datum_RXG(struct s1a_isp *t)
+{
+	return -0.5 * t->secondary_header.field.rx_gain;
+}
+
+// S1-IF-ASD-PL-0007 page 37
+static double s1a_extract_datum_TXPRR(struct s1a_isp *t)
+{
+	uint16_t x = t->secondary_header.field.tx_ramp_rate;
+	int pole   = x >> 15;           // extract first bit
+	int txprr  = x & (0xffff >> 1); // remove first bit
+	int sign   = pole ? 1 : -1;
+	double factor  = FILTER_REF_FREQ * FILTER_REF_FREQ / (1<<21);
+	return sign * factor * txprr;
+}
+
+// S1-IF-ASD-PL-0007 page 38
+static double s1a_extract_datum_TXPSF(struct s1a_isp *t)
+{
+	uint16_t x = t->secondary_header.field.tx_pulse_start_frequency;
+	int pole   = x >> 15;           // extract first bit
+	int txpsf  = x & (0xffff >> 1); // remove first bit
+	int sign   = pole ? 1 : -1;
+	double factor  = FILTER_REF_FREQ * FILTER_REF_FREQ / (1<<14);
+	double TXPRR = s1a_extract_datum_TXPRR(t);
+	return TXPRR/(4*FILTER_REF_FREQ) + sign * factor * txpsf;
+}
+
+// S1-IF-ASD-PL-0007 page 39
+static double s1a_extract_datum_TXPL(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.tx_pulse_length;
+	return x / FILTER_REF_FREQ;
+}
+
+// S1-IF-ASD-PL-0007 page 40
+static double s1a_extract_datum_PRI(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.PRI;
+	return x / FILTER_REF_FREQ;
+}
+
+// S1-IF-ASD-PL-0007 page 41
+static double s1a_extract_datum_SWST(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.SWST;
+	return x / FILTER_REF_FREQ;
+}
+
+// S1-IF-ASD-PL-0007 page 42
+static double s1a_extract_datum_SWL(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.SWL;
+	return x / FILTER_REF_FREQ;
 }
 
 
