@@ -177,7 +177,7 @@ static double s1a_extract_datum_SWL(struct s1a_isp *t)
 }
 
 
-void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
+void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int max_rec)
 {
 	FILE *f = xfopen(fname, "r");
 	long sf = get_file_size(f);
@@ -218,7 +218,7 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 		cx += 1;
 		x->n = cx;
 
-		//if (cx < 1000) break;
+		if (max_rec > 0 && cx > max_rec) break;
 
 		{
 			int c = fgetc(f);
@@ -255,6 +255,11 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 	}
 
 	// TODO: undo sub-commutation of ancillary data (in blocks of 64)
+}
+
+void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
+{
+	s1a_load_whole_datafile_trunc(x, fname, 0);
 }
 
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)

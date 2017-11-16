@@ -1,5 +1,7 @@
 #include <stdint.h>
 
+// TODO: compile-time asserts to verify exact struct sizes
+
 struct s1a_isp { // Instrument Source Packet
 
 	// packet primary header
@@ -106,6 +108,8 @@ struct s1a_file { // Measurement Data Component, page 64
 	struct s1a_isp *t;
 };
 
+
+
 struct s1a_annot { // Annotation Data Component record, page 65
 	union {
 		unsigned char byte[26];
@@ -152,6 +156,12 @@ struct s1a_index_file {
 	struct s1a_index *t;
 };
 
+// s1a_io.c
 void s1a_load_whole_datafile(struct s1a_file *x, char *fname);
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname);
 void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname);
+void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int n);
+
+// s1a_decode.c
+#include <complex.h>
+void s1a_decode_line(complex float *out, struct s1a_isp *x);
