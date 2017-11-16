@@ -2,6 +2,7 @@
 inline
 static void reverse_bits_of_byte(unsigned char *xx)
 {
+	return;
 	unsigned char x = *xx;
 	unsigned char t[16] = {
 		 0, //  0 = 0000 ~ 0000 =  0

@@ -35,10 +35,13 @@ struct s1a_isp { // Instrument Source Packet
 			uint32_t pri_count                   : 32 ; // 27 _ 33
 
 			// radar configuration support service (22 bytes, 31-52)
-			uint8_t  error_flag                  :  1 ; // 31 _ 37
-			uint8_t  zeroth_spare_2bit           :  2 ;
-			//uint8_t  first_spare_3bit          :  3 ; // 31 _ 37
+			//uint8_t  error_flag                  :  1 ; // 31 _ 37
+			//uint8_t  zeroth_spare_2bit           :  2 ;
+			//uint8_t  baq_mode                    :  5 ;
+			//reversed:
 			uint8_t  baq_mode                    :  5 ;
+			uint8_t  zeroth_spare_2bit           :  2 ;
+			uint8_t  error_flag                  :  1 ; // 31 _ 37
 			uint8_t  baq_block_length            :  8 ; // 32 _ 38
 			uint8_t  spare_byte                  :  8 ; // 33 _ 39
 			uint8_t  range_decimation            :  8 ; // 34 _ 40
@@ -46,28 +49,48 @@ struct s1a_isp { // Instrument Source Packet
 			uint16_t tx_ramp_rate                : 16 ; // 36 _ 42
 			uint16_t tx_pulse_start_frequency    : 16 ; // 38 _ 44
 			uint32_t tx_pulse_length             : 24 ; // 40 _ 46
-			uint8_t  second_spare_3bit           :  3 ; // 43 _ 49
+			//uint8_t  second_spare_3bit           :  3 ; // 43 _ 49
+			//uint8_t  rank                        :  5 ;
+			//reversed:
 			uint8_t  rank                        :  5 ;
+			uint8_t  second_spare_3bit           :  3 ; // 43 _ 49
 			uint32_t PRI                         : 24 ; // 44 _ 50
 			uint32_t SWST                        : 24 ; // 47 _ 53
 			uint32_t SWL                         : 24 ; // 50 _ 56
 
 			// SAS SSB message (3 bytes, 53-55)
-			uint8_t  ssb_flag                    :  1 ; // 53 _ 59
-			uint8_t  polarisation                :  3 ;
-			uint8_t  temperature_compensation    :  2 ;
+			//uint8_t  ssb_flag                    :  1 ; // 53 _ 59
+			//uint8_t  polarisation                :  3 ;
+			//uint8_t  temperature_compensation    :  2 ;
+			//uint8_t  first_spare_2bit            :  2 ;
+			//reversed:
 			uint8_t  first_spare_2bit            :  2 ;
-			uint8_t  elevation_beam_address      :  4 ; // 54 _ 60
-			uint8_t  second_spare_2bit           :  2 ;
+			uint8_t  temperature_compensation    :  2 ;
+			uint8_t  polarisation                :  3 ;
+			uint8_t  ssb_flag                    :  1 ; // 53 _ 59
+			//uint8_t  elevation_beam_address      :  4 ; // 54 _ 60
+			//uint8_t  second_spare_2bit           :  2 ;
+			//uint16_t beam_address                : 10 ;
+			//reversed:
 			uint16_t beam_address                : 10 ;
+			uint8_t  second_spare_2bit           :  2 ;
+			uint8_t  elevation_beam_address      :  4 ; // 54 _ 60
 
 			// SES SSB message (3 bytes, 56-58)
-			uint8_t  cal_mode                    :  2 ; // 56 _ 60
-			uint8_t  second_spare_bit            :  1 ;
+			//uint8_t  cal_mode                    :  2 ; // 56 _ 60
+			//uint8_t  second_spare_bit            :  1 ;
+			//uint8_t  tx_pulse_number             :  5 ;
+			//reversed:
 			uint8_t  tx_pulse_number             :  5 ;
-			uint8_t  signal_type                 :  4 ; // 57 _ 61
-			uint8_t  third_spare_3bit            :  3 ;
+			uint8_t  second_spare_bit            :  1 ;
+			uint8_t  cal_mode                    :  2 ; // 56 _ 60
+			//uint8_t  signal_type                 :  4 ; // 57 _ 61
+			//uint8_t  third_spare_3bit            :  3 ;
+			//uint8_t  swap                        :  1 ;
+			//reversed:
 			uint8_t  swap                        :  1 ;
+			uint8_t  third_spare_3bit            :  3 ;
+			uint8_t  signal_type                 :  4 ; // 57 _ 61
 			uint8_t  swath_number                :  8 ; // 58 _ 62
 
 			// radar sample count service (3 bytes, 59-61)
@@ -363,13 +386,13 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 	// correct byte endianness of some fields
 	for (int i = 0; i < x->n; i++)
 	{
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 31);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 43);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 53);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 54);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 55);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 56);
-		reverse_bits_of_byte(x->t[i].secondary_header.byte + 57);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 31);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 43);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 53);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 54);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 55);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 56);
+		//reverse_bits_of_byte(x->t[i].secondary_header.byte + 57);
 		switch_4endianness(x->t[i].secondary_header.byte +  0, 1);
 		switch_2endianness(x->t[i].secondary_header.byte +  4, 1);
 		switch_4endianness(x->t[i].secondary_header.byte +  6, 2);
