@@ -14,63 +14,65 @@ struct s1a_isp { // Instrument Source Packet
 		unsigned char byte[62];
 		struct __attribute__((packed)) { // field
 			// datation service (6 bytes, 0-5)
-			uint32_t coarse_time                 : 32 ; // 0
-			uint16_t fine_time                   : 16 ; // 4
+			uint32_t coarse_time                 : 32 ; // 0  _  6
+			uint16_t fine_time                   : 16 ; // 4  _ 10
 
 			// fixed ancillary data service (14 bytes, 6-19)
-			uint32_t sync_marker                 : 32 ; // 6
-			uint32_t data_take_id                : 32 ; // 10
-			uint8_t  ecc_number                  :  8 ; // 14
-			uint8_t  first_spare_bit             :  1 ; // 15
+			uint32_t sync_marker                 : 32 ; // 6  _ 12
+			uint32_t data_take_id                : 32 ; // 10 _ 16
+			uint8_t  ecc_number                  :  8 ; // 14 _ 20
+			uint8_t  first_spare_bit             :  1 ; // 15 _ 21
 			uint8_t  test_mode                   :  3 ;
 			uint8_t  rx_channel_id               :  4 ;
-			uint32_t instrument_configuration_id : 32 ; // 16
+			uint32_t instrument_configuration_id : 32 ; // 16 _ 22
 
 			// sub commutation ancill. data service (3 bytes, 20-22)
-			uint8_t  data_word_index             :  8 ; // 20
-			uint16_t data_word                   : 16 ; // 21
+			uint8_t  data_word_index             :  8 ; // 20 _ 26
+			uint16_t data_word                   : 16 ; // 21 _ 27
 
 			// counter service (8 bytes, 23-30)
-			uint32_t space_packet_count          : 32 ; // 23
-			uint32_t pri_count                   : 32 ; // 27
+			uint32_t space_packet_count          : 32 ; // 23 _ 29
+			uint32_t pri_count                   : 32 ; // 27 _ 33
 
 			// radar configuration support service (22 bytes, 31-52)
-			uint8_t  first_spare_3bit            :  3 ; // 31
+			uint8_t  error_flag                  :  1 ; // 31 _ 37
+			uint8_t  zeroth_spare_2bit           :  2 ;
+			//uint8_t  first_spare_3bit          :  3 ; // 31 _ 37
 			uint8_t  baq_mode                    :  5 ;
-			uint8_t  baq_block_length            :  8 ; // 32
-			uint8_t  spare_byte                  :  8 ; // 33
-			uint8_t  range_decimation            :  8 ; // 34
-			uint8_t  rx_gain                     :  8 ; // 35
-			uint16_t tx_ramp_rate                : 16 ; // 36
-			uint16_t tx_pulse_start_frequency    : 16 ; // 38
-			uint32_t tx_pulse_length             : 24 ; // 40
-			uint8_t  second_spare_3bit           :  3 ; // 43
+			uint8_t  baq_block_length            :  8 ; // 32 _ 38
+			uint8_t  spare_byte                  :  8 ; // 33 _ 39
+			uint8_t  range_decimation            :  8 ; // 34 _ 40
+			uint8_t  rx_gain                     :  8 ; // 35 _ 41
+			uint16_t tx_ramp_rate                : 16 ; // 36 _ 42
+			uint16_t tx_pulse_start_frequency    : 16 ; // 38 _ 44
+			uint32_t tx_pulse_length             : 24 ; // 40 _ 46
+			uint8_t  second_spare_3bit           :  3 ; // 43 _ 49
 			uint8_t  rank                        :  5 ;
-			uint32_t PRI                         : 24 ; // 44
-			uint32_t SWST                        : 24 ; // 47
-			uint32_t SWL                         : 24 ; // 50
+			uint32_t PRI                         : 24 ; // 44 _ 50
+			uint32_t SWST                        : 24 ; // 47 _ 53
+			uint32_t SWL                         : 24 ; // 50 _ 56
 
 			// SAS SSB message (3 bytes, 53-55)
-			uint8_t  ssb_flag                    :  1 ; // 53
+			uint8_t  ssb_flag                    :  1 ; // 53 _ 59
 			uint8_t  polarisation                :  3 ;
 			uint8_t  temperature_compensation    :  2 ;
 			uint8_t  first_spare_2bit            :  2 ;
-			uint8_t  elevation_beam_address      :  4 ; // 54
+			uint8_t  elevation_beam_address      :  4 ; // 54 _ 60
 			uint8_t  second_spare_2bit           :  2 ;
 			uint16_t beam_address                : 10 ;
 
 			// SES SSB message (3 bytes, 56-58)
-			uint8_t  cal_mode                    :  2 ; // 56
+			uint8_t  cal_mode                    :  2 ; // 56 _ 60
 			uint8_t  second_spare_bit            :  1 ;
 			uint8_t  tx_pulse_number             :  5 ;
-			uint8_t  signal_type                 :  4 ; // 57
+			uint8_t  signal_type                 :  4 ; // 57 _ 61
 			uint8_t  third_spare_3bit            :  3 ;
 			uint8_t  swap                        :  1 ;
-			uint8_t  swath_number                :  8 ; // 58
+			uint8_t  swath_number                :  8 ; // 58 _ 62
 
 			// radar sample count service (3 bytes, 59-61)
-			uint16_t num_of_quads                : 16 ; // 59
-			uint8_t  filler_octet                :  8 ; // 61
+			uint16_t number_of_quads             : 16 ; // 59 _ 65
+			uint8_t  filler_octet                :  8 ; // 61 _ 67
 		} field;
 	} secondary_header;
 	unsigned char *data;
@@ -218,8 +220,15 @@ static unsigned char xget_byte(FILE *f)
 {
 	int r = fgetc(f);
 	if (r == EOF)
-		fail("could not read another char from file");
+		fail("could not read another byte from file");
 	return r;
+}
+
+static void xget_bytes(unsigned char *x, FILE *f, int n)
+{
+	int r = fread(x, 1, n, f);
+	if (n != r)
+		fail("could not read %d bytes from file (got %d)", n, r);
 }
 
 static long get_file_size(FILE *f)
@@ -331,8 +340,9 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 		s->data_size = s->packet_data_length + 1 - 62;
 
 		s->data = xmalloc(s->data_size);
-		for (int i = 0; i < s->data_size; i++)
-			s->data[i] = xget_byte(f);
+		xget_bytes(s->data, f, s->data_size);
+		//for (int i = 0; i < s->data_size; i++)
+		//	s->data[i] = xget_byte(f);
 
 		cx += 1;
 		x->n = cx;
@@ -353,6 +363,13 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 	// correct byte endianness of some fields
 	for (int i = 0; i < x->n; i++)
 	{
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 31);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 43);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 53);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 54);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 55);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 56);
+		reverse_bits_of_byte(x->t[i].secondary_header.byte + 57);
 		switch_4endianness(x->t[i].secondary_header.byte +  0, 1);
 		switch_2endianness(x->t[i].secondary_header.byte +  4, 1);
 		switch_4endianness(x->t[i].secondary_header.byte +  6, 2);
@@ -365,6 +382,8 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 		// TODO: what happens with bytes 54 and 55? it seems ambiguous
 		switch_2endianness(x->t[i].secondary_header.byte + 59, 1);
 	}
+
+	// TODO: undo sub-commutation of ancillary data (in blocks of 64)
 }
 
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)
@@ -423,7 +442,9 @@ void s1a_dump_headers(struct s1a_file *x)
 		P2(test_mode); P2(rx_channel_id);
 		P2(instrument_configuration_id); P2(data_word_index);
 		P2(data_word); P2(space_packet_count); P2(pri_count);
-		P2(first_spare_3bit); P2(baq_mode); P2(baq_block_length);
+		P2(error_flag);
+		P2(zeroth_spare_2bit);
+		P2(baq_mode); P2(baq_block_length);
 		P2(spare_byte); P2(range_decimation); P2(rx_gain);
 		P2(tx_ramp_rate); P2(tx_pulse_start_frequency);
 		P2(tx_pulse_length); P2(second_spare_3bit); P2(rank); P2(PRI);
@@ -432,7 +453,8 @@ void s1a_dump_headers(struct s1a_file *x)
 		P2(elevation_beam_address); P2(second_spare_2bit);
 		P2(beam_address); P2(cal_mode); P2(second_spare_bit);
 		P2(tx_pulse_number); P2(signal_type); P2(third_spare_3bit);
-		P2(swap); P2(swath_number); P2(num_of_quads); P2(filler_octet);
+		P2(swap); P2(swath_number); P2(number_of_quads);
+		P2(filler_octet);
 	}
 #undef P
 #undef P2
@@ -478,14 +500,22 @@ void s1a_dump_image_to_blocks_pgm(char *fname, struct s1a_file *x)
 	for (int j = 0; j < h; j++)
 	for (int i = 0; i < w; i++)
 	if (i < x->t[j].data_size-1)
-		//t[j*w+i] = x->t[j].data[i];
-		t[j*w+i] = ((i%2) == 0) ?
-			hypot(x->t[j].data[i], x->t[j].data[i+1])/1.4
-			: 0;
+		t[j*w+i] = x->t[j].data[i];
+		//t[j*w+i] = ((i%2) == 0) ?
+		//	hypot(x->t[j].data[i], x->t[j].data[i+1])/1.4
+		//	: 0;
 
 	pgm_write(fname, t, w, h);
 }
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
 void s1a_index_dump(struct s1a_index_file *x)
 {
@@ -560,7 +590,7 @@ int main(int c, char *v[])
 	//s1a_annot_dump(xa);
 	//s1a_index_dump(xi);
 
-	s1a_dump_image_to_blocks_pgm(filename_out, x);
+	//s1a_dump_image_to_blocks_pgm(filename_out, x);
 
 	return 0;
 }

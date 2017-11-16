@@ -1,5 +1,13 @@
-CFLAGS = -march=native -O3
+# configuration
+CFLAGS  = -march=native -O3
+LDLIBS  = -lm
 
-s1aio  :
+# default target
+s1aio   :
 
-clean  : ; rm -f *.o s1aio
+# bureaucracy
+clean   : ; $(RM) *.o s1aio
+
+# automatic dependences (necessary for directly-included files .c files)
+.dep.mk : ; $(CC) -MM *.c > $@
+-include .dep.mk
