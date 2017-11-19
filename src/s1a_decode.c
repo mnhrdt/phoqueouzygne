@@ -64,7 +64,8 @@ static bool bitstream_pop(struct bitstream *s)
 	assert(real_byte < s->total_bytes);
 
 	if (s->bit == 0)
-		printf("\t\tbyte=%d %x " BYTE_TO_BINARY_PATTERN "\n",
+		printf("\t\tbyte(%d) = %d %x " BYTE_TO_BINARY_PATTERN "\n",
+				s->byte,
 			       	s->data[real_byte],
 			       	s->data[real_byte],
 			       	BYTE_TO_BINARY(s->data[real_byte])
@@ -83,11 +84,12 @@ static bool bitstream_pop(struct bitstream *s)
 
 static void bitstream_align_16(struct bitstream *s)
 {
+	printf("going to align... bit=%d, byte=%d\n", s->bit, s->byte);
 	int t[100], cx = 0;
 	while (s->bit || s->byte % 2)
 		t[cx++] = bitstream_pop(s);
 	printf("%d lost bits:", cx);
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < cx; i++)
 		printf(" %d", t[i]);
 	printf("\n");
 }
@@ -268,6 +270,7 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 	// variables (cf. page 60 of document S1-IF-ASD-PL-0007)
 	int NB = ceil(NQ / 128.0); // number of blocks
 	int BRC[NB];               // bit rate of each block
+	int THIDX[NB];             // THIDX of each block
 	int code_ie[NQ];
 	int code_io[NQ];
 	int code_qe[NQ];
@@ -298,4 +301,71 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 		}
 	}
 	bitstream_align_16(s);
+
+	// decode IO data
+	for (int b = 0; b < NB; b++)
+	{
+		int (*huf)[2] = global_huffman_table[BRC[b]];
+
+		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
+		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
+		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
+		{
+			int sign = bitstream_pop(s) ? -1 : 1;
+			int state = 1;
+			while (state > 0)
+				state = huf[state][bitstream_pop(s)];
+			code_io[i] = sign * (-state);
+			printf("io[%d] = %d\n", i, code_ie[i]);
+		}
+	}
+	bitstream_align_16(s);
+
+	// decode QE data
+	for (int b = 0; b < NB; b++)
+	{
+		THIDX[b] = 128 * bitstream_pop(s)
+		         +  64 * bitstream_pop(s)
+		         +  32 * bitstream_pop(s)
+		         +  16 * bitstream_pop(s)
+		         +   8 * bitstream_pop(s)
+		         +   4 * bitstream_pop(s)
+		         +   2 * bitstream_pop(s)
+		         +   1 * bitstream_pop(s);
+		printf("THIDX[%d] = %d\n", b, THIDX[b]);
+
+		int (*huf)[2] = global_huffman_table[BRC[b]];
+
+		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
+		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
+		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
+		{
+			int sign = bitstream_pop(s) ? -1 : 1;
+			int state = 1;
+			while (state > 0)
+				state = huf[state][bitstream_pop(s)];
+			code_qe[i] = sign * (-state);
+			printf("qe[%d] = %d\n", i, code_ie[i]);
+		}
+	}
+	bitstream_align_16(s);
+
+	// decode QO data
+	for (int b = 0; b < NB; b++)
+	{
+		int (*huf)[2] = global_huffman_table[BRC[b]];
+
+		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
+		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
+		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
+		{
+			int sign = bitstream_pop(s) ? -1 : 1;
+			int state = 1;
+			while (state > 0)
+				state = huf[state][bitstream_pop(s)];
+			code_qo[i] = sign * (-state);
+			printf("qo[%d] = %d\n", i, code_ie[i]);
+		}
+	}
+	//bitstream_align_16(s);
 }
