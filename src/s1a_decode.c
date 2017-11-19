@@ -250,6 +250,40 @@ static void s1a_print_some_isp_fields(struct s1a_isp *x)
 	printf("\tNQ     = %d\n", x->secondary_header.field.number_of_quads);
 }
 
+// huffman decoder (converts bits into M-codes)
+static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
+{
+	int (*huf)[2] = global_huffman_table[brc];
+	for (int i = 0; i < n; i++) // flowchart page 70
+	{
+		int sign = bitstream_pop(s) ? -1 : 1;
+		int state = 1;
+		while (state > 0)
+			state = huf[state][bitstream_pop(s)];
+		scode[i] = sign * (-state);
+	}
+}
+
+static double compute_svalue(int brc, int thidx, int scode)
+{
+	// page 74 of S1-IF-ASD-PL-0007
+	int mcode = abs(scode);
+	int sign = scode<0 ? -1 : 1;
+	double B = 0;
+	double NRL = 0;
+	double SF = 0;
+	int k[5] = { 3, 4, 6, 9, 15 };
+	if (thidx < k[brc])
+	{
+		if (mcode <  k[brc])
+			return mcode;
+		if (mcode == k[brc])
+			return sign * B;
+		fail("brc=%d k=%d mcode=%d thidx=%d",brc,k[brc],mcode,thidx);
+	}
+	return sign * NRL * SF;
+}
+
 void s1a_decode_line(complex float *out, struct s1a_isp *x)
 {
 	s1a_isp_verify_sanity(x);
@@ -262,10 +296,10 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 
 	// space for output quads
 	int NQ = x->secondary_header.field.number_of_quads;
-	double out_ie[NQ];
-	double out_io[NQ];
-	double out_qe[NQ];
-	double out_qo[NQ];
+	double svalue_ie[NQ];
+	double svalue_io[NQ];
+	double svalue_qe[NQ];
+	double svalue_qo[NQ];
 
 	// variables (cf. page 60 of document S1-IF-ASD-PL-0007)
 	int NB = ceil(NQ / 128.0); // number of blocks
@@ -286,38 +320,17 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 		       + 1 * bitstream_pop(s);
 		printf("BRC[%d] = %d\n", b, BRC[b]);
 		if (BRC[b] < 0 || BRC[b] > 4) fail("bad BRC=%d\n", BRC[b]);
-		int (*huf)[2] = global_huffman_table[BRC[b]];
 
 		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
-		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
-		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
-		{
-			int sign = bitstream_pop(s) ? -1 : 1;
-			int state = 1;
-			while (state > 0)
-				state = huf[state][bitstream_pop(s)];
-			code_ie[i] = sign * (-state);
-			printf("ie[%d] = %d\n", i, code_ie[i]);
-		}
+		extract_scodes(code_ie, s, BRC[b], num_hcodes);
 	}
 	bitstream_align_16(s);
 
 	// decode IO data
 	for (int b = 0; b < NB; b++)
 	{
-		int (*huf)[2] = global_huffman_table[BRC[b]];
-
 		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
-		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
-		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
-		{
-			int sign = bitstream_pop(s) ? -1 : 1;
-			int state = 1;
-			while (state > 0)
-				state = huf[state][bitstream_pop(s)];
-			code_io[i] = sign * (-state);
-			printf("io[%d] = %d\n", i, code_ie[i]);
-		}
+		extract_scodes(code_io, s, BRC[b], num_hcodes);
 	}
 	bitstream_align_16(s);
 
@@ -334,38 +347,26 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 		         +   1 * bitstream_pop(s);
 		printf("THIDX[%d] = %d\n", b, THIDX[b]);
 
-		int (*huf)[2] = global_huffman_table[BRC[b]];
-
 		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
-		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
-		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
-		{
-			int sign = bitstream_pop(s) ? -1 : 1;
-			int state = 1;
-			while (state > 0)
-				state = huf[state][bitstream_pop(s)];
-			code_qe[i] = sign * (-state);
-			printf("qe[%d] = %d\n", i, code_ie[i]);
-		}
+		extract_scodes(code_qe, s, BRC[b], num_hcodes);
 	}
 	bitstream_align_16(s);
 
 	// decode QO data
 	for (int b = 0; b < NB; b++)
 	{
-		int (*huf)[2] = global_huffman_table[BRC[b]];
-
 		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
-		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
-		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
-		{
-			int sign = bitstream_pop(s) ? -1 : 1;
-			int state = 1;
-			while (state > 0)
-				state = huf[state][bitstream_pop(s)];
-			code_qo[i] = sign * (-state);
-			printf("qo[%d] = %d\n", i, code_ie[i]);
-		}
+		extract_scodes(code_qo, s, BRC[b], num_hcodes);
 	}
 	//bitstream_align_16(s);
+
+	// convert M-codes (small integers) to S-codes (physical samples)
+	for (int i = 0; i < NQ; i++)
+	{
+		int b = i / 128; // TODO: verify off-by-one consistency here
+		svalue_ie[i] = compute_svalue(BRC[b], THIDX[b], code_ie[i]);
+		svalue_io[i] = compute_svalue(BRC[b], THIDX[b], code_io[i]);
+		svalue_qe[i] = compute_svalue(BRC[b], THIDX[b], code_qe[i]);
+		svalue_qo[i] = compute_svalue(BRC[b], THIDX[b], code_qo[i]);
+	}
 }
