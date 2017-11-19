@@ -183,6 +183,25 @@ static int (*global_huffman_table[5])[2] = {
 	global_huffman_table_brc_4
 };
 
+// page 78
+static double (*global_table_B[5]) = {
+	[0] = (double[]){ 3,  3,  3.16,  3.53 },
+	[1] = (double[]){ 4,  4,  4.08,  4.37 },
+	[2] = (double[]){ 6,  6,  6   ,  6.15,  6.5 ,  6.88 },
+	[3] = (double[]){ 9,  9,  9   ,  9   ,  9.36,  9.5 , 10.1},
+	[4] = (double[]){15, 15, 15   , 15   , 15   , 15   , 15.22, 15.5, 16.05}
+};
+
+// page 79
+static double (*global_table_NRL[5]) = {
+	[0] = (double[]){ 3,  3,  3.16,  3.53 },
+	[1] = (double[]){ 4,  4,  4.08,  4.37 },
+	[2] = (double[]){ 6,  6,  6   ,  6.15,  6.5 ,  6.88 },
+	[3] = (double[]){ 9,  9,  9   ,  9   ,  9.36,  9.5 , 10.1},
+	[4] = (double[]){15, 15, 15   , 15   , 15   , 15   , 15.22, 15.5, 16.05}
+};
+
+
 void huffman_decode(struct bitstream *x)
 {
 	int brc = 3;
@@ -264,14 +283,20 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 	}
 }
 
+static double sigma_factor(int thidx)
+{
+	return thidx;
+}
+
+
 static double compute_svalue(int brc, int thidx, int scode)
 {
 	// page 74 of S1-IF-ASD-PL-0007
 	int mcode = abs(scode);
 	int sign = scode<0 ? -1 : 1;
-	double B = 0;
-	double NRL = 0;
-	double SF = 0;
+	double B = global_table_B[brc][thidx];
+	double NRL = 0;//global_table_nrl[brc][mcode];
+	double SF = sigma_factor(thidx);
 	int k[5] = { 3, 4, 6, 9, 15 };
 	if (thidx < k[brc])
 	{
