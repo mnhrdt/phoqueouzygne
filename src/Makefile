@@ -8,6 +8,9 @@ default : $(BIN)
 
 $(BIN)  : $(OBJ)
 
+test    : $(BIN)
+	./decode_line ../data/vv.dat 2000
+
 clean   : ; $(RM) $(BIN) *.o
 
 .dep.mk : ; $(CC) -MM *.c > $@
