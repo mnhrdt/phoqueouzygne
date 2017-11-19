@@ -29,7 +29,18 @@ static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 
 #include "smapa.h"
 SMART_PARAMETER(REVERSE_BYTES,0)
-SMART_PARAMETER(REVERSE_BITS,0)
+SMART_PARAMETER(REVERSE_BITS,1)
+
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+		  (byte & 0x80 ? '1' : '0'), \
+	  (byte & 0x40 ? '1' : '0'), \
+	  (byte & 0x20 ? '1' : '0'), \
+	  (byte & 0x10 ? '1' : '0'), \
+	  (byte & 0x08 ? '1' : '0'), \
+	  (byte & 0x04 ? '1' : '0'), \
+	  (byte & 0x02 ? '1' : '0'), \
+	  (byte & 0x01 ? '1' : '0')
 
 static bool bitstream_pop(struct bitstream *s)
 {
@@ -52,9 +63,17 @@ static bool bitstream_pop(struct bitstream *s)
 	assert(real_byte >= 0);
 	assert(real_byte < s->total_bytes);
 
+	if (s->bit == 0)
+		printf("\t\tbyte=%d %x " BYTE_TO_BINARY_PATTERN "\n",
+			       	s->data[real_byte],
+			       	s->data[real_byte],
+			       	BYTE_TO_BINARY(s->data[real_byte])
+				);
+
 	bool r = s->data[real_byte] & (1 << real_bit);
-	s->byte += 1;
 	s->bit = (s->bit + 1) % 8;
+	if (!s->bit)
+		s->byte += 1;
 	if (s->byte >= s->total_bytes)
 		fail("got too much bits from a bitstream!");
 
