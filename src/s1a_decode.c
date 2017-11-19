@@ -1,4 +1,5 @@
 #include <complex.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,24 +17,44 @@ struct bitstream {
 	uint8_t *data;
 };
 
-static void bitstream_init(struct bitstream *b, void *data, int total_bytes)
+static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 {
-	b->byte = 0;
-	b->bit = 0;
-	b->data = data;
-	b->total_bytes = total_bytes;
+	s->byte = 0;
+	s->bit = 0;
+	s->data = data;
+	s->total_bytes = total_bytes;
 }
 
-static bool bitstream_pop(struct bitstream *b)
+static bool bitstream_pop(struct bitstream *s)
 {
-	bool r = b->data[b->byte] & (1 << b->bit);
+	// formula without endianness-shit
+	bool r = s->data[s->byte] & (1 << s->bit);
 
-	b->byte += 1;
-	b->bit = (b->bit + 1) % 8;
-	if (b->byte >= b->total_bytes)
+	//int real_byte = s->byte;
+	//if (0 == s->byte%2)
+	//	real_byte += 1;
+	//else
+	//	real_byte -= 1;
+	//bool r = s->data[real_byte] & (1 << s->bit);
+
+	s->byte += 1;
+	s->bit = (s->bit + 1) % 8;
+	if (s->byte >= s->total_bytes)
 		fail("got too much bits from a bitstream!");
 
+	printf("\tbit %d\n", r);
 	return r;
+}
+
+static void bitstream_align_16(struct bitstream *s)
+{
+	int t[100], cx = 0;
+	while (s->bit || s->byte % 2)
+		t[cx++] = bitstream_pop(s);
+	printf("%d lost bits:", cx);
+	for (int i = 0; i < 0; i++)
+		printf(" %d", t[i]);
+	printf("\n");
 }
 
 // Note: the following tables encode the Huffman trees on pages 71-73
@@ -45,7 +66,7 @@ static bool bitstream_pop(struct bitstream *b)
 // ordering.  Leafs are indicated by numbers s<1 , and the symbol represented
 // by a leaf is the value "-s".
 
-static int huffman_table_brc_0[4][2] = {
+static int global_huffman_table_brc_0[4][2] = {
 	[1] = { 0,  2},
 	[2] = {-1,  3},
 	[3] = {-2, -3}
@@ -55,7 +76,7 @@ static int huffman_table_brc_0[4][2] = {
 //       |     |     |
 //       0     -1    -2
 
-static int huffman_table_brc_1[5][2] = {
+static int global_huffman_table_brc_1[5][2] = {
 	[1] =  { 0,  2},
 	[2] =  {-1,  3},
 	[3] =  {-2,  4},
@@ -66,7 +87,7 @@ static int huffman_table_brc_1[5][2] = {
 //       |     |     |     |
 //       0     -1    -2    -3
 
-static int huffman_table_brc_2[7][2] = {
+static int global_huffman_table_brc_2[7][2] = {
 	[1] = { 0,  2},
 	[2] = {-1,  3},
 	[3] = {-2,  4},
@@ -79,7 +100,7 @@ static int huffman_table_brc_2[7][2] = {
 //       |     |     |     |     |     |
 //       0     -1    -2    -3    -4    -5
 
-static int huffman_table_brc_3[10][2] = {
+static int global_huffman_table_brc_3[10][2] = {
 	[1] = { 2,  3},
 	[2] = { 0, -1},
 	[3] = {-2,  4},
@@ -98,7 +119,7 @@ static int huffman_table_brc_3[10][2] = {
 //       | \
 //       0  -1
 
-static int huffman_table_brc_4[16][2] = {
+static int global_huffman_table_brc_4[16][2] = {
 	[ 1] = {  2,   3},
 	[ 2] = {  0,   4},
 	[ 3] = {  5,   6},
@@ -117,15 +138,31 @@ static int huffman_table_brc_4[16][2] = {
 };
 // (too difficult to draw in ascii)
 
-static int (*huffman_table[5])[2] = {
-	huffman_table_brc_0,
-	huffman_table_brc_1,
-	huffman_table_brc_2,
-	huffman_table_brc_3,
-	huffman_table_brc_4
+static int (*global_huffman_table[5])[2] = {
+	global_huffman_table_brc_0,
+	global_huffman_table_brc_1,
+	global_huffman_table_brc_2,
+	global_huffman_table_brc_3,
+	global_huffman_table_brc_4
 };
 
-void s1a_isp_sanity_check(struct s1a_isp *x)
+void huffman_decode(struct bitstream *x)
+{
+	int brc = 3;
+	int (*h)[2] = global_huffman_table[brc];
+	int s = 1;
+	while (1)
+		if (s > 0)
+			s = h[s][bitstream_pop(x)];
+		else {
+			printf("got symbol %d\n", -s);
+	//		bytestream_push(y, -s);
+			s = 1;
+		}
+
+}
+
+void s1a_isp_verify_sanity(struct s1a_isp *x)
 {
 	if (x->secondary_header.field.sync_marker != 0x352ef853)
 		fail("incorrect sync marker found");
@@ -134,10 +171,18 @@ void s1a_isp_sanity_check(struct s1a_isp *x)
 		fail("incorrect baq_block_field");
 }
 
-void s1a_decode_line(complex float *out, struct s1a_isp *x)
+void s1a_isp_verify_nominal_mode(struct s1a_isp *x)
 {
-	s1a_isp_sanity_check(x);
+	int TSTMOD = x->secondary_header.field.test_mode;
+	int SIGTYP = x->secondary_header.field.signal_type;
+	int BAQMOD = x->secondary_header.field.baq_mode;
+	if (TSTMOD !=  0) fail("bad TSTMOD %d (should be 0)\n", TSTMOD);
+	if (SIGTYP !=  0) fail("bad SIGTYP %d (should be 0)\n", SIGTYP);
+	if (BAQMOD != 12) fail("bad BAQMOD %d (should be 12)\n", BAQMOD);
+}
 
+static void s1a_print_some_isp_fields(struct s1a_isp *x)
+{
 	printf("S1A ISP:\n");
 	printf("\tversion_number   = %d\n", x->version_number);
 	printf("\tid               = %d\n", x->id);
@@ -146,4 +191,75 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 
 	printf("\tcoarse_T = %d\n", x->secondary_header.field.coarse_time);
 	printf("\tfine_T   = %d\n", x->secondary_header.field.fine_time);
+	printf("\tDTID   = %d\n", x->secondary_header.field.data_take_id);
+	printf("\tECC    = %d\n", x->secondary_header.field.ecc_number);
+	printf("\tTSTMOD = %d\n", x->secondary_header.field.test_mode);
+	printf("\tRXCHID = %d\n", x->secondary_header.field.rx_channel_id);
+	printf("\tBAQMOD = %d\n", x->secondary_header.field.baq_mode);
+	//printf("\tBAQLEN  = %d\n",x->secondary_header.field.baq_block_length);
+	printf("\tRGDEC  = %d\n", x->secondary_header.field.range_decimation);
+	printf("\tRXG    = %d\n", x->secondary_header.field.rx_gain);
+	printf("\tTXPRR  = %d\n", x->secondary_header.field.tx_ramp_rate);
+	printf("\tTXPSF  = %d\n", x->secondary_header.field.tx_pulse_start_frequency);
+	printf("\tTXPL   = %d\n", x->secondary_header.field.tx_pulse_length);
+	printf("\tRANK   = %d\n", x->secondary_header.field.rank);
+	printf("\tPOL    = %d\n", x->secondary_header.field.polarisation);
+	printf("\tCALMOD = %d\n", x->secondary_header.field.cal_mode);
+	printf("\tTXPNO  = %d\n", x->secondary_header.field.tx_pulse_number);
+	printf("\tSIGTYP = %d\n", x->secondary_header.field.signal_type);
+	printf("\tSWAP   = %d\n", x->secondary_header.field.swap);
+	printf("\tSWATH  = %d\n", x->secondary_header.field.swath_number);
+	printf("\tNQ     = %d\n", x->secondary_header.field.number_of_quads);
+}
+
+void s1a_decode_line(complex float *out, struct s1a_isp *x)
+{
+	s1a_isp_verify_sanity(x);
+	s1a_print_some_isp_fields(x);
+	s1a_isp_verify_nominal_mode(x);
+
+	// setup init bitstream
+	struct bitstream s[1];
+	bitstream_init(s, x->data, x->data_size);
+
+	// space for output quads
+	int NQ = x->secondary_header.field.number_of_quads;
+	double out_ie[NQ];
+	double out_io[NQ];
+	double out_qe[NQ];
+	double out_qo[NQ];
+
+	// variables (cf. page 60 of document S1-IF-ASD-PL-0007)
+	int NB = ceil(NQ / 128.0); // number of blocks
+	int BRC[NB];               // bit rate of each block
+	int code_ie[NQ];
+	int code_io[NQ];
+	int code_qe[NQ];
+	int code_qo[NQ];
+	//int b = 0;                 // block index (iterator)
+
+	// decode IE data
+	printf("NB = %d\n", NB);
+	for (int b = 0; b < NB; b++)
+	{
+		BRC[b] = 4 * bitstream_pop(s)
+		       + 2 * bitstream_pop(s)
+		       + 1 * bitstream_pop(s);
+		printf("BRC[%d] = %d\n", b, BRC[b]);
+		if (BRC[b] < 0 || BRC[b] > 4) fail("bad BRC=%d\n", BRC[b]);
+		int (*huf)[2] = global_huffman_table[BRC[b]];
+
+		int num_hcodes = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
+		printf("num_hcodes(%d) = %d\n", b, num_hcodes);
+		for (int i = 0; i < num_hcodes; i++) // flowchart page 70
+		{
+			int sign = bitstream_pop(s) ? -1 : 1;
+			int state = 1;
+			while (state > 0)
+				state = huf[state][bitstream_pop(s)];
+			code_ie[i] = sign * (-state);
+			printf("ie[%d] = %d\n", i, code_ie[i]);
+		}
+	}
+	bitstream_align_16(s);
 }

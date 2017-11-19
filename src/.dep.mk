@@ -1,4 +1,4 @@
-decode_line.o: decode_line.c xfopen.c fail.c xmalloc.c s1a.h
+decode_line.o: decode_line.c s1a.h
 dump_headers.o: dump_headers.c xfopen.c fail.c xmalloc.c s1a.h
 endianness.o: endianness.c
 fail.o: fail.c

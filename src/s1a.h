@@ -27,7 +27,7 @@ struct s1a_isp { // Instrument Source Packet
 			uint8_t  rx_channel_id               :  4 ;
 			uint32_t instrument_configuration_id : 32 ; // 16 _ 22
 
-			// sub commutation ancill. data service (3 bytes, 20-22)
+			// sub commutated ancill. data service (3 bytes, 20-22)
 			uint8_t  data_word_index             :  8 ; // 20 _ 26
 			uint16_t data_word                   : 16 ; // 21 _ 27
 
