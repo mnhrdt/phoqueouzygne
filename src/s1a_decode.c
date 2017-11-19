@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <complex.h>
 #include <math.h>
 #include <stdbool.h>
@@ -10,6 +11,7 @@
 
 #include "s1a.h"
 
+// data structure for bitwise memory traversal
 struct bitstream {
 	int byte;
 	int bit;
@@ -25,18 +27,32 @@ static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 	s->total_bytes = total_bytes;
 }
 
+#include "smapa.h"
+SMART_PARAMETER(REVERSE_BYTES,0)
+SMART_PARAMETER(REVERSE_BITS,0)
+
 static bool bitstream_pop(struct bitstream *s)
 {
-	// formula without endianness-shit
-	bool r = s->data[s->byte] & (1 << s->bit);
 
-	//int real_byte = s->byte;
-	//if (0 == s->byte%2)
-	//	real_byte += 1;
-	//else
-	//	real_byte -= 1;
-	//bool r = s->data[real_byte] & (1 << s->bit);
+	int real_byte = s->byte;
+	int real_bit = s->bit;
 
+	if (REVERSE_BYTES()) {
+		if (0 == s->byte%2)
+			real_byte += 1;
+		else
+			real_byte -= 1;
+	}
+
+	if (REVERSE_BITS())
+		real_bit = 7 - real_bit;
+
+	assert(real_bit >= 0);
+	assert(real_bit < 8);
+	assert(real_byte >= 0);
+	assert(real_byte < s->total_bytes);
+
+	bool r = s->data[real_byte] & (1 << real_bit);
 	s->byte += 1;
 	s->bit = (s->bit + 1) % 8;
 	if (s->byte >= s->total_bytes)
@@ -188,6 +204,7 @@ static void s1a_print_some_isp_fields(struct s1a_isp *x)
 	printf("\tid               = %d\n", x->id);
 	printf("\tsequence_control = %d\n", x->sequence_control);
 	printf("\tdata_length      = %d\n", x->packet_data_length);
+	printf("\tdata_size        = %d\n", x->data_size);
 
 	printf("\tcoarse_T = %d\n", x->secondary_header.field.coarse_time);
 	printf("\tfine_T   = %d\n", x->secondary_header.field.fine_time);
