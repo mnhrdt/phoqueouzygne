@@ -15,6 +15,15 @@ static void asc_write(char *fname, float *x, int w, int h)
 	xfclose(f);
 }
 
+static void pgm_write(char *fname, uint8_t *x, int w, int h)
+{
+	FILE *f = xfopen(fname, "w");
+	fprintf(f, "P5\n%d %d\n255\n", w, h);
+	fwrite(x, h, w, f);
+	xfclose(f);
+}
+
+
 int main(int c, char *v[])
 {
 	if (c != 4) return fprintf(stderr, "usage:\n\t%s raw.dat l0 lf\n", *v);
@@ -46,10 +55,19 @@ int main(int c, char *v[])
 	float *x_real    = xmalloc(w * h * sizeof*x_real);
 	float *x_imag    = xmalloc(w * h * sizeof*x_imag);
 
+	uint8_t *x_block = xmalloc(w*h);
+	uint8_t *x_brc   = xmalloc(w*h);
+	uint8_t *x_thidx = xmalloc(w*h);
+	for (int i = 0; i < w*h; i++) x_block[i]=x_brc[i]=x_thidx[i]=42;
+
 	fprintf(stderr, "w = %d\n", w);
 	fprintf(stderr, "x = %p\n", (void*)x);
 	for (int i = 0; i < h; i++)
-		s1a_decode_line(x + w*i, f->t + n_first + i);
+		s1a_decode_line_fancy(x + w*i,
+				x_block + w*i,
+				x_brc   + w*i,
+				x_thidx + w*i,
+				f->t + n_first + i);
 
 	for (int i = 0; i < w*h; i++)
 	{
@@ -58,6 +76,9 @@ int main(int c, char *v[])
 		x_imag[i] = cimag(x[i]);
 	}
 
+	pgm_write("x_block.asc", x_block, w, h);
+	pgm_write("x_brc.asc"  , x_brc  , w, h);
+	pgm_write("x_thidx.asc", x_thidx, w, h);
 	asc_write("x_norm.asc", x_norm, w, h);
 	asc_write("x_real.asc", x_real, w, h);
 	asc_write("x_imag.asc", x_imag, w, h);
@@ -67,6 +88,9 @@ int main(int c, char *v[])
 	free(x_norm);
 	free(x_real);
 	free(x_imag);
+	free(x_block);
+	free(x_brc);
+	free(x_thidx);
 
 	return 0;
 }

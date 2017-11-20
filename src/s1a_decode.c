@@ -283,9 +283,9 @@ static double compute_svalue(int brc, int thidx, int scode)
 	int sign   = scode<0 ? -1 : 1;
 	double B   = global_table_B_FDBAQ[brc][thidx];
 	double SF  = global_table_SF[thidx];
+	double NRL = global_table_NRL_FDBAQ[brc][mcode];
 	int t[5]   = { 3, 3, 5, 6, 8};   // THIDX threshold for nominal case
 	int k[5]   = { 3, 4, 6, 9, 15 }; // mcode threshold inside simple case
-	double NRL = global_table_NRL_FDBAQ[brc][mcode];
 	if (thidx <= t[brc])
 	{
 		if (mcode <  k[brc])
@@ -299,7 +299,12 @@ static double compute_svalue(int brc, int thidx, int scode)
 
 // decode a line into an array of complex numbers (cf. flowchart on page 69)
 // returns the number of complex samples filled-in
-int s1a_decode_line(complex float *out, struct s1a_isp *x)
+int s1a_decode_line_fancy(
+		complex float *out,
+		uint8_t *out_block,
+		uint8_t *out_brc,
+		uint8_t *out_thidx,
+		struct s1a_isp *x)
 {
 	s1a_isp_verify_sanity(x);
 	if (!s1a_isp_nominal_mode_P(x))
@@ -324,6 +329,7 @@ int s1a_decode_line(complex float *out, struct s1a_isp *x)
 	{
 		BRC[b] = bitstream_pop_ulong(s, 3);
 		if (BRC[b] < 0 || BRC[b] > 4) fail("bad BRC=%d\n", BRC[b]);
+		fprintf(stderr, "BRC[%d] = %d\n", b, BRC[b]);
 		extract_scodes(code_ie+128*b, s, BRC[b], num_hcodes[b]);
 	}
 	bitstream_align_16(s);
@@ -335,6 +341,7 @@ int s1a_decode_line(complex float *out, struct s1a_isp *x)
 	for (int b = 0; b < NB; b++) // decode QE data
 	{
 		THIDX[b] = bitstream_pop_ulong(s, 8);
+		fprintf(stderr, "THIDX[%d] = %d\n", b, THIDX[b]);
 		extract_scodes(code_qe+128*b, s, BRC[b], num_hcodes[b]);
 	}
 	bitstream_align_16(s);
@@ -361,5 +368,20 @@ int s1a_decode_line(complex float *out, struct s1a_isp *x)
 		out[2*i+1] = svalue_io[i] + I * svalue_qo[i];
 	}
 
+	for (int i = 0; i < NQ; i++)
+	{
+		int b = i / 128;
+		if (out_block) out_block[2*i] = out_block[2*i+1] = b;
+		if (out_brc  ) out_brc  [2*i] = out_brc  [2*i+1] = BRC[b];
+		if (out_thidx) out_thidx[2*i] = out_thidx[2*i+1] = THIDX[b];
+	}
+
 	return 2*NQ;
+}
+
+// decode a line into an array of complex numbers (cf. flowchart on page 69)
+// returns the number of complex samples filled-in
+int s1a_decode_line(complex float *out, struct s1a_isp *x)
+{
+	return s1a_decode_line_fancy(out, NULL, NULL, NULL, x);
 }
