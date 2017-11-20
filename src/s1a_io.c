@@ -4,7 +4,7 @@
 #include "fail.c"
 #include "xmalloc.c"
 #include "xfopen.c"
-#include "endianness.c"
+#include "bits.c"
 
 #include "s1a.h"
 

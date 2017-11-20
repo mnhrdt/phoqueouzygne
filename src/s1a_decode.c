@@ -7,7 +7,7 @@
 
 #include "fail.c"
 #include "xmalloc.c"
-#include "endianness.c"
+#include "bits.c"
 
 #include "s1a.h"
 
@@ -27,17 +27,6 @@ static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 	s->total_bytes = total_bytes;
 }
 
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)  \
-		  (byte & 0x80 ? '1' : '0'), \
-	  (byte & 0x40 ? '1' : '0'), \
-	  (byte & 0x20 ? '1' : '0'), \
-	  (byte & 0x10 ? '1' : '0'), \
-	  (byte & 0x08 ? '1' : '0'), \
-	  (byte & 0x04 ? '1' : '0'), \
-	  (byte & 0x02 ? '1' : '0'), \
-	  (byte & 0x01 ? '1' : '0')
-
 static bool bitstream_pop(struct bitstream *s)
 {
 	if (s->byte >= s->total_bytes)
@@ -51,20 +40,11 @@ static bool bitstream_pop(struct bitstream *s)
 	assert(real_byte >= 0);
 	assert(real_byte < s->total_bytes);
 
-	//if (s->bit == 0)
-	//	printf("\t\tbyte(%d) = %d %x " BYTE_TO_BINARY_PATTERN "\n",
-	//			s->byte,
-	//			s->data[real_byte],
-	//			s->data[real_byte],
-	//			BYTE_TO_BINARY(s->data[real_byte])
-	//	      );
-
 	bool r = s->data[real_byte] & (1 << real_bit);
 	s->bit = (s->bit + 1) % 8;
 	if (!s->bit)
 		s->byte += 1;
 
-	//printf("\tbit %d\n", r);
 	return r;
 }
 
@@ -78,14 +58,9 @@ static unsigned long bitstream_pop_ulong(struct bitstream *s, int nbits)
 
 static void bitstream_align_16(struct bitstream *s)
 {
-	//printf("going to align... bit=%d, byte=%d\n", s->bit, s->byte);
 	int t[100], cx = 0;
 	while (s->bit || s->byte % 2)
 		t[cx++] = bitstream_pop(s);
-	//printf("%d lost bits:", cx);
-	//for (int i = 0; i < cx; i++)
-	//	printf(" %d", t[i]);
-	//printf("\n");
 }
 
 // Note: the following tables encode the Huffman trees on pages 71-73
@@ -240,14 +215,15 @@ void s1a_isp_verify_sanity(struct s1a_isp *x)
 		fail("incorrect baq_block_field");
 }
 
-void s1a_isp_verify_nominal_mode(struct s1a_isp *x)
+bool s1a_isp_nominal_mode_P(struct s1a_isp *x)
 {
 	int TSTMOD = x->secondary_header.field.test_mode;
 	int SIGTYP = x->secondary_header.field.signal_type;
 	int BAQMOD = x->secondary_header.field.baq_mode;
-	if (TSTMOD !=  0) fail("bad TSTMOD %d (should be 0)\n", TSTMOD);
-	if (SIGTYP !=  0) fail("bad SIGTYP %d (should be 0)\n", SIGTYP);
-	if (BAQMOD != 12) fail("bad BAQMOD %d (should be 12)\n", BAQMOD);
+	return   TSTMOD == 0   &&   SIGTYP == 0   &&   BAQMOD == 12;
+	//if (TSTMOD !=  0) fail("bad TSTMOD %d (should be 0)\n", TSTMOD);
+	//if (SIGTYP !=  0) fail("bad SIGTYP %d (should be 0)\n", SIGTYP);
+	//if (BAQMOD != 12) fail("bad BAQMOD %d (should be 12)\n", BAQMOD);
 }
 
 static void s1a_print_some_isp_fields(struct s1a_isp *x)
@@ -296,12 +272,7 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 	}
 }
 
-static double sigma_factor(int thidx)
-{
-	return thidx;
-}
-
-
+// compute a physical S-value (double) from a quantized S-code (int)
 static double compute_svalue(int brc, int thidx, int scode)
 {
 	// page 74
@@ -312,33 +283,26 @@ static double compute_svalue(int brc, int thidx, int scode)
 	int t[5]   = { 3, 3, 5, 6, 8};   // THIDX threshold for nominal case
 	int k[5]   = { 3, 4, 6, 9, 15 }; // mcode threshold inside simple case
 	double NRL = global_table_NRL_FDBAQ[brc][mcode];
-	double r = NAN;
 	if (thidx <= t[brc])
 	{
 		if (mcode <  k[brc])
-			r = sign * mcode;
-		else if (mcode == k[brc])
-			r = sign * B;
-		else fail("brc=%d k=%d mcode=%d thidx=%d",
-				brc,k[brc],mcode,thidx);
+			return sign * mcode;
+		if (mcode == k[brc])
+			return sign * B;
+		fail("brc=%d k=%d mcode=%d thidx=%d", brc,k[brc],mcode,thidx);
 	}
-	else
-		r = sign * NRL * SF;
-	//printf("svalue(brc=%d thidx=%d scode=%d) = %g\n",
-	//		brc, thidx, scode, r);
-	return r;
+	return sign * NRL * SF;
 }
 
-void s1a_decode_line(complex float *out, struct s1a_isp *x)
+int s1a_decode_line(complex float *out, struct s1a_isp *x)
 {
 	s1a_isp_verify_sanity(x);
-	//s1a_print_some_isp_fields(x);
-	s1a_isp_verify_nominal_mode(x);
+	if (!s1a_isp_nominal_mode_P(x))
+		return 0 * fprintf(stderr, "isp %p is non-nominal\n", (void*)x);
 
 	// setup init bitstream
 	struct bitstream s[1];
 	bitstream_init(s, x->data, x->data_size);
-
 
 	// variables (cf. page 60 of document S1-IF-ASD-PL-0007)
 	int NQ = x->secondary_header.field.number_of_quads;
@@ -346,19 +310,12 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 	int BRC[NB];               // bit rate of each block
 	int THIDX[NB];             // THIDX of each block
 	int num_hcodes[NB];
-	int code_ie[NQ];
-	int code_io[NQ];
-	int code_qe[NQ];
-	int code_qo[NQ];
-	for (int i = 0; i < NQ; i++)
-		code_ie[i] = code_io[i] = code_qe[i] = code_qo[i] = -42;
+	int code_ie[NQ], code_io[NQ], code_qe[NQ], code_qo[NQ];
 
-	// set number of hcodes for each block
-	for (int b = 0; b < NB; b++)
+	for (int b = 0; b < NB; b++) // set number of hcodes for each block
 		num_hcodes[b] = b < NB-1 ? 128 : NQ - 128 * (NB-1); // page 70
 
-	// decode IE data
-	for (int b = 0; b < NB; b++)
+	for (int b = 0; b < NB; b++) // decode IE data
 	{
 		BRC[b] = bitstream_pop_ulong(s, 3);
 		if (BRC[b] < 0 || BRC[b] > 4) fail("bad BRC=%d\n", BRC[b]);
@@ -366,32 +323,25 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 	}
 	bitstream_align_16(s);
 
-	// decode IO data
-	for (int b = 0; b < NB; b++)
+	for (int b = 0; b < NB; b++) // decode IO data
 		extract_scodes(code_io+128*b, s, BRC[b], num_hcodes[b]);
 	bitstream_align_16(s);
 
-	// decode QE data
-	for (int b = 0; b < NB; b++)
+	for (int b = 0; b < NB; b++) // decode QE data
 	{
 		THIDX[b] = bitstream_pop_ulong(s, 8);
 		extract_scodes(code_qe+128*b, s, BRC[b], num_hcodes[b]);
 	}
 	bitstream_align_16(s);
 
-	// decode QO data
-	for (int b = 0; b < NB; b++)
+	for (int b = 0; b < NB; b++) // decode QO data
 		extract_scodes(code_qo+128*b, s, BRC[b], num_hcodes[b]);
 	bitstream_align_16(s);
 
 	// space for quads of svalues
-	double svalue_ie[NQ];
-	double svalue_io[NQ];
-	double svalue_qe[NQ];
-	double svalue_qo[NQ];
+	double svalue_ie[NQ], svalue_io[NQ], svalue_qe[NQ], svalue_qo[NQ];
 
-	// convert Scodes (small signed integers) to Svalues (physical samples)
-	for (int i = 0; i < NQ; i++)
+	for (int i = 0; i < NQ; i++) // convert Scodes to Svalues
 	{
 		int b = i / 128; // TODO: verify off-by-one consistency here
 		svalue_ie[i] = compute_svalue(BRC[b], THIDX[b], code_ie[i]);
@@ -400,10 +350,11 @@ void s1a_decode_line(complex float *out, struct s1a_isp *x)
 		svalue_qo[i] = compute_svalue(BRC[b], THIDX[b], code_qo[i]);
 	}
 
-	// interlace even and odd samples
-	for (int i = 0; i < NQ; i++)
+	for (int i = 0; i < NQ; i++) // interlace even and odd samples
 	{
 		out[2*i+0] = svalue_ie[i] + I * svalue_qe[i];
 		out[2*i+1] = svalue_io[i] + I * svalue_qo[i];
 	}
+
+	return 2*NQ;
 }

@@ -165,4 +165,4 @@ void s1a_file_free_memory(struct s1a_file *x);
 
 // s1a_decode.c
 #include <complex.h>
-void s1a_decode_line(complex float *out, struct s1a_isp *x);
+int s1a_decode_line(complex float *out, struct s1a_isp *x);
