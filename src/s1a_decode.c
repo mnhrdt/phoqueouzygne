@@ -19,6 +19,7 @@ struct bitstream {
 	uint8_t *data;
 };
 
+// setup a bitstream from a memory array
 static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 {
 	s->byte = 0;
@@ -27,20 +28,17 @@ static void bitstream_init(struct bitstream *s, void *data, int total_bytes)
 	s->total_bytes = total_bytes;
 }
 
+// extract next bit from the bitstream
 static bool bitstream_pop(struct bitstream *s)
 {
+	// check if there is still available data
 	if (s->byte >= s->total_bytes)
 		fail("got too much bits from a bitstream!");
 
-	int real_byte = s->byte;
-	int real_bit = 7 - s->bit;
+	// extract bit
+	bool r = s->data[s->byte] & (1 << (7 - s->bit));
 
-	assert(real_bit >= 0);
-	assert(real_bit < 8);
-	assert(real_byte >= 0);
-	assert(real_byte < s->total_bytes);
-
-	bool r = s->data[real_byte] & (1 << real_bit);
+	// increase counters
 	s->bit = (s->bit + 1) % 8;
 	if (!s->bit)
 		s->byte += 1;
@@ -48,6 +46,7 @@ static bool bitstream_pop(struct bitstream *s)
 	return r;
 }
 
+// extract nbits to form an integer
 static unsigned long bitstream_pop_ulong(struct bitstream *s, int nbits)
 {
 	unsigned long r = 0;
@@ -56,12 +55,14 @@ static unsigned long bitstream_pop_ulong(struct bitstream *s, int nbits)
 	return r;
 }
 
+// extract enough bits so that the head is aligned to a multiple of 16
 static void bitstream_align_16(struct bitstream *s)
 {
 	int t[100], cx = 0;
 	while (s->bit || s->byte % 2)
 		t[cx++] = bitstream_pop(s);
 }
+
 
 // Note: the following tables encode the Huffman trees on pages 71-73
 // of the pdf named "S1-IF-ASD-PL-007" from the official Sentinel 1 docs.
@@ -206,6 +207,7 @@ static double global_table_SF[256] = {
 };
 
 
+// verify that some constant fields have the appropriate constants
 void s1a_isp_verify_sanity(struct s1a_isp *x)
 {
 	if (x->secondary_header.field.sync_marker != 0x352ef853)
@@ -215,6 +217,7 @@ void s1a_isp_verify_sanity(struct s1a_isp *x)
 		fail("incorrect baq_block_field");
 }
 
+// check wether the line is a nominal datum (FDBAQ-encoded echo)
 bool s1a_isp_nominal_mode_P(struct s1a_isp *x)
 {
 	int TSTMOD = x->secondary_header.field.test_mode;
@@ -226,6 +229,7 @@ bool s1a_isp_nominal_mode_P(struct s1a_isp *x)
 	//if (BAQMOD != 12) fail("bad BAQMOD %d (should be 12)\n", BAQMOD);
 }
 
+// debugging function to dump most data fields of the header
 static void s1a_print_some_isp_fields(struct s1a_isp *x)
 {
 	printf("S1A ISP:\n");
@@ -258,7 +262,7 @@ static void s1a_print_some_isp_fields(struct s1a_isp *x)
 	printf("\tNQ     = %d\n", x->secondary_header.field.number_of_quads);
 }
 
-// huffman decoder (converts bits into M-codes)
+// huffman decoder (converts bits into S-codes)
 static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 {
 	int (*huf)[2] = global_huffman_tree[brc];
@@ -294,6 +298,8 @@ static double compute_svalue(int brc, int thidx, int scode)
 	return sign * NRL * SF;
 }
 
+// decode a line into an array of complex numbers (cf. flowchart on page 69)
+// returns the number of complex samples filled-in
 int s1a_decode_line(complex float *out, struct s1a_isp *x)
 {
 	s1a_isp_verify_sanity(x);
