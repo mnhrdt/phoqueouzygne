@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 #include "fail.c"
-#include "xmalloc.c"
 #include "bits.c"
 
 #include "s1a.h"
