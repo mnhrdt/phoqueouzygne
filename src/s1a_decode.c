@@ -311,12 +311,13 @@ static double compute_svalue(int brc, int thidx, int scode)
 	int sign   = scode<0 ? -1 : 1;
 	double B   = global_table_B_FDBAQ[brc][thidx];
 	double SF  = global_table_SF[thidx];
-	int k[5]   = { 3, 4, 6, 9, 15 };
+	int t[5]   = { 3, 3, 5, 6, 8};   // THIDX threshold for nominal case
+	int k[5]   = { 3, 4, 6, 9, 15 }; // mcode threshold inside simple case
 	double NRL = global_table_NRL_FDBAQ[brc][mcode];
-	if (thidx < k[brc])
+	if (thidx <= t[brc])
 	{
 		if (mcode <  k[brc])
-			return mcode;
+			return sign * mcode;
 		if (mcode == k[brc])
 			return sign * B;
 		fail("brc=%d k=%d mcode=%d thidx=%d",brc,k[brc],mcode,thidx);
