@@ -262,6 +262,13 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname)
 	s1a_load_whole_datafile_trunc(x, fname, 0);
 }
 
+void s1a_file_free_memory(struct s1a_file *x)
+{
+	for (int i = 0; i < x->n; i++)
+		free(x->t[i].data);
+	free(x->t);
+}
+
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname)
 {
 	FILE *f = xfopen(fname, "r");

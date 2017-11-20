@@ -161,6 +161,7 @@ void s1a_load_whole_datafile(struct s1a_file *x, char *fname);
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname);
 void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname);
 void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int n);
+void s1a_file_free_memory(struct s1a_file *x);
 
 // s1a_decode.c
 #include <complex.h>
