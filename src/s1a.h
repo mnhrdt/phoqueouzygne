@@ -76,6 +76,7 @@ struct s1a_isp { // Instrument Source Packet
 			uint16_t beam_address                : 10 ;
 			uint8_t  second_spare_2bit           :  2 ;
 			uint8_t  elevation_beam_address      :  4 ; // 54 _ 60
+			// NOTE: the field "beam_address" is mangled
 
 			// SES SSB message (3 bytes, 56-58)
 			//uint8_t  cal_mode                    :  2 ; // 56 _ 60
@@ -169,3 +170,9 @@ int s1a_decode_line(complex float *out, struct s1a_isp *x);
 int s1a_decode_line_fancy(complex float *out,
 		uint8_t *out_block, uint8_t *out_brc, uint8_t *out_thidx,
 		struct s1a_isp *x);
+
+// s1a_focus.c
+int s1a_focus_decoded_line(complex float *out, complex float *in,
+		struct s1a_isp *x);
+int s1a_focus_band(complex float *out, complex float *in,
+		struct s1a_file *f, int first, int last);
