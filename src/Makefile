@@ -1,7 +1,7 @@
 CFLAGS  = -march=native -O3
-LDLIBS  = -lm
+LDLIBS  = -lfftw3f -lm
 
-OBJ     = s1a_io.o s1a_decode.o
+OBJ     = s1a_io.o s1a_decode.o s1a_focus.o
 BIN     = dump_headers decode_line extract_img
 
 default : $(BIN)
