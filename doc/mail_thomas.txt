@@ -1,0 +1,99 @@
+Salut Enric,
+
+Pardonne moi de te répondre si tard ça fait 2 semaines que je suis malade je
+sors enfin du gouffre :-)! Lorsque j'avais travaillé dessus j'avais écrit la
+chose ci-dessous sur un notebook pour essayer de comprendre les paramètres
+(j'ai simplement écrit le commentaire que j'avais trouvé dans la
+documentation). Je n'ai donc pas compris énormément de choses néanmoins de ce
+que je comprends du focusing les paramètres qui me semblent essentiels sont:
+
+
+-  mdc[0].range_decimation = 9     #### The Range Decimation indicates the used LowPass filter and down-sampling ratio for decimation of the radar data in the sampling window according to the needed mode bandwidth. The resulting Sampling Frequency after decimation
+#applies to that of the SAR user data in the Space Packet. fdec= 5/16 *4*fref pour range_decimation=9 ( permet de comprendre comment est modulé le signal)
+
+- mdc[0].tx_ramp_rate = 33961     #### Critere essentiel pour faire le filter matching  True tx_ramp_rate= f_ref^2/ 2**21 (correspond au K du livre que j'ai consulté essentiel pour le filter matching, d'ailleurs normalement tu devrais pouvoir faire le filter matching dans le sens range déjà l'image devrait être plus visible après cette étape)
+
+-mdc[0].tx_pulse_start_frequency = 9341  ###  True pulse_start  = pulse_ramp_rate/ (4 *f_ref) + pulse_start *f_ref/ 2**14  ( cette donnée est essentielle pour faire le filter matching dans le sens azimuth mais il me manquait la vitesse du satellite)
+
+Enfin je pense que ces paramètres permettent de comprendre comment est acquis le signal:
+
+mdc[0].tx_pulse_start_frequency = 9341  ###  True pulse_start  = pulse_ramp_rate/ (4 *f_ref) + pulse_start *f_ref/ 2**14
+mdc[0].tx_pulse_length = 2004    #### Duree du Chirp true pulse_length = pulse_length / f_ref
+
+mdc[0].PRI = 22265     ### time interval between two transmission pulse true PRI = PRI/ f_ref
+mdc[0].SWST = 3719     ### voir page 41 très clair premiere partie du PRI au moment de l'envoi de pulse   true SWST= SWQT/ f_ref
+mdc[0].SWL = 15837     ### voir page 41 très clair premiere partie du PRI au moment de la reception du pulse   true SWL= SWL/ f_ref
+
+
+Pour les autres ce n'était pas très clair ma compréhension des choses. Voilà désolé de ne pas t'aider plus que cela.
+
+J'espère que tu passes de bonnes fêtes et bon courage pour le Focusing,
+
+Amitiés,
+
+Thomas
+
+
+
+
+mdc[0].version_number = 0
+mdc[0].id = 3100
+mdc[0].sequence_control = 57599
+mdc[0].packet_data_length = 17729
+mdc[0].coarse_time = 1171214655    ## Normalement en seconde
+mdc[0].fine_time = 37884    ##  true_fine_time= (fine_time + 0.5)*10**(-16)
+mdc[0].sync_marker = 892270675
+mdc[0].data_take_id = 15708224
+mdc[0].ecc_number = 8
+mdc[0].first_spare_bit = 0
+mdc[0].test_mode = 0
+mdc[0].rx_channel_id = 0
+mdc[0].instrument_configuration_id = 1
+mdc[0].data_word_index = 49
+mdc[0].data_word = 23393
+mdc[0].space_packet_count = 762111  ### Nombre de chirp enregistré par le satellite
+mdc[0].pri_count = 764962    ### Nombre de Pulse repetition interval (nombre de pulse genere par le satellite)
+mdc[0].first_spare_3bit = 4
+mdc[0].baq_mode = 1          #### Block Adaptive Quantisation Quand 1 pas vraiment exploitable, donne une indication sur le type de signal reçu
+mdc[0].baq_block_length = 31   #### Block Adaptive Quantisation pas vraiment compris
+mdc[0].spare_byte = 0
+mdc[0].range_decimation = 9     #### The Range Decimation indicates the used LowPass filter and down-sampling ratio for decimation of the
+#radar data in the sampling window according to the needed mode bandwidth. The resulting Sampling Frequency after decimation
+#applies to that of the SAR user data in the Space Packet. fdec= 5/16 *4*fref pour range_decimation=9
+
+## Je pense que cela signifie qu'un filtre passe bas a été appliqué
+
+
+
+mdc[0].rx_gain = 8    ### True Rx = -0.5*Rx_code
+mdc[0].tx_ramp_rate = 33961     #### Critere essentiel pour faire le filter matching  True tx_ramp_rate= f_ref^2/ 2**21
+mdc[0].tx_pulse_start_frequency = 9341  ###  True pulse_start  = pulse_ramp_rate/ (4 *f_ref) + pulse_start *f_ref/ 2**14
+mdc[0].tx_pulse_length = 2004    #### Duree du Chirp true pulse_length = pulse_length / f_ref
+mdc[0].second_spare_3bit = 2
+mdc[0].rank = 1     ### The Rank indicates the number of PRIs between Tx pulse transmission and the reception of the
+#corresponding echo from the swath of interest (ici égal à 1).
+
+
+mdc[0].PRI = 22265     ### time interval between two transmission pulse true PRI = PRI/ f_ref
+mdc[0].SWST = 3719     ### voir page 41 très clair premiere partie du PRI au moment de l'envoi de pulse   true SWST= SWQT/ f_ref
+mdc[0].SWL = 15837     ### voir page 41 très clair premiere partie du PRI au moment de la reception du pulse   true SWL= SWL/ f_ref
+mdc[0].ssb_flag = 0     ### Flag which indicates either Imaging or Noise operation for 0 ou Calibration Operation for 1
+mdc[0].polarisation = 0   ### 0 means Tx only, Horizontal for the polarisation
+mdc[0].temperature_compensation = 3   ### The Temperature Compensation indicates the activity of temperature compensation in the SAS.
+mdc[0].first_spare_2bit = 1
+mdc[0].elevation_beam_address = 2   ## EBADR = EBADRcode identifies one of 16 available Elevation beams that is applied in
+### actual PRI for the SAR imaging of the actual mode swath. TROUVER CES 16 modes CHANGE DANS L AQUISITION
+
+
+mdc[0].second_spare_2bit = 0
+mdc[0].beam_address = 574   ##ABADR = ABADRcode identifies one of 1024 available Azimuth beams that is applied in actual PRI
+##for the SAR imaging of the actual mode swath. TROUVER CES 1024 modes CHANGE DANS L AQUISITION
+mdc[0].cal_mode = 0
+mdc[0].second_spare_bit = 0
+mdc[0].tx_pulse_number = 1  ### varie entre 0 1 et 2 TXPNO TXPL TXPSF TXPRR RGDEC SWL SWST PRI ou RANK ont changé de valeur
+mdc[0].signal_type = 1
+mdc[0].third_spare_3bit = 0
+mdc[0].swap = 0   # passe de 0 à 1 et indique si
+mdc[0].swath_number = 12  ### code pour decrire les paramatre de TXPNO TXPL ....
+mdc[0].num_of_quads = 9863
+mdc[0].filler_octet = 0
