@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 // TODO: compile-time asserts to verify exact struct sizes
+#define FILTER_REF_FREQ 37.53472224
 
 struct s1a_isp { // Instrument Source Packet
 
@@ -163,6 +164,10 @@ void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname);
 void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname);
 void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int n);
 void s1a_file_free_memory(struct s1a_file *x);
+
+// utility functions on s1a_io :
+double s1a_extract_datum_TXPRR(struct s1a_isp *);
+int s1a_extract_datum_TXPL3(struct s1a_isp *);
 
 // s1a_decode.c
 #include <complex.h>

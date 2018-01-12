@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "fail.c"
 #include "xmalloc.c"
@@ -7,9 +8,9 @@
 #include "bits.c"
 
 #include "s1a.h"
+//#define FILTER_REF_FREQ 37.53472224
 
 // S1-IF-ASD-PL-0007 page 35
-#define FILTER_REF_FREQ 37.53472224
 static struct { // decimation filter
 	int id;
 	double decimation_filter_bandwith;
@@ -122,7 +123,7 @@ static double s1a_extract_datum_RXG(struct s1a_isp *t)
 }
 
 // S1-IF-ASD-PL-0007 page 37
-static double s1a_extract_datum_TXPRR(struct s1a_isp *t)
+double s1a_extract_datum_TXPRR(struct s1a_isp *t)
 {
 	uint16_t x = t->secondary_header.field.tx_ramp_rate;
 	int pole   = x >> 15;           // extract first bit
@@ -133,7 +134,7 @@ static double s1a_extract_datum_TXPRR(struct s1a_isp *t)
 }
 
 // S1-IF-ASD-PL-0007 page 38
-static double s1a_extract_datum_TXPSF(struct s1a_isp *t)
+double s1a_extract_datum_TXPSF(struct s1a_isp *t)
 {
 	uint16_t x = t->secondary_header.field.tx_pulse_start_frequency;
 	int pole   = x >> 15;           // extract first bit
@@ -145,15 +146,29 @@ static double s1a_extract_datum_TXPSF(struct s1a_isp *t)
 }
 
 // S1-IF-ASD-PL-0007 page 39
-static double s1a_extract_datum_TXPL(struct s1a_isp *t)
+double s1a_extract_datum_TXPL(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.tx_pulse_length;
 	return x / FILTER_REF_FREQ;
 }
 
+// width of the filter (chirp)
+int s1a_extract_datum_TXPL3(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.tx_pulse_length;
+	if (x < 128 || x > 4223)
+		fprintf(stderr, "WARNING: TXPL = %d\n", x);
+	int i = t->secondary_header.field.range_decimation;;
+	if (i < 0 || i > 11)
+		fprintf(stderr, "WARNING: RGDEC = %d\n", i);
+	double fdec = s1a_table_decimation_filter[i].sampling_frequency_after_decimation;
+	return ceil(fdec * x / FILTER_REF_FREQ);
+}
+
 // S1-IF-ASD-PL-0007 page 40
-static double s1a_extract_datum_PRI(struct s1a_isp *t)
+double s1a_extract_datum_PRI(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.PRI;
@@ -161,7 +176,7 @@ static double s1a_extract_datum_PRI(struct s1a_isp *t)
 }
 
 // S1-IF-ASD-PL-0007 page 41
-static double s1a_extract_datum_SWST(struct s1a_isp *t)
+double s1a_extract_datum_SWST(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.SWST;
@@ -169,7 +184,7 @@ static double s1a_extract_datum_SWST(struct s1a_isp *t)
 }
 
 // S1-IF-ASD-PL-0007 page 42
-static double s1a_extract_datum_SWL(struct s1a_isp *t)
+double s1a_extract_datum_SWL(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.SWL;

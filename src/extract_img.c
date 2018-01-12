@@ -50,10 +50,12 @@ int main(int c, char *v[])
 	int w = 2 * max_nq;
 	int h = 1 + n_last - n_first;
 	complex float *x = xmalloc(w * h * sizeof*x);
+	complex float *y = xmalloc(w * h * sizeof*y);
 	for (int i = 0; i < w*h; i++) x[i] = 0;
 	float *x_norm    = xmalloc(w * h * sizeof*x_norm);
 	float *x_real    = xmalloc(w * h * sizeof*x_real);
 	float *x_imag    = xmalloc(w * h * sizeof*x_imag);
+	float *y_norm    = xmalloc(w * h * sizeof*y_norm);
 
 	uint8_t *x_block = xmalloc(w*h);
 	uint8_t *x_brc   = xmalloc(w*h);
@@ -63,25 +65,33 @@ int main(int c, char *v[])
 	fprintf(stderr, "w = %d\n", w);
 	fprintf(stderr, "x = %p\n", (void*)x);
 	for (int i = 0; i < h; i++)
+	{
 		s1a_decode_line_fancy(x + w*i,
 				x_block + w*i,
 				x_brc   + w*i,
 				x_thidx + w*i,
 				f->t + n_first + i);
+		s1a_focus_decoded_line(
+				y + w*i, x + w*i,
+				f->t + n_first + i);
+	}
 
 	for (int i = 0; i < w*h; i++)
 	{
 		x_norm[i] = cabs(x[i]);
 		x_real[i] = creal(x[i]);
 		x_imag[i] = cimag(x[i]);
+		y_norm[i] = cabs(y[i]);
 	}
+	asc_write("y_norm.asc", y_norm, w, h);
 
-	pgm_write("x_block.asc", x_block, w, h);
-	pgm_write("x_brc.asc"  , x_brc  , w, h);
-	pgm_write("x_thidx.asc", x_thidx, w, h);
-	asc_write("x_norm.asc", x_norm, w, h);
-	asc_write("x_real.asc", x_real, w, h);
-	asc_write("x_imag.asc", x_imag, w, h);
+	//pgm_write("x_block.asc", x_block, w, h);
+	//pgm_write("x_brc.asc"  , x_brc  , w, h);
+	//pgm_write("x_thidx.asc", x_thidx, w, h);
+	//asc_write("x_norm.asc", x_norm, w, h);
+	//asc_write("x_real.asc", x_real, w, h);
+	//asc_write("x_imag.asc", x_imag, w, h);
+
 
 	s1a_file_free_memory(f);
 	free(x);

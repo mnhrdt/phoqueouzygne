@@ -329,7 +329,7 @@ int s1a_decode_line_fancy(
 	{
 		BRC[b] = bitstream_pop_ulong(s, 3);
 		if (BRC[b] < 0 || BRC[b] > 4) fail("bad BRC=%d\n", BRC[b]);
-		fprintf(stderr, "BRC[%d] = %d\n", b, BRC[b]);
+		//fprintf(stderr, "BRC[%d] = %d\n", b, BRC[b]);
 		extract_scodes(code_ie+128*b, s, BRC[b], num_hcodes[b]);
 	}
 	bitstream_align_16(s);
@@ -341,7 +341,7 @@ int s1a_decode_line_fancy(
 	for (int b = 0; b < NB; b++) // decode QE data
 	{
 		THIDX[b] = bitstream_pop_ulong(s, 8);
-		fprintf(stderr, "THIDX[%d] = %d\n", b, THIDX[b]);
+		//fprintf(stderr, "THIDX[%d] = %d\n", b, THIDX[b]);
 		extract_scodes(code_qe+128*b, s, BRC[b], num_hcodes[b]);
 	}
 	bitstream_align_16(s);
