@@ -181,3 +181,5 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 		struct s1a_isp *x);
 int s1a_focus_band(complex float *out, complex float *in,
 		struct s1a_file *f, int first, int last);
+int s1a_focus_column(complex float *out,complex float *in,int n,
+		float k,int l,float f);

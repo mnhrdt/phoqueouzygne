@@ -1,4 +1,5 @@
 #include <complex.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,8 +25,17 @@ static void pgm_write(char *fname, uint8_t *x, int w, int h)
 }
 
 
+#include "smapa.h"
+SMART_PARAMETER(WMIN,0)
+SMART_PARAMETER(WMAX,-1)
+SMART_PARAMETER(FHACK2,INFINITY)
+
+
+#include "iio.h"
+#include "pickopt.c"
 int main(int c, char *v[])
 {
+	char *filename_ynorm = pick_option(&c, &v, "y", "y_norm.asc");
 	if (c != 4) return fprintf(stderr, "usage:\n\t%s raw.dat l0 lf\n", *v);
 	//                                             0 1       2  3
 	char *filename_x = v[1];
@@ -53,9 +63,9 @@ int main(int c, char *v[])
 	complex float *y = xmalloc(w * h * sizeof*y);
 	for (int i = 0; i < w*h; i++) x[i] = 0;
 	float *x_norm    = xmalloc(w * h * sizeof*x_norm);
-	float *x_real    = xmalloc(w * h * sizeof*x_real);
-	float *x_imag    = xmalloc(w * h * sizeof*x_imag);
-	float *y_norm    = xmalloc(w * h * sizeof*y_norm);
+	//float *x_real    = xmalloc(w * h * sizeof*x_real);
+	//float *x_imag    = xmalloc(w * h * sizeof*x_imag);
+	//float *y_norm    = xmalloc(w * h * sizeof*y_norm);
 
 	uint8_t *x_block = xmalloc(w*h);
 	uint8_t *x_brc   = xmalloc(w*h);
@@ -71,33 +81,57 @@ int main(int c, char *v[])
 				x_brc   + w*i,
 				x_thidx + w*i,
 				f->t + n_first + i);
+		if (isfinite(FHACK2()))
 		s1a_focus_decoded_line(
 				y + w*i, x + w*i,
 				f->t + n_first + i);
 	}
 
+	// focus columns
+	float param_k = s1a_extract_datum_TXPRR(f->t + n_first);
+	int   param_l = s1a_extract_datum_TXPL3(f->t + n_first);
+	float param_f = FHACK2();
+	int wmin = WMIN();
+	int wmax = WMAX();
+	for (int i = wmin; i < wmax; i++)
+	{
+		fprintf(stderr, "focusing column %d\n", i);
+		complex float t1[h], t2[h];
+		for (int j = 0; j < h; j++)
+			t1[j] = y[w*j + i];
+		s1a_focus_column(t2, t1, h, param_k, param_l, param_f);
+		for (int j = 0; j < h; j++)
+			y[w*j + i] = t2[j];
+	}
+
+	fprintf(stderr, "going to free mem\n");
+	s1a_file_free_memory(f);
+	fprintf(stderr, "i freed the mem!\n");
+
 	for (int i = 0; i < w*h; i++)
 	{
 		x_norm[i] = cabs(x[i]);
-		x_real[i] = creal(x[i]);
-		x_imag[i] = cimag(x[i]);
-		y_norm[i] = cabs(y[i]);
+		//x_real[i] = creal(x[i]);
+		//x_imag[i] = cimag(x[i]);
+		//y_norm[i] = cabs(y[i]);
 	}
-	asc_write("y_norm.asc", y_norm, w, h);
+	free(x);
+	fprintf(stderr, "i freed more mem!\n");
+	//if (isfinite(FHACK2()))
+	//	iio_write_image_float(filename_ynorm, y_norm, w, h);
 
 	//pgm_write("x_block.asc", x_block, w, h);
 	//pgm_write("x_brc.asc"  , x_brc  , w, h);
 	//pgm_write("x_thidx.asc", x_thidx, w, h);
-	//asc_write("x_norm.asc", x_norm, w, h);
+	fprintf(stderr, "going to write stuff\n");
+	iio_write_image_float("x_norm.tif", x_norm, w, h);
 	//asc_write("x_real.asc", x_real, w, h);
 	//asc_write("x_imag.asc", x_imag, w, h);
 
 
-	s1a_file_free_memory(f);
-	free(x);
 	free(x_norm);
-	free(x_real);
-	free(x_imag);
+	//free(x_real);
+	//free(x_imag);
 	free(x_block);
 	free(x_brc);
 	free(x_thidx);

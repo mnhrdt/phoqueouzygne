@@ -21,22 +21,22 @@ static void ifft(complex float *x, complex float *X, int n)
 
 #include "smapa.h"
 SMART_PARAMETER(FHACK,37);
-static void fill_chirp(complex float *c, int n, float k, int l)
+static void fill_chirp(complex float *c, int n, float k, int l, float f)
 {
 	for (int i = 0; i < n; i++)
 	{
 		int j = i < n/2 ? i : n - i;
-		double t = j / FHACK();//FILTER_REF_FREQ;
+		double t = j / f;//FHACK();//FILTER_REF_FREQ;
 		if (abs(j) < l/2)
 			c[i] = c[n-i] = cos(k*t*t);
 		else
 			c[i] = 0;
 	}
 
-	FILE *f = fopen("/tmp/chirpvals.txt", "w");
-	for (int i = 0; i < n; i++)
-		fprintf(f, "%g\n", creal(c[i]));
-	fclose(f);
+	//FILE *ff = fopen("/tmp/chirpvals.txt", "w");
+	//for (int i = 0; i < n; i++)
+	//	fprintf(ff, "%g\n", creal(c[i]));
+	//fclose(ff);
 }
 
 static void focus_one_line(
@@ -44,11 +44,12 @@ static void focus_one_line(
 		complex float *x, // input (raw data for a line)
 		int n,            // number of complex samples
 		float k,          // pulse parameter K
-		float l           // filter length TXPL3
+		float l,          // filter length TXPL3
+		float f           // frequency scaling
 		)
 {
 	complex float c[n];
-	fill_chirp(c, n, k, l);
+	fill_chirp(c, n, k, l, f);
 
 	complex float C[n], X[n], Y[n];
 	fft(C, c, n);
@@ -60,6 +61,7 @@ static void focus_one_line(
 	ifft(y, Y, n);
 }
 
+
 int s1a_focus_decoded_line(complex float *out, complex float *in,
 		struct s1a_isp *x)
 {
@@ -69,6 +71,7 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 	// chirp parameters
 	float k = s1a_extract_datum_TXPRR(x);
 	int   l = s1a_extract_datum_TXPL3(x);
+	float f = FHACK();
 
 	static int printed = 0;
 	if (!printed) {
@@ -78,7 +81,14 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 	}
 
 	// focus
-	focus_one_line(out, in, n, k, l);
+	focus_one_line(out, in, n, k, l, f);
 
 	return 1;
 }
+
+int s1a_focus_column(complex float *out, complex float *in, int n,
+		float k, int l, float f)
+{
+	focus_one_line(out, in, n, k, l, f);
+}
+
