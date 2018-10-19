@@ -1,4 +1,4 @@
-CFLAGS  = -march=native -O3 -DNDEBUG
+CFLAGS  = -march=native -O3 -Wall -Wno-unused
 LDLIBS  = -lfftw3f -lm -ljpeg -lpng -ltiff
 
 OBJ     = s1a_io.o s1a_decode.o s1a_focus.o iio.o

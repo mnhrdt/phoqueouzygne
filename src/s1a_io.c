@@ -130,7 +130,7 @@ double s1a_extract_datum_TXPRR(struct s1a_isp *t)
 	int txprr  = x & (0xffff >> 1); // remove first bit
 	int sign   = pole ? 1 : -1;
 	double factor  = FILTER_REF_FREQ * FILTER_REF_FREQ / (1<<21);
-	return sign * factor * txprr;
+	return sign * factor * txprr;// * 1e12;
 }
 
 // S1-IF-ASD-PL-0007 page 38
@@ -140,9 +140,9 @@ double s1a_extract_datum_TXPSF(struct s1a_isp *t)
 	int pole   = x >> 15;           // extract first bit
 	int txpsf  = x & (0xffff >> 1); // remove first bit
 	int sign   = pole ? 1 : -1;
-	double factor  = FILTER_REF_FREQ * FILTER_REF_FREQ / (1<<14);
+	double factor  = FILTER_REF_FREQ / (1<<14);
 	double TXPRR = s1a_extract_datum_TXPRR(t);
-	return TXPRR/(4*FILTER_REF_FREQ) + sign * factor * txpsf;
+	return /*1e6*(1e-12*/(TXPRR/(4*FILTER_REF_FREQ) + sign * factor * txpsf);
 }
 
 // S1-IF-ASD-PL-0007 page 39
@@ -150,7 +150,7 @@ double s1a_extract_datum_TXPL(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.tx_pulse_length;
-	return x / FILTER_REF_FREQ;
+	return (x / FILTER_REF_FREQ);// * 1e-6;
 }
 
 // width of the filter (chirp)
@@ -165,6 +165,29 @@ int s1a_extract_datum_TXPL3(struct s1a_isp *t)
 		fprintf(stderr, "WARNING: RGDEC = %d\n", i);
 	double fdec = s1a_table_decimation_filter[i].sampling_frequency_after_decimation;
 	return ceil(fdec * x / FILTER_REF_FREQ);
+}
+
+// width of the filter (chirp)
+int s1a_extract_datum_NF(struct s1a_isp *t)
+{
+	// WARNING: 3 bytes! (TODO : check endianness)
+	uint32_t x = t->secondary_header.field.tx_pulse_length;
+	if (x < 128 || x > 4223)
+		fprintf(stderr, "WARNING: TXPL = %d\n", x);
+	int i = t->secondary_header.field.range_decimation;;
+	if (i < 0 || i > 11)
+		fprintf(stderr, "WARNING: RGDEC = %d\n", i);
+	return s1a_table_decimation_filter[i].filter_length;
+}
+
+int s1a_extract_datum_TXPL1(struct s1a_isp *t)
+{
+	return 8 * t->secondary_header.field.tx_pulse_length;
+}
+
+int s1a_extract_datum_TXPL2(struct s1a_isp *t)
+{
+	return 4 * t->secondary_header.field.tx_pulse_length;
 }
 
 // S1-IF-ASD-PL-0007 page 40

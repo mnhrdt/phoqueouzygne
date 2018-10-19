@@ -63,15 +63,28 @@ int main(int c, char *v[])
 	complex float *y = xmalloc(w * h * sizeof*y);
 	for (int i = 0; i < w*h; i++) x[i] = 0;
 	float *x_norm    = xmalloc(w * h * sizeof*x_norm);
-	//float *x_real    = xmalloc(w * h * sizeof*x_real);
-	//float *x_imag    = xmalloc(w * h * sizeof*x_imag);
-	//float *y_norm    = xmalloc(w * h * sizeof*y_norm);
-
+	float *x_real    = xmalloc(w * h * sizeof*x_real);
+	float *x_imag    = xmalloc(w * h * sizeof*x_imag);
+	float *y_norm    = xmalloc(w * h * sizeof*y_norm);
 	uint8_t *x_block = xmalloc(w*h);
 	uint8_t *x_brc   = xmalloc(w*h);
 	uint8_t *x_thidx = xmalloc(w*h);
 	for (int i = 0; i < w*h; i++) x_block[i]=x_brc[i]=x_thidx[i]=42;
 
+
+	// read focusing parameters
+	{
+	double param_TXPSF = s1a_extract_datum_TXPSF(f->t + n_first);
+	double param_TXPRR = s1a_extract_datum_TXPRR(f->t + n_first);
+	double param_TXPL = s1a_extract_datum_TXPL(f->t + n_first);
+	int    param_NF = s1a_extract_datum_NF(f->t + n_first);
+	fprintf(stderr, "TXPRR = %.18e\n", param_TXPRR);
+	fprintf(stderr, "TXPL = %.18e\n", param_TXPL);
+	fprintf(stderr, "TXPSF = %.18e\n", param_TXPSF);
+	fprintf(stderr, "NF = %d\n", param_NF);
+	}
+
+	// decode and focus lines
 	fprintf(stderr, "w = %d\n", w);
 	fprintf(stderr, "x = %p\n", (void*)x);
 	for (int i = 0; i < h; i++)
@@ -81,28 +94,24 @@ int main(int c, char *v[])
 				x_brc   + w*i,
 				x_thidx + w*i,
 				f->t + n_first + i);
-		if (isfinite(FHACK2()))
-		s1a_focus_decoded_line(
-				y + w*i, x + w*i,
+		s1a_focus_decoded_line(y + w*i, x + w*i,
 				f->t + n_first + i);
 	}
 
-	// focus columns
-	float param_k = s1a_extract_datum_TXPRR(f->t + n_first);
-	int   param_l = s1a_extract_datum_TXPL3(f->t + n_first);
-	float param_f = FHACK2();
-	int wmin = WMIN();
-	int wmax = WMAX();
-	for (int i = wmin; i < wmax; i++)
-	{
-		fprintf(stderr, "focusing column %d\n", i);
-		complex float t1[h], t2[h];
-		for (int j = 0; j < h; j++)
-			t1[j] = y[w*j + i];
-		s1a_focus_column(t2, t1, h, param_k, param_l, param_f);
-		for (int j = 0; j < h; j++)
-			y[w*j + i] = t2[j];
-	}
+	//// focus columns
+	//int wmin = WMIN();
+	//int wmax = WMAX();
+	//for (int i = wmin; i < wmax; i++)
+	//{
+	//	fprintf(stderr, "focusing column %d\n", i);
+	//	complex float t1[h], t2[h];
+	//	for (int j = 0; j < h; j++)
+	//		t1[j] = y[w*j + i];
+	//	s1a_focus_column(t2, t1, h,
+	//			param_TXPRR, param_TXPSF, param_TXPL, param_NF);
+	//	for (int j = 0; j < h; j++)
+	//		y[w*j + i] = t2[j];
+	//}
 
 	fprintf(stderr, "going to free mem\n");
 	s1a_file_free_memory(f);
@@ -111,9 +120,9 @@ int main(int c, char *v[])
 	for (int i = 0; i < w*h; i++)
 	{
 		x_norm[i] = cabs(x[i]);
-		//x_real[i] = creal(x[i]);
-		//x_imag[i] = cimag(x[i]);
-		//y_norm[i] = cabs(y[i]);
+		x_real[i] = creal(x[i]);
+		x_imag[i] = cimag(x[i]);
+		y_norm[i] = cabs(y[i]);
 	}
 	free(x);
 	fprintf(stderr, "i freed more mem!\n");
@@ -125,13 +134,16 @@ int main(int c, char *v[])
 	//pgm_write("x_thidx.asc", x_thidx, w, h);
 	fprintf(stderr, "going to write stuff\n");
 	iio_write_image_float("x_norm.tif", x_norm, w, h);
+	iio_write_image_float("x_real.tif", x_real, w, h);
+	iio_write_image_float("x_imag.tif", x_imag, w, h);
+	iio_write_image_float("y_norm.tif", y_norm, w, h);
 	//asc_write("x_real.asc", x_real, w, h);
 	//asc_write("x_imag.asc", x_imag, w, h);
 
 
 	free(x_norm);
-	//free(x_real);
-	//free(x_imag);
+	free(x_real);
+	free(x_imag);
 	free(x_block);
 	free(x_brc);
 	free(x_thidx);

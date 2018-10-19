@@ -1,3 +1,10 @@
-Note: the sync_marker seems to be always 892270675 = 0x352ef853
-vv.data height = 51956
-intersting band : 49063 50462
+to test, you only need the raw.dat image
+
+./extract_img raw.dat 3000 4000
+
+creates the following images, corresponding to records 3000-4000
+
+x_real.tiff  # raw data, real part
+x_imag.tiff  # raw data, imaginary part
+x_norm.tiff  # raw data, norm
+y_norm.tiff  # focused data, norm

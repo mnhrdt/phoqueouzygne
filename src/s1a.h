@@ -167,7 +167,12 @@ void s1a_file_free_memory(struct s1a_file *x);
 
 // utility functions on s1a_io :
 double s1a_extract_datum_TXPRR(struct s1a_isp *);
+double s1a_extract_datum_TXPSF(struct s1a_isp *);
+double s1a_extract_datum_TXPL(struct s1a_isp *);
+int s1a_extract_datum_TXPL1(struct s1a_isp *);
+int s1a_extract_datum_TXPL2(struct s1a_isp *);
 int s1a_extract_datum_TXPL3(struct s1a_isp *);
+int s1a_extract_datum_NF(struct s1a_isp *);
 
 // s1a_decode.c
 #include <complex.h>
@@ -182,4 +187,4 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 int s1a_focus_band(complex float *out, complex float *in,
 		struct s1a_file *f, int first, int last);
 int s1a_focus_column(complex float *out,complex float *in,int n,
-		float k,int l,float f);
+		double,double,double,int);
