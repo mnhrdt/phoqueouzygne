@@ -21,7 +21,7 @@ setenv mt "-mt"
 # 3) Set the path to GMT, NETCDF,  and GMTSAR
 #    (Find the files libnetcdf.a and libgmt.a on your computer)
 #
-setenv GMTHOME /opt/local/lib/gmt4
+setenv GMTHOME /opt/gmt4
 setenv NETCDFHOME /opt/local
 setenv GMTSARHOME /usr/local/GMTSAR
 #
