@@ -36,18 +36,22 @@ SMART_PARAMETER(FHACK2,INFINITY)
 int main(int c, char *v[])
 {
 	char *filename_ynorm = pick_option(&c, &v, "y", "y_norm.asc");
-	if (c != 4) return fprintf(stderr, "usage:\n\t%s raw.dat l0 lf\n", *v);
-	//                                             0 1       2  3
-	char *filename_x = v[1];
-	int n_first = atoi(v[2]);
-	int n_last  = atoi(v[3]);
+	if (c != 5 && c != 7) return fprintf(stderr, "usage:\n\t"
+			"%s raw.dat raw.tiff lin0 linf [col0 colf]\n", *v);
+	//                0 1       2        3    4     5    6
+	char *filename_in  = v[1];
+	char *filename_out = v[2];
+	int n_first = atoi(v[3]);
+	int n_last  = atoi(v[4]);
+	int col_first  = c > 5 ? atoi(v[5]) : 0 ;
+	int col_last   = c > 5 ? atoi(v[6]) : 0 ;
 
 	if (n_first > n_last)
 		return fprintf(stderr, "first(%d) > last(%d)\n",n_first,n_last);
 
 	struct s1a_file f[1];
 
-	s1a_load_whole_datafile_trunc(f, filename_x, 1+n_last);
+	s1a_load_whole_datafile_trunc(f, filename_in, 1+n_last);
 
 	int max_nq = 0;
 	for (int i = n_first; i <= n_last; i++)
@@ -62,10 +66,6 @@ int main(int c, char *v[])
 	complex float *x = xmalloc(w * h * sizeof*x);
 	complex float *y = xmalloc(w * h * sizeof*y);
 	for (int i = 0; i < w*h; i++) x[i] = 0;
-	float *x_norm    = xmalloc(w * h * sizeof*x_norm);
-	float *x_real    = xmalloc(w * h * sizeof*x_real);
-	float *x_imag    = xmalloc(w * h * sizeof*x_imag);
-	float *y_norm    = xmalloc(w * h * sizeof*y_norm);
 	uint8_t *x_block = xmalloc(w*h);
 	uint8_t *x_brc   = xmalloc(w*h);
 	uint8_t *x_thidx = xmalloc(w*h);
@@ -100,8 +100,8 @@ int main(int c, char *v[])
 				x_brc   + w*i,
 				x_thidx + w*i,
 				f->t + n_first + i);
-		s1a_focus_decoded_line(y + w*i, x + w*i,
-				f->t + n_first + i);
+		//s1a_focus_decoded_line(y + w*i, x + w*i,
+		//		f->t + n_first + i);
 	}
 
 	//// focus columns
@@ -123,33 +123,52 @@ int main(int c, char *v[])
 	s1a_file_free_memory(f);
 	fprintf(stderr, "i freed the mem!\n");
 
-	for (int i = 0; i < w*h; i++)
-	{
-		x_norm[i] = cabs(x[i]);
-		x_real[i] = creal(x[i]);
-		x_imag[i] = cimag(x[i]);
-		y_norm[i] = cabs(y[i]);
+	if (!col_first && !col_last)
+		iio_write_image_float_vec(filename_out, (float*)x, w, h, 2);
+	else {
+		int w2 = 1 + col_last - col_first;
+		int h2 = h;
+		if (w2 < 0 || w2 > 50000) return fprintf(stderr, "ERROR:bad w2=%d\n", w2);
+		if (h2 < 0 || h2 > 50000) return fprintf(stderr, "ERROR:bad h2=%d\n", h2);
+		fprintf(stderr, "output file of size %dx%d\n", w2, h2);
+		complex float *x2 = xmalloc(w2 * h2 * sizeof*x2);
+		fprintf(stderr, "a\n");
+		for (int j = 0; j < h2; j++)
+		for (int i = 0; i < w2; i++)
+			x2[j*w2 + i] = x[j*w + i + col_first];
+		fprintf(stderr, "a\n");
+		iio_write_image_float_vec(filename_out, (float*)x2, w2, h2, 2);
+		fprintf(stderr, "a\n");
+		free(x2);
+		fprintf(stderr, "a\n");
 	}
+
+	//for (int i = 0; i < w*h; i++)
+	//{
+	//	x_norm[i] = cabs(x[i]);
+	//	x_real[i] = creal(x[i]);
+	//	x_imag[i] = cimag(x[i]);
+	//	y_norm[i] = cabs(y[i]);
+	//}
+	//free(x);
+	//fprintf(stderr, "i freed more mem!\n");
+	////if (isfinite(FHACK2()))
+	////	iio_write_image_float(filename_ynorm, y_norm, w, h);
+
+	////pgm_write("x_block.asc", x_block, w, h);
+	////pgm_write("x_brc.asc"  , x_brc  , w, h);
+	////pgm_write("x_thidx.asc", x_thidx, w, h);
+	//fprintf(stderr, "going to write stuff\n");
+	//iio_write_image_float("x_norm.tif", x_norm, w, h);
+	//iio_write_image_float("x_real.tif", x_real, w, h);
+	//iio_write_image_float("x_imag.tif", x_imag, w, h);
+	//iio_write_image_float("y_norm.tif", y_norm, w, h);
+	////asc_write("x_real.asc", x_real, w, h);
+	////asc_write("x_imag.asc", x_imag, w, h);
+
+
 	free(x);
-	fprintf(stderr, "i freed more mem!\n");
-	//if (isfinite(FHACK2()))
-	//	iio_write_image_float(filename_ynorm, y_norm, w, h);
-
-	//pgm_write("x_block.asc", x_block, w, h);
-	//pgm_write("x_brc.asc"  , x_brc  , w, h);
-	//pgm_write("x_thidx.asc", x_thidx, w, h);
-	fprintf(stderr, "going to write stuff\n");
-	iio_write_image_float("x_norm.tif", x_norm, w, h);
-	iio_write_image_float("x_real.tif", x_real, w, h);
-	iio_write_image_float("x_imag.tif", x_imag, w, h);
-	iio_write_image_float("y_norm.tif", y_norm, w, h);
-	//asc_write("x_real.asc", x_real, w, h);
-	//asc_write("x_imag.asc", x_imag, w, h);
-
-
-	free(x_norm);
-	free(x_real);
-	free(x_imag);
+	//free(y);
 	free(x_block);
 	free(x_brc);
 	free(x_thidx);

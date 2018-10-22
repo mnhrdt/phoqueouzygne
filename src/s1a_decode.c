@@ -277,6 +277,7 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 }
 
 // compute a physical S-value (double) from a quantized S-code (int)
+// S1-IF-ASD-PL-0007 page 74
 static double compute_svalue(int brc, int thidx, int scode)
 {
 	// page 74
