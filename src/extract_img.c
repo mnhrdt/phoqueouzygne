@@ -74,13 +74,19 @@ int main(int c, char *v[])
 
 	// read focusing parameters
 	{
-	double param_TXPSF = s1a_extract_datum_TXPSF(f->t + n_first);
-	double param_TXPRR = s1a_extract_datum_TXPRR(f->t + n_first);
-	double param_TXPL = s1a_extract_datum_TXPL(f->t + n_first);
-	int    param_NF = s1a_extract_datum_NF(f->t + n_first);
+	double param_TXPSF = s1a_extract_datum_TXPSF (f->t + n_first);
+	double param_TXPRR = s1a_extract_datum_TXPRR (f->t + n_first);
+	double param_TXPL  = s1a_extract_datum_TXPL  (f->t + n_first);
+	int    param_TXPL3 = s1a_extract_datum_TXPL3 (f->t + n_first);
+	int    param_NF    = s1a_extract_datum_NF    (f->t + n_first);
+	double param_SWL   = s1a_extract_datum_SWL  (f->t + n_first);
+	int    param_SWL3  = s1a_extract_datum_SWL3 (f->t + n_first);
 	fprintf(stderr, "TXPRR = %.18e\n", param_TXPRR);
 	fprintf(stderr, "TXPL = %.18e\n", param_TXPL);
 	fprintf(stderr, "TXPSF = %.18e\n", param_TXPSF);
+	fprintf(stderr, "TXPL3 = %d\n", param_TXPL3);
+	fprintf(stderr, "SWL = %.18e\n", param_SWL);
+	fprintf(stderr, "SWL3 = %d\n", param_SWL3);
 	fprintf(stderr, "NF = %d\n", param_NF);
 	}
 

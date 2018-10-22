@@ -165,14 +165,6 @@ void s1a_load_whole_index_file(struct s1a_index_file *x, char *fname);
 void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int n);
 void s1a_file_free_memory(struct s1a_file *x);
 
-// utility functions on s1a_io :
-double s1a_extract_datum_TXPRR(struct s1a_isp *);
-double s1a_extract_datum_TXPSF(struct s1a_isp *);
-double s1a_extract_datum_TXPL(struct s1a_isp *);
-int s1a_extract_datum_TXPL1(struct s1a_isp *);
-int s1a_extract_datum_TXPL2(struct s1a_isp *);
-int s1a_extract_datum_TXPL3(struct s1a_isp *);
-int s1a_extract_datum_NF(struct s1a_isp *);
 
 // s1a_decode.c
 #include <complex.h>
@@ -180,6 +172,17 @@ int s1a_decode_line(complex float *out, struct s1a_isp *x);
 int s1a_decode_line_fancy(complex float *out,
 		uint8_t *out_block, uint8_t *out_brc, uint8_t *out_thidx,
 		struct s1a_isp *x);
+
+// utility functions on s1a_decode (extract data with correct units/conversion)
+double s1a_extract_datum_TXPRR (struct s1a_isp *);
+double s1a_extract_datum_TXPSF (struct s1a_isp *);
+double s1a_extract_datum_TXPL  (struct s1a_isp *);
+int    s1a_extract_datum_TXPL1 (struct s1a_isp *);
+int    s1a_extract_datum_TXPL2 (struct s1a_isp *);
+int    s1a_extract_datum_TXPL3 (struct s1a_isp *);
+int    s1a_extract_datum_NF    (struct s1a_isp *);
+double s1a_extract_datum_SWL   (struct s1a_isp *);
+int    s1a_extract_datum_SWL3  (struct s1a_isp *);
 
 // s1a_focus.c
 int s1a_focus_decoded_line(complex float *out, complex float *in,
