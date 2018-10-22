@@ -57,9 +57,12 @@ static unsigned long bitstream_pop_ulong(struct bitstream *s, int nbits)
 // extract enough bits so that the head is aligned to a multiple of 16
 static void bitstream_align_16(struct bitstream *s)
 {
-	int t[100], cx = 0;
+	int t[16], cx = 0;
 	while (s->bit || s->byte % 2)
+	{
 		t[cx++] = bitstream_pop(s);
+		if (cx > 16) fail("too much padding cx=%d\n", cx);
+	}
 }
 
 
@@ -270,9 +273,10 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 	{
 		int sign = bitstream_pop(s) ? -1 : 1;
 		int state = 1;
-		while (state > 0)
+		while (state > 0) // negative state indicates leaf
 			state = huf[state][bitstream_pop(s)];
-		scode[i] = sign * (-state);
+		int mcode = -state;
+		scode[i] = sign * mcode;
 	}
 }
 
