@@ -24,6 +24,17 @@ static void pgm_write(char *fname, uint8_t *x, int w, int h)
 	xfclose(f);
 }
 
+static void pgm_write_wcrop(char *s, uint8_t *x,int w, int h, int x0, int xf)
+{
+	FILE *f = xfopen(s, "w");
+	fprintf(f, "P5\n%d %d\n255\n", 1+xf-x0, h);
+	for (int j = 0; j < h; j++)
+	for (int i = 0; i <= xf-x0; i++)
+		fputc(x[j*w+i+x0], f);
+	xfclose(f);
+}
+
+
 
 #include "smapa.h"
 SMART_PARAMETER(WMIN,0)
@@ -155,9 +166,16 @@ int main(int c, char *v[])
 	////if (isfinite(FHACK2()))
 	////	iio_write_image_float(filename_ynorm, y_norm, w, h);
 
-	////pgm_write("x_block.asc", x_block, w, h);
-	////pgm_write("x_brc.asc"  , x_brc  , w, h);
-	////pgm_write("x_thidx.asc", x_thidx, w, h);
+	int x0 = 0;
+	int xf = w - 1;
+	if (col_last)
+	{
+		x0 = col_first;
+		xf = col_last;
+	}
+	pgm_write_wcrop("x_block.pgm", x_block, w, h, x0, xf);
+	pgm_write_wcrop("x_brc.pgm"  , x_brc  , w, h, x0, xf);
+	pgm_write_wcrop("x_thidx.pgm", x_thidx, w, h, x0, xf);
 	//fprintf(stderr, "going to write stuff\n");
 	//iio_write_image_float("x_norm.tif", x_norm, w, h);
 	//iio_write_image_float("x_real.tif", x_real, w, h);
