@@ -275,7 +275,7 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 		int state = 1;
 		while (state > 0) // negative state indicates leaf
 			state = huf[state][bitstream_pop(s)];
-		int mcode = -state;
+		int mcode = 1 - state;
 		scode[i] = sign * mcode;
 	}
 }
@@ -285,7 +285,7 @@ static void extract_scodes(int *scode, struct bitstream *s, int brc, int n)
 static double compute_svalue(int brc, int thidx, int scode)
 {
 	// page 74
-	int mcode  = abs(scode);
+	int mcode  = abs(scode) - 1;
 	int sign   = scode<0 ? -1 : 1;
 	double B   = global_table_B_FDBAQ[brc][thidx];
 	double SF  = global_table_SF[thidx];
