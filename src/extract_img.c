@@ -46,7 +46,7 @@ SMART_PARAMETER(FHACK2,INFINITY)
 #include "pickopt.c"
 int main(int c, char *v[])
 {
-	char *filename_ynorm = pick_option(&c, &v, "y", "y_norm.asc");
+	char *filename_ynorm = pick_option(&c, &v, "y", "y_norm.tif");
 	if (c != 5 && c != 7) return fprintf(stderr, "usage:\n\t"
 			"%s raw.dat raw.tiff lin0 linf [col0 colf]\n", *v);
 	//                0 1       2        3    4     5    6
@@ -111,8 +111,8 @@ int main(int c, char *v[])
 				x_brc   + w*i,
 				x_thidx + w*i,
 				f->t + n_first + i);
-		//s1a_focus_decoded_line(y + w*i, x + w*i,
-		//		f->t + n_first + i);
+		s1a_focus_decoded_line(y + w*i, x + w*i,
+				f->t + n_first + i);
 	}
 
 	//// focus columns
@@ -134,8 +134,10 @@ int main(int c, char *v[])
 	s1a_file_free_memory(f);
 	fprintf(stderr, "i freed the mem!\n");
 
-	if (!col_first && !col_last)
+	if (!col_first && !col_last) {
 		iio_write_image_float_vec(filename_out, (float*)x, w, h, 2);
+		iio_write_image_float_vec(filename_ynorm, (float*)y, w, h, 2);
+	}
 	else {
 		int w2 = 1 + col_last - col_first;
 		int h2 = h;
@@ -143,13 +145,18 @@ int main(int c, char *v[])
 		if (h2 < 0 || h2 > 50000) return fprintf(stderr, "ERROR:bad h2=%d\n", h2);
 		fprintf(stderr, "output file of size %dx%d\n", w2, h2);
 		complex float *x2 = xmalloc(w2 * h2 * sizeof*x2);
+		complex float *y2 = xmalloc(w2 * h2 * sizeof*y2);
 		fprintf(stderr, "a\n");
 		for (int j = 0; j < h2; j++)
-		for (int i = 0; i < w2; i++)
+		for (int i = 0; i < w2; i++) {
 			x2[j*w2 + i] = x[j*w + i + col_first];
+			y2[j*w2 + i] = y[j*w + i + col_first];
+		}
 		fprintf(stderr, "a\n");
 		iio_write_image_float_vec(filename_out, (float*)x2, w2, h2, 2);
+		iio_write_image_float_vec(filename_ynorm, (float*)y2, w2, h2, 2);
 		fprintf(stderr, "a\n");
+		free(y2);
 		free(x2);
 		fprintf(stderr, "a\n");
 	}
@@ -186,7 +193,7 @@ int main(int c, char *v[])
 
 
 	free(x);
-	//free(y);
+	free(y);
 	free(x_block);
 	free(x_brc);
 	free(x_thidx);

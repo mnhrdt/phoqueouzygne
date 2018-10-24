@@ -29,7 +29,7 @@ static void fill_chirp(complex float *c_out, int n,
 		int NF
 		)
 {
-	assert(NF < n);
+	assert(NF <= n);
 	assert(NF >= 0);
 	assert(isfinite(TXPRR));
 	assert(isfinite(TXPSF));
@@ -38,7 +38,11 @@ static void fill_chirp(complex float *c_out, int n,
 
 	// SENT-TN-52-7445 sec.4.2.1.1.1 (p.4-6)
 	double phi1 = TXPSF + TXPRR*TXPL / 2; // TODO: check!
+	//double phi1 = 0;
 	double phi2 = TXPRR / 2;
+	//double phi2 = TXPRR / 36;
+	//fprintf(stderr, "phi1 = %g\n", phi1);
+	//fprintf(stderr, "phi2 = %g\n", phi2);
 	for (int i = 0; i < NF; i++)
 	{
 		double t = TXPL*(-0.5 + i/(float)NF);
@@ -105,10 +109,11 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 	double param_TXPRR = s1a_extract_datum_TXPRR(x);
 	double param_TXPL  = s1a_extract_datum_TXPL(x);
 	int    param_NF    = s1a_extract_datum_NF(x);
+	int    param_NS    = s1a_extract_datum_TXPL3(x);
 
 	// focus
 	focus_one_line(out, in, n,
-			param_TXPRR, param_TXPSF, param_TXPL, param_NF);
+			param_TXPRR, param_TXPSF, param_TXPL, param_NS);
 
 	return 1;
 }
