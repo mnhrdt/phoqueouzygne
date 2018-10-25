@@ -86,6 +86,8 @@ static void focus_one_line(
 {
 	complex float c[n];
 	fill_chirp(c, n, TXPRR, TXPSF, TXPL, NF);
+	for (int i = 0; i < NF; i++)
+		c[i] = conj(c[i]);
 
 	complex float C[n], X[n], Y[n];
 	fft(C, c, n);
