@@ -20,8 +20,8 @@ static void ifft(complex float *x, complex float *X, int n)
 	fftwf_destroy_plan(p);
 }
 
-#include "smapa.h"
-SMART_PARAMETER(FHACK,37);
+//#include "smapa.h"
+//SMART_PARAMETER(FHACK,1);
 static void fill_chirp(complex float *c_out, int n,
 		double TXPRR,
 		double TXPSF,
@@ -29,12 +29,16 @@ static void fill_chirp(complex float *c_out, int n,
 		int NF
 		)
 {
+	int pad = 0;
+
 	assert(NF <= n);
 	assert(NF >= 0);
 	assert(isfinite(TXPRR));
 	assert(isfinite(TXPSF));
 	assert(isfinite(TXPL));
 	complex float c[NF];
+	for (int i = 0; i < NF; i++)
+		c[i] = 0;
 
 	// SENT-TN-52-7445 sec.4.2.1.1.1 (p.4-6)
 	double phi1 = TXPSF + TXPRR*TXPL / 2; // TODO: check!
@@ -43,7 +47,7 @@ static void fill_chirp(complex float *c_out, int n,
 	//double phi2 = TXPRR / 36;
 	//fprintf(stderr, "phi1 = %g\n", phi1);
 	//fprintf(stderr, "phi2 = %g\n", phi2);
-	for (int i = 0; i < NF; i++)
+	for (int i = pad; i < NF-pad; i++)
 	{
 		double t = TXPL*(-0.5 + i/(float)NF);
 		double s = phi1 * t + phi2 * t * t;
@@ -120,9 +124,30 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 	return 1;
 }
 
-//int s1a_focus_column(complex float *out, complex float *in, int n,
-//		float k, int l, float f)
-//{
-//	focus_one_line(out, in, n, k, l, f);
-//}
+int s1a_focus_column(complex float *y, complex float *x, int n,
+		double k, double l, double f, int NF)
+{
+	complex float c[n];
+	for (int i = 0; i < n; i++)
+		c[i] = 0;
+	for (int i = 0; i < NF/2; i++)
+	{
+		c[i] = 1;
+		c[n-i] = 1;
+	}
+
+	for (int i = 0; i < n; i++)
+		c[i] = conj(c[i]);
+
+	complex float C[n], X[n], Y[n];
+	fft(C, c, n);
+	fft(X, x, n);
+
+	for (int i = 0; i < n; i++)
+		Y[i] = X[i] * C[i];
+
+	ifft(y, Y, n);
+
+	return 1;
+}
 
