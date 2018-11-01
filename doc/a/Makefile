@@ -1,4 +1,4 @@
-all: a.pdf p.pdf
+all: a.pdf #p.pdf
 
 %.pdf: %.tex
 	grep ^%SCRIPT $< | cut -c9- | sh
