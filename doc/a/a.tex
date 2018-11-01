@@ -1,21 +1,15 @@
-\documentclass[a4paper]{article}      % base article class
-\usepackage[utf8]{inputenc}           % allow utf8 input
-\usepackage{graphicx}                 % includegraphics
-
-\usepackage{amsmath,amsthm}           % fancier math
-
-\usepackage[osf,sups]{Baskervaldx} % lining figures
-%\usepackage[bigdelims,cmintegrals,vvarbb,baskervaldx]{newtxmath} % math font
-\usepackage[baskervaldx]{newtxmath} % math font
-%\usepackage{cabin}                  % monospace font
-%\usepackage[cal=boondoxo]{mathalfa} % mathcal from STIX, unslanted a bit
-
+\documentclass[a4paper]{article}           % base article class
+\usepackage[utf8]{inputenc}                % allow utf8 input
+\usepackage{graphicx}                      % includegraphics
+\usepackage{amsmath,amsthm}                % fancier math
+\usepackage{Baskervaldx}                   % fancy font for letters and numbers
+\usepackage[baskervaldx,upint]{newtxmath}  % fancy math font
 
 % global settings
-\setlength{\parindent}{0pt}           % no paragraph indentation
-\setlength{\parskip}{7pt}             % spacing between paragraphs
-\pdfimageresolution 200               % change the default for included png files
-\pdfinfoomitdate=1\pdftrailerid{}     % ensure reproducible PDF
+\setlength{\parindent}{0pt}                % no paragraph indentation
+\setlength{\parskip}{7pt}                  % spacing between paragraphs
+\pdfimageresolution 200                    % pixel size for included pngs
+\pdfinfoomitdate=1\pdftrailerid{}          % ensure reproducible PDF
 
 % theorem environments
 \newtheorem{theorem}{Theorem}
@@ -36,25 +30,34 @@
 \newcommand{\pairing}[2]{\left\langle #1,#2\right\rangle}
 
 
-
 \begin{document}
 
-{\Large Focusing of Sentinel 1 images}
-
+{\Large Focusing of Sentinel-1 images}
 \vspace{2em}
 
 \section{Context}
 
-Sentinel~1 images are typically used in their SLC form (Single Look Complex),
+Sentinel-1 images are typically used in their SLC form (Single Look Complex),
 which are complex-valued rectangular images, whose pixels correspond to
 well-determined points on the surface of the Earth.  However, the images they
 are also distributed in SAFE form (Standard Archive Format for Europe), which
 is the datastream directly acquired from the ground stations.
 
 We are interested in focusing for several reasons
-%\begin{itemize}
-%	\item 
-%\end{itemize}«»
+\begin{itemize}
+	\item The SAFE files are about 8 times smaller than the SLC files
+	\item Some advanced algorithms cannot work with the processed SLC data
+	\item Interferometry of reflectors can be more precise
+	\item We want to understand the beauty of the focusing algorithms
+\end{itemize}
+
+The SLC is a sampled image or, equivalently, a trigonometric polynomial.  In
+some contexts, it may be preferable to use a different data representation
+(e.g. a weighted sum of impulses at sub-pixel positions).
+Since the SAFE->SLC process is lossy and non-invertible, it may be better to
+obtain this representation directly from the SAFE files.
+
+In this report we document the efforts of the CMLA team towards this goal.
 
 \section{Documentation}
 
@@ -110,8 +113,8 @@ compresses the support of each chirp into a single impulse.
 
 \paragraph{Computation in the sense of distributions}
 Equation~\ref{eq:sqrt} makes no sense because the chirp is not integrable,
-and convolution of two non-integrable functions is not a well-defined
-function.
+and convolution of two non-integrable functions is not well-defined
+in general.
 
 However, we can interpret~$h\star h$ in the sense of distributions (see
 Equation~(\ref{eq:dirac}) below):
@@ -153,6 +156,27 @@ $$
 The parameter~$T$ is the support, and~$K$ is the~\emph{ramp rate}
 of the chirp.
 
+%\includegraphics{o/wchirps.pdf}
+%%SCRIPT cat <<END | gnuplot > o/wchirp.pdf
+%%SCRIPT set term pdf
+%%SCRIPT set zeroaxis
+%%SCRIPT sinc(x)=sin(x)/x
+%%SCRIPT h(T,K,x)=(abs(x)<T)*cos(K*x*x)
+%%SCRIPT s(T,K,x)=2*(abs(x)<2*T)*(T-abs(x))*sinc(K*x*(T-abs(x)))
+%%SCRIPT plot [-15:15] [-2:12] (abs(x)<5)*cos(x*x),\
+%%SCRIPT  2*(abs(x)<10)*(5-abs(x))*sinc(1*x*(5-abs(x)))
+%%SCRIPT END
+
+\includegraphics{o/wchirp.pdf}
+%SCRIPT cat <<END | gnuplot > o/wchirp.pdf
+%SCRIPT set term pdf
+%SCRIPT set zeroaxis
+%SCRIPT sinc(x)=sin(x)/x
+%SCRIPT plot [-15:15] [-2:12] (abs(x)<5)*cos(x*x),\
+%SCRIPT  2*(abs(x)<10)*(5-abs(x))*sinc(1*x*(5-abs(x)))
+%SCRIPT END
+
+\clearpage
 \begin{proposition}
 	Let~$h$ be a windowed linear chirp as above.  Then
 	\[
@@ -246,14 +270,14 @@ of the chirp.
 	value is~$0$, and by symmetry we can extend the result to~$y<0$ obtaining
 	the following expression, valid for any~$y\in\R$:
 	\[
-		h\star h(y)=\paren{T-\abs{y}}_+
+		h\star h(y)=\1_{[-2T,2T]}(x)\,\paren{T-\abs{y}}
 		\,
 		\mathrm{sinc}\paren{ Ky\paren{T-\abs{y}} }
 	\]
 \end{proof}
 
 
-\paragraph{The two-dimensional case}
+%\paragraph{The two-dimensional case}
 
 \clearpage
 \paragraph{Fourier analysis reminder}
@@ -278,7 +302,7 @@ $$
 =
 \pairing{T}{\hat{\varphi}}
 $$
-For example, the Fourier transform of the constant~$1$ is
+For example, the Fourier transform of the constant function~$1$ is
 $$
 \pairing{\hat 1}{\varphi}
 =
@@ -286,7 +310,7 @@ $$
 =
 \int 1\hat\varphi
 =
-\sqrt{2\pi}\frac{1}{\sqrt{2\pi}}\int 1\hat\varphi
+\sqrt{2\pi}\frac{1}{\sqrt{2\pi}}\int \hat\varphi(x)e^{i0x}\ud x
 =\sqrt{2\pi}\check{\hat{\varphi}}(0)
 =\sqrt{2\pi}\varphi(0)
 $$
@@ -312,3 +336,4 @@ and in that case, the right hand side can be used as the definition of~$S*T$.
 \end{document}
 
 % vim:set tw=77 filetype=tex spell spelllang=en sw=2 ts=2:
+r
