@@ -85,6 +85,13 @@ the Dirac delta
 	\label{eq:sqrt}
 \end{equation}
 
+\includegraphics{o/chirp.pdf}
+%SCRIPT cat <<END | gnuplot > o/chirp.pdf
+%SCRIPT set term pdf
+%SCRIPT set zeroaxis
+%SCRIPT plot [-8:8] [-2:2] cos(x*x)
+%SCRIPT END
+
 Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar antenna
 emits a single chirp~$h(x)$.  Then, reflectors at different distances reflect
 the chirp, and the antenna receives back a linear superposition of chirps:

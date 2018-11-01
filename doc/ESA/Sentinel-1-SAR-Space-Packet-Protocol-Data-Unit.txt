@@ -1,0 +1,10787 @@
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+2 of 85
+
+Change Record
+Issue
+
+Date
+
+Section
+
+draft 1
+
+04.04.2008
+
+All
+
+Description of Change
+
+1
+
+27.05.2008
+
+all
+
+completely revised issue for PDR
+
+2
+
+07.05.2009
+
+general
+
+Column included for all parameters to indicate if parameter is constant
+or variable during the data take
+
+general
+
+corrected for Typos
+
+1.3.1
+
+section number introduced
+
+1.3.2
+
+new section defining the parameter description scheme
+
+Table 3.1-2
+
+Definition of PID and PCAT
+
+Table 3.2-3
+
+“Test Mode” parameter included at octet offset 21
+
+Table 3.2-5
+Table 3.2-6
+
+UTC corrected to GPS time, Pointing Status Word included
+
+Table 3.2-7
+
+S/C Ancillary Data Time Stamp Format included
+
+Table 3.2-8
+
+Placeholder included for pointing status description
+
+3.2.1.1
+3.2.1.2
+
+details included
+
+3.2.2.1
+3.2.2.2
+3.2.2.6
+
+details included
+
+3.2.2.3
+
+Max. number of ECCs corrected to 48
+
+0
+
+Description of Test Mode Configuration included
+
+3.2.2.5
+
+Clarification about Rx Cannel ID and polarisation included
+
+3.2.3.1
+
+section reworked
+
+3.2.3.2
+
+section reworked
+
+3.2.5
+
+Section and subsections updated with information available up to now
+(see change bars in the document):
+parameter descriptions detailed
+parameter resolutions added
+parameter dependencies added
+
+3.3
+
+Section and subsections revised (see change bars in the document)
+Description of Data Output Format Types amended (Format Types
+A,B,C,D)
+
+4
+
+Section and subsections reworked (see change bars in the document):
+subsection “General” included with common information for overall
+section 4
+“Data Blocks” in the User Data Fields renamed into “Data Sections”
+to not mix up this term with “BAQ Data Block”
+
+3
+
+25.08.2009
+
+all
+
+revised and updated for SAR CDR
+(for changes see change bars in the document)
+
+4
+
+25.01.2010
+
+Table 2.4-1
+
+Length of Packet Secondary Header changed to 62 octets
+
+3.2
+Table 3.2-1
+
+Section updated with additional “Radar Sample Count” service field
+and changed length of Packet Secondary Header to 62 octets
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+5
+
+15.09.2010
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+3 of 85
+
+3.2.3
+
+AI-SY-109 response for SAR CDR
+
+3.2.3.1
+
+AI-OP-93 response for SAR CDR
+
+3.2.2.3
+
+AI-SY-26-1 (partly) response for SAR CDR
+AI-OP-16 (partly) response for SAR CDR
+
+3.2.4.2
+
+AI-OP-94 response for SAR CDR
+
+3.2.5.3
+
+AI-IF-106 response for SAR CDR
+
+3.2.5.13.2.3
+
+AI-OP-108 response for SAR CDR
+
+3.2.5
+
+overall section revised, including
+AI-SY-23 response for SAR CDR
+AI-OP-110 response for SAR CDR
+AI-OP-16 response for SAR CDR
+
+3.2.5.6
+3.2.5.7
+3.2.5.8
+3.2.5.9
+
+sections revised
+
+3.2.5.14.1
+
+section revised
+
+3.2.5.14.4
+
+section revised
+
+3.2.6
+
+new section introduced with service field “Radar Sample Count”
+including the parameter “Number of Quads” (was formerly part of the
+User Data Field and has been removed there)
+
+3.3
+
+section revised, including
+AI-SY-26-1 (partly) response for SAR CDR
+Al-SY-113 response for CDR
+
+4
+
+section completely revised and complemented with Decoding
+algorithms, including
+AI-OP-95 response for SAR CDR
+
+5
+
+new section with annexes attached
+
+general
+
+editorial changes and improvements
+
+2.3
+
+Reference [IRD-07] changed to S1-TN-ASD-0046 “Description of
+Instrument Radar Database”
+Reference [IRD-08] for Decompression
+
+Table 3.2-1
+
+PDL range of values corrected (SYS CDR AI-PL-67)
+Comment about Sequence Count revised
+
+3.2.2.3
+
+Revision of ECC No. vs. Modes, RFC mode defined as a single mode
+(SAR CDR2 AI-OP-19-1)
+(SYS CDR AI-PL-36 #4)
+
+0
+
+Section revised.
+Dependency between Test Mode and ECC No. added
+(SYS CDR AI-PL-108)
+
+3.2.3
+
+Table 3.2-8 Definition of Pointing Status added (SYS CDR AI-PL-36
+#3)
+Table 3.2-6 Dummy parameter removed since already defined in
+Table 3.2-5
+
+3.2.3.1
+
+Description Field revised
+
+3.2.4.1
+
+Description of Space Packet Count revised, information added for
+anomaly condition
+
+3.2.4.2
+
+PRI Gap corrected to 13 PRIs (SYS CDR AI-PL-110)
+
+3.2.5.1
+
+Dependencies clarified between BAQ Mode and Signal and Cal Types
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+4 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+(SYS CDR AI-PL-111)
+
+6
+
+7
+
+31.03.2011
+
+12.12.2011
+
+3.2.5.4
+
+Section revised
+
+3.2.5.5
+
+Note about Calibration switches removed, since no longer used to
+switch power levels in SAR user data.
+
+3.2.5.6
+3.2.5.7
+3.2.5.8
+
+Sections about Tx pulse parameters decoding revised
+
+3.2.5.11
+
+SWST description revised (SYS CDR AI-PL-36 #5)
+
+3.2.5.12
+
+SWL description revised
+
+3.2.5.13.2.4
+
+Dependencies clarified between BAQ Mode and Signal and Cal Types
+
+3.2.5.13.2.5
+
+Applicable Range corrected to 0
+
+3.2.5.14.1
+
+Cal Mode description revised
+
+1023
+
+3.2.5.14.2
+
+Parameter Description field revised
+
+3.2.5.14.3
+
+Dependencies clarified between BAQ Mode and Signal and Cal Types
+
+3.2.6
+
+Section revised, filler octet marked as n/a (SYS CDR AI-PL-112)
+
+4.3, 4.4
+
+Sections revised for:
+Reconstruction laws for “Simple” and “Nominal” Reconstruction and
+Reconstruction Examples (SYS CDR AI-PL-36 #2)
+Fig. 4-4 updated with “Simple” Reconstruction
+Threshold Index part of QE channel (SYS CDR AI-PL-107)
+
+5
+
+Section revised, introduction of tables for:
+“Simple” Reconstruction of compressed SAR data samples
+computation of number of complex samples in the Space Packet
+new section for the acquisition timing of calibration signal
+
+3.2.5.13.1.3
+3.2.5.13.2.3
+3.2.5.13.2.4
+3.2.5.14.2
+3.2.5.14.3
+Table 3.2-16
+Table 3.2-17
+Table 3.2-18
+
+format of SES SSB & SAS SSB data in header corrected
+Position in header has changed for:
+Elevation Beam Address
+SAS Test Flag
+Tx Pulse Number
+Signal Type
+Cal Type
+
+3.2.5.12
+
+applicability of SWL corrected to: “SWL is applicable for all signal
+types”
+
+Table 3.2-14
+
+Error Flag included in octet 37
+
+3.2.5.1
+
+New section with description of Error Flag (section numbers for “BAQ
+Mode” and ”BAQ Block Length” changed to 3.2.5.2 and 3.2.5.3)
+
+3.2.5.2
+
+dependencies added for “Echo” data
+
+3.2.3
+
+information about reference frames added for S/C attitude quaternions
+and S/C angular rates
+
+3.2.5.4
+
+filter length values corrected for filter No. 4, 5 and 8.
+
+Table 4.3-1
+
+clarification of parameter N added in subtitle of table
+
+3.2.5.14.2
+
+applicable range of Tx Pulse No. corrected to “0
+
+3.2.5.13.1.2
+
+size of code corrected to 2 bits
+
+3.2.4.1
+
+SPCT description field updated to include action response C6-2 from
+S1-NC-ASU-PL-0030
+
+3.2.4.2
+
+PRICT description field: example deleted about suppressed packets
+
+Astrium GmbH – All Rights Reserved
+
+31”
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+5 of 85
+
+between IWS and EWS subswath transitions. Baseline approach is to
+generate packets for all PRIs between subswath transitions.
+8
+
+9
+
+10
+
+23.08.2012
+
+14.02.2013
+
+01.03.2013
+
+3.2.2.3
+
+ECC No. for Notch Modes added
+
+3.2.5.4
+
+SAR swath Wave 1 (WV1) applicable with Filter No.1 (not Filter 3)
+
+3.2.5.13.2.4
+
+Cal Type 7 modified to “EPDN Cal Iso” (Isolation Measurement)
+
+3.2.5.14.3
+
+Signal Type 15 modified to “EPDN Cal Iso” (Isolation Measurement)
+
+3.2.5.14.4
+3.2.5.14.5
+
+typo “TCPSF” corrected to “TXPSF”
+
+5.3
+
+Footnote added for clarification of Cal Window timing
+
+3.2.2.3
+
+EWS Mode moved to ECC No.32
+ECC No. for Azimuth Notch S6 Mode corrected to “24”
+ECC No.s for Contingency Modes corrected to “25-31”
+
+3.2.3 , 3.2.3.1
+
+Inclusion of Antenna & TGU Temperature HKs in sub-commutated
+Ancillary Data field
+
+3.2.5.14.1
+
+“PCC512” corrected to “RF672”
+
+3.2.4.2
+
+Note added about 2 PRI delay of ECC program execution
+
+4.3
+
+Computation of “SValue” for BAQ simple reconstruction adapted wrt.
+5.2.1. Examples no.2 and no.3 adapted.
+
+4.4
+
+Computation of “SValue” for FDBAQ simple reconstruction adapted
+wrt. 5.2.1. Example no.3 adapted.
+
+5.2.1
+
+Simple Reconstruction Parameter Values A, B changed
+
+5.4
+
+Temperature Calibration values for EFE and TGU
+
+3.2.1.2
+
+Interpretation of OBT Fine Time improved, addition of 0.5 lsb to code
+improves datation accuracy by about 7.63us
+
+3.2.2.3
+
+Stripmap 6 Mode added (table entry has gone lost in issue 9)
+
+3.2.5.13.2.4
+
+“EPDN Cal Iso” replaced by “TxH Cal Iso” in CalType = 7
+
+3.2.5.14.3
+
+“EPDN Cal Iso” replaced by “TxH Cal Iso” in Signal Type = 15
+
+11
+
+10.07.2013
+
+3.2.3
+
+Clarification added about updating scheme of temperature HK values
+in the sub-commutated Ancillary Data field
+
+12
+
+07.03.2014
+
+3.2.2.3
+
+ECC Code interpretation actualised
+
+4.4
+
+criteria for application of Simple Reconstruction Method after Huffman
+decoding modified for FDBAQ BRC=1, BRC=3, BRC=4
+
+5.2.1
+
+Table 5.2-1 Simple Reconstruction Parameter Values A, B:
+values modified and applicable THIDX range reduced for BRC=1;3;4
+
+5.2.2
+
+Table 5.2-2 Normalised Reconstruction Level: values modified
+
+5.4.2
+
+EFE temperature calibration indicated as “not defined” for HK raw
+values 0, 1, 2, 3.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+6 of 85
+
+Table of Contents
+1
+
+INTRODUCTION .......................................................................................................................................... 9
+1.1
+Scope................................................................................................................................................. 9
+1.2
+Overview ........................................................................................................................................... 9
+1.3
+Conventions and Definitions .......................................................................................................... 9
+1.3.1
+Sequencing and Numbering of Parameters .................................................................................. 9
+1.3.2
+Parameter Field Descriptions ...................................................................................................... 10
+1.4
+Abbreviations ................................................................................................................................. 10
+2 DOCUMENTS ............................................................................................................................................ 12
+2.1
+Parent Documents ......................................................................................................................... 12
+2.2
+Normative Reference Documents ................................................................................................ 12
+2.3
+Informative Reference Documents ............................................................................................... 12
+2.4
+Standards ........................................................................................................................................ 12
+3 SAR SPACE PACKET FORMAT .............................................................................................................. 13
+3.1
+Packet Primary Header .................................................................................................................. 13
+3.2
+Packet Secondary Header ............................................................................................................. 14
+3.2.1
+Datation Service........................................................................................................................... 15
+3.2.1.1
+Coarse Time .......................................................................................................................... 16
+3.2.1.2
+Fine Time ............................................................................................................................... 16
+3.2.2
+Fixed Ancillary Data Field ............................................................................................................ 16
+3.2.2.1
+Sync Marker........................................................................................................................... 17
+3.2.2.2
+Data Take ID.......................................................................................................................... 18
+3.2.2.3
+ECC Number ......................................................................................................................... 18
+3.2.2.4
+Test Mode .............................................................................................................................. 21
+3.2.2.5
+RX Channel ID ....................................................................................................................... 22
+3.2.2.6
+Instrument Configuration ID ................................................................................................... 22
+3.2.3
+Sub-commutated Ancillary Data Service ..................................................................................... 22
+3.2.3.1
+Sub-commutated Ancillary Data Word Index ........................................................................ 28
+3.2.3.2
+Sub-commutated Ancillary Data Word .................................................................................. 29
+3.2.4
+Counters Service ......................................................................................................................... 29
+3.2.4.1
+Space Packet Count .............................................................................................................. 30
+3.2.4.2
+Mode PRI Count .................................................................................................................... 31
+3.2.5
+Radar Configuration Support Service .......................................................................................... 32
+3.2.5.1
+Error Flag ............................................................................................................................... 33
+3.2.5.2
+BAQ Mode ............................................................................................................................. 33
+3.2.5.3
+BAQ Block Length ................................................................................................................. 34
+3.2.5.4
+Range Decimation ................................................................................................................. 35
+3.2.5.5
+Rx Gain .................................................................................................................................. 36
+3.2.5.6
+Tx Pulse Ramp Rate ............................................................................................................. 37
+3.2.5.7
+Tx Pulse Start Frequency ...................................................................................................... 38
+3.2.5.8
+Tx Pulse Length ..................................................................................................................... 39
+3.2.5.9
+Rank ...................................................................................................................................... 40
+3.2.5.10
+Pulse Repetition Interval .................................................................................................... 40
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+7 of 85
+
+3.2.5.11
+Sampling Window Start Time ............................................................................................ 41
+3.2.5.12
+Sampling Window Length .................................................................................................. 42
+3.2.5.13
+SAS SSB Data Field .......................................................................................................... 43
+3.2.5.13.1 SAS SSB Data Field – Imaging/Noise ............................................................................ 43
+3.2.5.13.1.1 Polarisation ............................................................................................................... 45
+3.2.5.13.1.2 Temperature Compensation..................................................................................... 46
+3.2.5.13.1.3 Elevation Beam Address .......................................................................................... 46
+3.2.5.13.1.4 Azimuth Beam Address ............................................................................................ 47
+3.2.5.13.2 SAS SSB Data - Calibration............................................................................................ 47
+3.2.5.13.2.1 Polarisation ............................................................................................................... 47
+3.2.5.13.2.2 Temperature Compensation..................................................................................... 47
+3.2.5.13.2.3 SAS Test Mode ........................................................................................................ 48
+3.2.5.13.2.4 Cal Type ................................................................................................................... 49
+3.2.5.13.2.5 Calibration Beam Address........................................................................................ 49
+3.2.5.14
+SES SSB Data Field .......................................................................................................... 50
+3.2.5.14.1 Calibration Mode ............................................................................................................. 50
+3.2.5.14.2 Tx Pulse Number ............................................................................................................ 51
+3.2.5.14.3 Signal Type ..................................................................................................................... 52
+3.2.5.14.4 Swap Flag ....................................................................................................................... 53
+3.2.5.14.5 Swath Number ................................................................................................................ 54
+3.2.6
+Radar Sample Count Service ...................................................................................................... 54
+3.3
+User Data Field ............................................................................................................................... 56
+3.3.1
+User Data Field Length ................................................................................................................ 56
+3.3.2
+User Data Format Types ............................................................................................................. 56
+3.3.2.1
+Data Format Type A “Bypass” ............................................................................................... 57
+3.3.2.2
+Data Format Type B “Decimation Only” ................................................................................ 57
+3.3.2.3
+Data Format Type C “Decimation + BAQ” ............................................................................. 58
+3.3.2.4
+Data Format Type D “Decimation + FDBAQ” ........................................................................ 58
+3.3.3
+User Data Organisation ............................................................................................................... 58
+4 USER DATA FIELD DECODING .............................................................................................................. 60
+4.1
+General ............................................................................................................................................ 60
+4.1.1
+Notations used for Decoding ....................................................................................................... 60
+4.1.2
+Principle of Decoding ................................................................................................................... 60
+4.2
+Decoding of Data Format Type A and B (“Bypass” or “Decimation Only”) ............................ 61
+4.3
+Decoding of Data Format Type C (“Decimation + BAQ”)........................................................... 62
+4.4
+Decoding of Data Format Type D (“Decimation + FDBAQ”) ...................................................... 67
+5 ANNEXES .................................................................................................................................................. 76
+5.1
+Support Tables for Computation of Number of Samples after Decimation ............................. 76
+5.2
+Sample Reconstruction Tables .................................................................................................... 77
+5.2.1
+Table for Simple Reconstruction Method .................................................................................... 77
+5.2.2
+Tables for Normal Reconstruction Method .................................................................................. 78
+5.2.2.1
+Normalised Reconstruction Levels (NRL) ............................................................................. 78
+5.2.2.2
+Sigma Factors (SF)................................................................................................................ 79
+5.3
+Calibration Signal Acqusition Timing .......................................................................................... 80
+5.4
+EFE and TGU Temperature Calibration ....................................................................................... 83
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+5.4.1
+5.4.2
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+8 of 85
+
+TGU Temperature Calibration ..................................................................................................... 83
+EFE Temperature Calibration ...................................................................................................... 84
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+1
+
+Introduction
+
+1.1
+
+Scope
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+9 of 85
+
+This document gives a comprehensive description of the Sentinel-1 Space Packet on packet layer level. It
+describes the structure of the packets, provides the data formats and decoding algorithms for user data
+decoding and gives a detailed description of the annotated SAR ancillary header data.
+Electrical, mechanical or transmit channel coding characteristics are not part of this document. These can be
+found in the electrical ICDs.
+
+1.2
+
+Overview
+
+For packetized transmission of SAR data from the Instrument to the S/C platform the Space Packet Protocol
+Standard [SD 01] is applied.
+Each Space Packet generated by the Instrument contains the complete SAR data acquired in one PRI. The
+standard limits the maximum packet size to (65536+6) octets but, due to decimation and BAQ compression of
+SAR data in nominal operation the packet size will stay well below this limit.
+The format of the Space Packet is described in section 3. In each packet a SAR ancillary data field is
+included. The ancillary data provide the information how to interprete, decode and process the SAR radar
+data in the packet. In addition, they provide information about Instrument status and configuration at the
+moment of data acquisition (digitizing). General approach here is to provide appropriate information for ground
+to support SAR image decoding and processing.
+In section 4 the decoding algorithms are described to retrieve the SAR radar data from the packets to finally
+get the usual complex radar data representation suitable to be fed into a ground image processor.
+Typically, the acquired SAR data in a PRI is a radar echo received as a backscattered response of a radar
+pulse transmitted some few PRIs before. But also other data are generated by the Instrument like calibration,
+noise or test data.
+
+1.3
+
+Conventions and Definitions
+
+1.3.1
+
+Sequencing and Numbering of Parameters
+
+The Space Packet data format is described as a sequence of octets.
+The start position of a parameter or a data word within the sequence is defined by the “Octet Offset” and the
+“Bit Offset” within the octet. The “Octet Offset” refers to the beginning of the overall Space Packet.
+The N-BIT FIELD of a parameter or data word within the sequence may not be aligned to octet boundaries
+and may have a size exceeding one octet.
+The first bit of a N-BIT FIELD is defined to be “Bit 0” of the parameter or data word, the following bit is defined
+to be “Bit 1” and so on up to “Bit N-1” (see Fig. 1-1).
+For the interpretation of the binary code in the N-BIT FIELD the first bit (“Bit 0”) is the most significant bit
+(msb), the last bit (“Bit N-1”) is the least significant bit (lsb).
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+10 of 85
+
+Fig. 1-1: Bit Numbering Convention
+
+1.3.2
+
+Parameter Field Descriptions
+
+The packet parameters are described with the key words shown in Table 1.3-1:
+Key Word
+
+Key Word Description
+
+Description:
+
+This field provides a brief description of the parameter
+
+Performance:
+
+This field defines the performance of the parameter, i.e. whether it has a “variable“ or
+“constant“ value during the data take. If “variable“ is indicated this means the parameter may
+be “variable“ but does not have to be.
+
+Short Name:
+
+This field defines the parameter name
+
+Code Name:
+
+This field defines the parameter code name (identified by the subscript “code”) which designates
+the uncalibrated parameter code.
+
+Code Properties: This field describes the parameter code in terms of:
+Start Position
+End Posiiton
+Code Size
+Data Type
+Applicable Range of Code
+Interpretation:
+
+This field provides the interpretation of the parameter value in terms of its significance and
+calibration to its physical value.
+
+Dependencies:
+
+This field describes the dependencies of the parameter with other parameters of the packet
+header in order to:
+show relations with other header parameters which have to be consistent
+extract additional information by combining with other parameters
+
+Table 1.3-1: Definition of Parameter Field Description
+
+1.4
+
+Abbreviations
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+ADC
+BAQ
+BW
+Cal
+DCD
+DDC
+DFD
+EC
+ECC
+EFE
+FDBAQ
+FE
+HW
+ID
+Int
+n/a
+NPM
+OCM
+PRF
+PRI
+RDB
+Rx
+RxM
+S-1
+SAR
+SAS
+SES
+SP
+SSB
+SW
+SWL
+SWST
+Sync
+TA
+TBC
+TBD
+TC
+TCM
+Temp Comp
+TRM
+Tx
+TxM
+VBR
+
+Analog to Digital Converter
+Block Adaptive Quantisation
+Bandwidth
+Calibration
+Digital Compression Device
+Digital Downconversion
+Digital Filter Device
+Entropy Coding
+Event Control Code
+Electronical Front End
+Flexible Dynamic Block Adaptive Quantisation
+(Antenna) Frontend
+Hardware
+Identity, Identification
+Integer
+not applicable
+Normal Pointing Mode
+Orbit Control Mode
+Pulse Repetition Frequency
+Pulse Repetition Interval
+Radar Data Base
+Receive
+Rx Module
+Sentinel 1
+Synthetic Aperture Radar
+SAR Antenna Subsystem
+SAR Electronics Subsystem
+Space Packet
+Setting Selector Bus
+Software
+Sample Window Length
+Sample Window Start Time
+Synchronisation
+(Antenna) Tile Amplifier
+To be confirmed
+To be defined
+Telecommand
+Timing Control Module
+Temperature Compensation
+Transmit Receive Module
+Transmit
+Tx Module
+Variable Bit Rate
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+11 of 85
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+2
+
+Documents
+
+2.1
+
+Parent Documents
+
+[PD 01]
+
+2.2
+
+S1-RS-TASI-CS-0001
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+12 of 85
+
+SAR Instrument Requirements Specification
+
+Normative Reference Documents
+
+[NRD 01]
+
+S1-RS-ASD-PL-0002
+
+SES Requirements Specification
+
+[NRD 02]
+
+S1-IF-TASI-SC-0002
+
+Instrument to Spacecraft I/F Requirements (IF-8)
+
+2.3
+
+Informative Reference Documents
+
+[IRD 01]
+
+S1-DD-ASD-PL-0001
+
+SAR Instrument Technical Description
+
+[IRD 02]
+
+S1-IF-ASU-PL-0006
+
+SES Interface Control Document, Annex D
+
+[IRD 03]
+
+S1-DD-ASU-PL-0003
+
+SES Internal Commanding Document
+
+[IRD 04]
+
+S1-MA-SSE-TX-0023
+
+TxM Users Manual
+
+[IRD 05]
+
+S1-DD-ASU-PL-0019
+
+ICE TCM Design Description
+
+[IRD 06]
+
+S1-DD-ASU-PL-0024
+
+ICE Receive Module Design Description
+
+[IRD 07]
+
+S1-TN-ASD-PL-0046
+
+Description of the Instrument Radar Database
+
+[IRD 08]
+
+S1-TN-ASU-PL-0023
+
+SAR Data Decompression for S1
+
+2.4
+
+Standards
+
+[SD 01]
+
+CCSDS 133.0-B-1
+
+Space Packet Protocol
+
+[SD 02]
+
+CCSDS 301.0-B-3
+
+Time Code Formats
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+13 of 85
+
+SAR Space Packet Format
+
+The overall Sentinel-1 SAR Space Packet format is shown in Table 2.4-1 and has a total length which is a
+multiple of 4 octets. The format is detailed in the following subsections 3.1 to 3.3 .
+Space Packet
+Packet Primary Header
+
+Version
+
+Packet Sequence
+Control
+
+Packet Identification
+
+Packet
+
+Packet Data Field
+
+Number
+
+Packet
+Type
+
+Secondary
+Header
+Flag
+
+Application
+Process
+Identifier
+
+Sequence
+Flags
+
+Packet
+Sequence
+Count
+
+3 bits
+
+1 bit
+
+1 bit
+
+11bits
+
+2 bits
+
+14 bits
+
+Packet
+Data
+Length
+
+Packet
+Secondary
+Header
+
+16 bits
+
+62 octets
+
+6 octets
+
+User Data Field
+
+variable length
+65534 octets
+
+Length = Multiple of 4 Octets
+
+Table 2.4-1: Overall Space Packet Format
+
+3.1
+
+Packet Primary Header
+
+The Packet Primary Header format is shown in Table 3.1-1 with the parameters described in Table 3.1-2.
+
+Table 3.1-1: Format of Packet Primary Header
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+14 of 85
+
+Parameter
+
+Length
+
+Value
+
+Packet Version Number
+
+3 bits
+
+000 BIN
+
+Packet Type
+
+1 bit
+
+0 BIN
+
+Secondary Header Flag
+
+1 bit
+
+1 BIN
+
+Secondary Header is present
+
+PID
+
+7 bis
+
+100 0001 BIN (65 DEC )
+
+Process ID
+
+PCAT
+
+4 bits
+
+1100 BIN (12 DEC )
+
+Packet Category
+
+Sequence Flags
+
+2 bits
+
+11 BIN
+
+user data are unsegmented
+
+Packet Sequence Count
+
+14 bits
+
+actual count of space
+
+starts with “0” at start of measurement
+
+packet (modulo
+
+counts all packets output by the Instrument
+
+16384)
+
+to the platform
+
+Application Process
+Identifier
+
+Comment
+1
+
+is an ambiguous count, that wraps to “0”
+after “16383”
+Packet Data Length
+
+16 bits
+
+61 to 65533
+
+number of octets in packet data field -1
+
+Table 3.1-2: Primary Packet Header Values
+
+3.2
+
+Packet Secondary Header
+
+The Packet Secondary Header has a length of LEN SH
+
+62 octets. Following the standard [SD 01] it contains
+
+a Time Code Field and an Ancillary Data Field.
+The Packet Secondary Header provides the information of a number of Services as shown in Table 3.2-1.
+Each Service field occupies an integer number of octets.
+
+1
+
+“BIN“ denotes binary representation of the value
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+
+Time
+Code
+Field
+
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+15 of 85
+
+Datation Service
+
+Ancillary Data Field
+
+Fixed Ancillary Data Service
+Sub-commutation Ancillary
+Data Service
+Counters Service
+Radar Configuration Support Service
+Radar Sample Count Service
+Table 3.2-1: Packet Secondary Header and its Services Fields
+
+3.2.1
+
+Datation Service
+
+The Datation Service provides the time stamp for the packet datation. The time stamp value is a sample of the
+local instrument time at a specific event within the PRI where the packet data has been acquired.
+The Datation Service field consists of 6 octets as shown in Table 3.2-2.
+Octet
+Offset
+
+bit
+bit 0
+
+6
+7
+8
+9
+10
+11
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+bit 5
+
+Coarse Time
+
+Fine Time
+Table 3.2-2: Datation Service Field
+
+Astrium GmbH – All Rights Reserved
+
+bit 6
+
+bit 7
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+16 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.1.1
+
+Coarse Time
+
+Description:
+
+The Coarse Time represents the time stamp of the Space Packet in units of integer seconds.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+TCOAR
+
+Code Name:
+
+TCOAR code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 6, bit 0
+
+Octet 9, bit 7
+
+32 bit
+
+unsign.integer
+
+0
+
+Nominal time base is GPS time.
+
+32
+
+2 -1
+
+Interpretation:
+
+TCOAR TCOARcode [s]
+Dependencies:
+
+3.2.1.2
+
+only incremented on availability of platform PPS
+
+Fine Time
+
+Description:
+
+The Fine Time represents the subsecond time stamp of the Space Packet.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+TFINE
+
+Code Name:
+
+TFINE code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 10, bit 0
+
+Octet 11, bit 7
+
+16 bit
+
+unsigned int.
+
+0
+
+16
+
+2 -1
+
+Interpretation:
+
+TFINE
+Dependencies:
+
+TFINE code
+
+0.5 2
+
+16
+
+[s]
+
+TFINE code restarted from “0” on incrementation of TCOAR code .
+Note, that TFINE code and TCOAR code are registered (latched) times from Hardware clocks and
+sampled with PRF rate. Hence, due to time sampling with PRF, the TFINE code transition to “0” may
+not be observed and observed TFINE code value may already be >0 if a space packet indicates a
+transition of TCOAR code .
+
+3.2.2
+
+Fixed Ancillary Data Field
+
+The Fixed Auxiliary Data Service consists of 14 octets as shown in Table 3.2-3. The data in this service
+remains invariant for the duration of the data-take.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+Octet
+Offset
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+17 of 85
+
+bit
+bit 0
+
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+bit 5
+
+bit 6
+
+bit 7
+
+Sync Marker
+
+Data Take ID
+
+ECC Number
+n/a
+
+Test Mode
+
+Rx Channel ID
+
+Instrument Configuration ID
+
+Table 3.2-3: Fixed Auxiliary Data Service Field
+
+3.2.2.1
+
+Sync Marker
+
+Description:
+
+The Sync Marker represents a bit pattern to support (re-)synchronisation of packet data on Space
+Packet layer level (e.g. in case of corruptions or disruptions in a continuous stream of Space
+Packets)
+
+Performance:
+
+constant value during the mission
+
+Short Name:
+
+SYNC
+
+Code Name:
+
+SYNC code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 12, bit 0
+
+Octet 15, bit 7
+
+32 bit
+
+unsigned int.
+
+one static bit pattern
+
+Interpretation:
+
+SYNC
+Dependencies:
+
+352E F853HEX
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+18 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.2.2
+
+Data Take ID
+
+Description:
+
+The Data Take ID is supposed to support ground operations to track the E2E life cycle of a data
+take from the planning, commanding up to the downlinking and reception of the related Space
+Packets of the data take. The Data Take ID will be uplinked as part of the “Perform Measurement”
+and “Perform Test” TC. Selection of the Data Take ID is under ground control.
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+DTID
+
+Code Name:
+
+DTID code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 16, bit 0
+
+Octet 19, bit 7
+
+32 bit
+
+unsigned int.
+
+0
+
+32
+
+2 -1
+
+Interpretation:
+TBD by ESA/ESOC
+Dependencies:
+
+3.2.2.3
+
+none
+
+ECC Number
+
+Description:
+
+The ECC Number identifies the selected Measurement, Test or RF Characterisation mode
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+ECC
+
+Code Name:
+
+ECC code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 20, bit 0
+
+Octet 20, bit 7
+
+8 bit
+
+enumeration
+
+0
+
+47
+
+Interpretation:
+
+see Table 3.2-4: ECC Code Interpretation
+
+Dependencies:
+
+ECC Code interpretation may change if ECC programs will be modified in the SES Radar
+Database.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+19 of 85
+
+ECC code
+
+Measurement Mode
+
+Comment
+
+0
+
+contingency
+
+reserved for ground testing or mode upgrading
+
+1
+
+Stripmap 1
+
+2
+
+Stripmap 2
+
+3
+
+Stripmap 3
+
+4
+
+Stripmap 4
+
+5
+
+Stripmap 5-N
+
+6
+
+Stripmap 6
+
+7
+
+contingency
+
+8
+
+Interferometric Wide Swath
+
+9
+
+Wave Mode
+
+Used for Stripmap 5 imaging on northern hemisphere
+reserved for ground testing or mode upgrading
+Leapfrog mode using alternating vignettes at different incidence
+angles
+
+10
+
+Stripmap 5-S
+
+Used for Stripmap 5 imaging on southern hemisphere
+
+11
+
+Stripmap 1 w/o interl.Cal
+
+12
+
+Stripmap 2 w/o interl.Cal
+
+13
+
+Stripmap 3 w/o interl.Cal
+
+14
+
+Stripmap 4 w/o interl.Cal
+
+15
+
+RFC mode
+
+16
+
+- Test Mode Oper
+
+There are two Test Mode variants which use the same ECC
+
+- Test Mode Bypass
+
+program.
+
+RFcharacterisation mode based on PCC sequences (RF672 for
+EFEs and PCC 32 for TAs )
+
+The Test Mode variant is defined by the parameter TSTMOD in 0
+17
+
+Elevation Notch S3
+
+Elevation Notch in centre of S3 swath
+
+18
+
+Azimuth Notch S1
+
+19
+
+Azimuth Notch S2
+
+20
+
+Azimuth Notch S3
+
+21
+
+Azimuth Notch S4
+
+22
+
+Azimuth Notch S5-N
+
+Used for Az. Notch Mode in Stripmap 5 on northern hemisphere
+
+23
+
+Azimuth Notch S5-S
+
+Used for Az. Notch Mode in Stripmap 5 on southern hemisphere
+
+24
+
+Azimuth Notch S6
+
+25
+
+Stripmap 5-N w/o interl.Cal
+
+26
+
+Stripmap 5-S w/o interl.Cal
+
+27
+
+Stripmap 6 w/o interl.Cal
+
+28-30
+
+contingency
+
+31
+
+Elevation Notch S3 w/o interl.Cal
+
+32
+
+Extra Wide Swath
+
+33
+
+Azimuth Notch S1 w/o interl.Cal
+
+34
+
+Azimuth Notch S3 w/o interl.Cal
+
+35
+
+Azimuth Notch S6 w/o interl.Cal
+
+36
+
+contingency
+
+37
+
+Noise Characterisation S1
+
+38
+
+Noise Characterisation S2
+
+39
+
+Noise Characterisation S3
+
+40
+
+Noise Characterisation S4
+
+reserved for ground testing or mode upgrading
+
+reserved for ground testing or mode upgrading
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+41
+
+Noise Characterisation S5-N
+
+42
+
+Noise Characterisation S5-S
+
+43
+
+Noise Characterisation S6
+
+44
+
+Noise Characterisation EWS
+
+45
+
+Noise Characterisation IWS
+
+46
+
+Noise Characterisation Wave
+
+47
+
+contingency
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+20 of 85
+
+reserved for ground testing or mode upgrading
+
+Table 3.2-4: ECC Code Interpretation
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.2.4
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+21 of 85
+
+Test Mode
+
+Description:
+
+The Test Mode parameter indicates whether the space packet is generated by a Test mode or a
+Measurement mode. In case of a Test mode the parameter indicates the configuration of the test
+performed.
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+TSTMOD
+
+Code Name:
+
+TSTMOD code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 21, bit 1
+
+Octet 21, bit 3
+
+3 bit
+
+enumeration
+
+see “Interpretation” field
+
+Interpretation:
+TSTMOD code
+(binary)
+000
+
+Interpretation
+
+Description
+
+Default
+
+in case of any Measurement Mode (i.e. no Test
+Mode)
+
+001 to 011
+
+n/a
+
+n/a
+
+100
+
+contingency used for
+
+Test Mode configuration:
+Data via ADC
+
+ground testing only
+
+RxM digital processing (DDC, DFD, DCD) fully
+operational
+DCD compression as per BAQ Mode
+101
+
+contingency used for
+
+Test Mode configuration:
+Data via ADC
+
+ground testing only
+
+RxM digital processing (DDC, DFD, DCD) fully
+bypassed
+110
+
+Test Mode “Oper”
+
+Test Mode configuration:
+Digital Test Pattern Stimuli input to DDC
+RxM digital processing (DDC, DFD, DCD) fully
+operational
+DCD compression as per BAQ Mode
+
+111
+
+Test Mode “Bypass”
+
+1
+
+Test Mode configuration:
+Digital Test Pattern Stimuli input to DDC
+RxM digital processing (DDC, DFD, DCD) fully
+bypassed
+
+Dependencies:
+
+TSTMOD
+
+0 indicates a Test Mode. A Test Mode is also indicated by ECC code =16.
+
+In Measurement modes TSTMOD =0 per default.
+
+1
+
+Compression may be active or bypassed in Test Mode “Oper“, i.e. it will be active in case of PRIs with “non-calibration”
+
+signal types (echo or noise) and bypassed in case of PRIs with “calibration” signal types.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.2.5
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+22 of 85
+
+RX Channel ID
+
+Description:
+
+The Rx Channel ID identifies the Rx channel generating the packet data. Rx polarisation is and Rx
+channel are in fixed relation. Therefore, the Rx Channel ID also identifies the Rx polarisation of the
+channel (RxV-Pol. or RxH-Pol.)
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+RXCHID
+
+Code Name:
+
+RXCHID code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 21, bit 4
+
+Octet 21, bit 7
+
+4 bit
+
+boolean
+
+0 or 1
+
+Interpretation:
+
+RXCHID
+
+Dependencies:
+
+3.2.2.6
+
+RxV - Pol Channel
+RxH - Pol Channel
+
+for RXCHIDcode
+for RXCHIDcode
+
+0
+1
+
+Combined with the information of the Tx polarisation from the “Polarisation Field” (3.2.5.13.1.1) the
+overall Tx/Rx polarisation of the actual packet can be identified.
+
+Instrument Configuration ID
+
+Description:
+
+The Instrument Configuration ID is intended to support ground operations. It identifies in the
+Space Packets the onboard configuration of the Instrument under which the Instrument has
+operated and generated the data take. Knowledge of the configuration is a prerequisite for ground
+processing of the data take raw data.
+The Instrument configuration ID is a patchable Instrument parameter and is under control of
+ground operations. It has to be patched together with an Instrument configuration change. An
+Instrument configuration change is mainly induced by a change of the onboard Radar Data Base
+(RDB), e.g. change of beam tables, ECC programs, etc...
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+ICID
+
+Code Name:
+
+ICID code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 22, bit 0
+
+Octet 25, bit 7
+
+32 bit
+
+TBD
+
+TBD
+
+Interpretation:
+TBD by ESA/ESOC
+Dependencies:
+
+3.2.3
+
+none
+
+Sub-commutated Ancillary Data Service
+
+This service provides Spacecraft Ancillary Data in terms of S/C PVT and S/C Attitude Data periodically
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+23 of 85
+
+received from the platform.
+The S/C ancillary data are defined in Table 3.2-5 , Table 3.2-6 and Table 3.2-9.
+The update rate of the data is up to 1Hz which is much lower than the PRF rate of Space Packet generation.
+Hence, it is decided to sub-commutate the data in the Space Packet Secondary Header in portions of 16bit
+data words. For identification of the sub-commutated data words a 16bit word index is referenced to each
+word which is defined in Table 3.2-5 , Table 3.2-6 and Table 3.2-9.
+PARAMETERS
+16 bit Dummy Data
+PVT ANCILLARY DATA (organised in 16 bit words)
+
+Word Index
+0
+1
+
+X- axis position ECEF in IEEE-754 double
+precision format (metres)
+
+64 bit float
+
+2
+3
+4
+5
+
+Y- axis position ECEF in IEEE-754 double
+precision format (metres)
+
+64 bit float
+
+6
+7
+8
+9
+
+Z- axis position ECEF in IEEE-754 double
+precision format (metres)
+
+64 bit float
+
+10
+11
+12
+
+X- velocity ECEF in IEEE-754 single
+precision format (metres/sec)
+
+32 bit float
+
+Y- velocity ECEF in IEEE-754 single
+precision format (metres/sec)
+
+32 bit float
+
+Z- velocity ECEF in IEEE-754 single
+precision format (metres/sec)
+
+32 bit float
+
+POD Solution Data Stamp in CCSDS CUC
+format (64-bit) - GPS Time
+(see Table 3.2-7)
+
+13
+14
+15
+16
+17
+18
+
+1
+
+Unsigned 16 bit integer
+
+19
+
+2
+
+Unsigned 16 bit integer
+
+20
+
+3
+
+Unsigned 16 bit integer
+
+21
+
+4
+
+Unsigned 16 bit integer
+
+22
+
+Table 3.2-5: S/C PVT Ancillary Data Table
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+24 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S/C ATTITUDE ANCILLARY DATA (organised in 16 bit words)
+Q0 Attitude Quaternion
+
+32 bit float
+
+Q1 Attitude Quaternion
+
+32 bit float
+
+Q2 Attitude Quaternion
+
+32 bit float
+
+Q3 Attitude Quaternion
+
+32 bit float
+
+[rad/sec]
+
+32 bit float
+
+ngular rate [rad/sec]
+
+32 bit float
+
+[rad/sec]
+
+32 bit float
+
+Data Time Stamp in CCSDS CUC format
+(64-bit) - GPS Time
+(see Table 3.2-7)
+
+Word Index
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+
+1
+
+Unsigned 16 bit integer
+
+37
+
+2
+
+Unsigned 16 bit integer
+
+38
+
+3
+
+Unsigned 16 bit integer
+
+39
+
+4
+
+Unsigned 16 bit integer
+
+40
+
+16 bit
+
+41
+
+Pointing Status
+
+Table 3.2-6: S/C Attitude Ancillary Data Table
+
+The reference frames for the S/C Attitude Quaternions and the S/C angular rates as given in [NRD 02] are as
+follows:
+the S/C Attitude Quaternions represent the S/C attitude wrt. the Orbital Reference Frame which, in
+NPM/OCM, is the Zero-Doppler Reference Frame. Q0 is the real component and Q1, Q2, Q3 are the
+vector components of the Attitude Quaternion.
+the S/C inertial angular rate vector is measured in the Body Fixed Reference Frame.
+
+bit
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+31
+
+9
+30
+
+2
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+29
+
+28
+
+27
+
+26
+
+25
+
+224
+
+data for word index 37
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+data for word index 38
+
+223
+
+222
+
+221
+
+220
+
+219
+
+218
+
+217
+
+216
+
+215
+
+214
+
+213
+
+212
+
+211
+
+210
+
+29
+
+28
+
+data for word index 39
+
+7
+
+2
+
+6
+
+2
+
+5
+
+2
+
+4
+
+2
+
+3
+
+2
+
+2
+
+2
+
+1
+
+2
+
+0
+
+2
+
+-1
+
+2
+
+-2
+
+2
+
+-3
+
+2
+
+-4
+
+2
+
+-5
+
+2
+
+-6
+
+2
+
+-7
+
+2
+
+2-8
+
+data for word index 40
+
+2-9
+
+2-10
+
+2-11
+
+2-12
+
+2-13
+
+2-14
+
+2-15
+
+2-16
+
+2-17
+
+2-18
+
+2-19
+
+2-20
+
+2-21
+
+2-22
+
+2-23
+
+2-24
+
+Table 3.2-7: S/C Ancillary Data GPS Time Stamp Format (in units of seconds)
+
+msb
+bit
+data for word index 41
+
+0
+
+lsb
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+AOCS OP Mode
+
+Table 3.2-8: Pointing Status Format
+
+Astrium GmbH – All Rights Reserved
+
+10
+n/a
+
+11
+
+12
+
+13
+
+14
+
+15
+
+RE
+
+PE
+
+YE
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+25 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+with
+Parameter
+
+Description
+
+Value
+
+AOCS OP Mode
+
+AOCS Operational Mode
+
+0: no mode
+5: NPM (Normal Pointing Mode)
+6: OCM (Orbit Control Mode)
+other values are not applicable
+
+RE
+
+Roll Error Status
+
+0: roll axis is fine pointed
+1: roll axis is degraded
+
+PE
+
+Pitch Error Status
+
+0: pitch axis is fine pointed
+1: pitch axis is degraded
+
+YE
+
+Yaw Error Status
+
+0: yaw axis is fine pointed
+1: yaw axis is degraded
+
+ANTENNA & TGU TEMPERATURE HK DATA
+(organised in 16 bit words)
+
+Word Index
+
+Temperature Updatre Status (16bit)
+
+42
+
+Tile 1 EFE H Temperature (8bit)
+
+Tile 1 EFE V Temperature (8bit)
+
+43
+
+Tile 1 Active TA Temp. (8bit)
+
+Tile 2 EFE H Temperature (8bit)
+
+44
+
+Tile 2 EFE V Temperature (8bit)
+
+Tile 2 Active TA Temp. (8bit)
+
+45
+
+Tile 3 EFE H Temperature (8bit)
+
+Tile 3 EFE V Temperature (8bit)
+
+46
+
+Tile 3 Active TA Temp. (8bit)
+
+Tile 4 EFE H Temperature (8bit)
+
+47
+
+Tile 4 EFE V Temperature (8bit)
+
+Tile 4 Active TA Temp. (8bit)
+
+48
+
+Tile 5 EFE H Temperature (8bit)
+
+Tile 5 EFE V Temperature (8bit)
+
+49
+
+Tile 5 Active TA Temp. (8bit)
+
+Tile 6 EFE H Temperature (8bit)
+
+50
+
+Tile 6 EFE V Temperature (8bit)
+
+Tile 6 Active TA Temp. (8bit)
+
+51
+
+Tile 7 EFE H Temperature (8bit)
+
+Tile 7 EFE V Temperature (8bit)
+
+52
+
+Tile 7 Active TA Temp. (8bit)
+
+Tile 8 EFE H Temperature (8bit)
+
+53
+
+Tile 8 EFE V Temperature (8bit)
+
+Tile 8 Active TA Temp. (8bit)
+
+54
+
+Tile 9 EFE H Temperature (8bit)
+
+Tile 9 EFE V Temperature (8bit)
+
+55
+
+Tile 9 Active TA Temp. (8bit)
+
+Tile 10 EFE H Temperature (8bit)
+
+56
+
+Tile 10 EFE V Temperature (8bit)
+
+Tile 10 Active TA Temp. (8bit)
+
+57
+
+Tile 11 EFE H Temperature (8bit)
+
+Tile 11 EFE V Temperature (8bit)
+
+58
+
+Tile 11 Active TA Temp. (8bit)
+
+Tile 12 EFE H Temperature (8bit)
+
+59
+
+Tile 12 EFE V Temperature (8bit)
+
+Tile 12 Active TA Temp. (8bit)
+
+60
+
+Tile 13 EFE H Temperature (8bit)
+
+Tile 13 EFE V Temperature (8bit)
+
+61
+
+Tile 13 Active TA Temp. (8bit)
+
+Tile 14 EFE H Temperature (8bit)
+
+62
+
+Tile 14 EFE V Temperature (8bit)
+
+Tile 14 Active TA Temp. (8bit)
+
+63
+
+TGU Temperature (7bit)
+
+64
+
+n/a
+
+Table 3.2-9: Antenna and TGU Temperature HK Data Table
+
+The Tile EFE H / V temperature is the average temperature of the EFE TRMs of a Tile assigned to the
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+26 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+corresponding polarisation H or V. The EFE and the TA temperatures are represented by a 8 bit code.
+The TGU Temperature is a 7bit code value shown in Table 3.2-10.
+The conversion of the code values to engineering values is described in the Annex 5.4 for EFE/TA and TGU
+temperatures.
+
+msb
+bit
+
+lsb
+
+0
+
+1
+
+2
+
+3
+
+4
+
+data for word index 64
+
+5
+
+6
+
+7
+
+8
+
+9
+
+n/a
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+TGU Temeprature (7 bit)
+
+Table 3.2-10: TGU Temperature Format
+The temperature HKs are acquired at different times throughout the operation. In detail, in a 16s period the
+SES acquires sequentially the temperature HKs of 14 Tiles and the temperature HK of the TGU,
+approximately, one HK value per second.
+Temperature HK acquisition and the updating of their corresponding values in the Ancillary Data field of the
+SAR header cannot be performed synchronously by the SES. Updating of the Ancillary Data in the SAR
+header is coupled to the reception of an Attitude Data set from the platform (received with 1 Hz rate).
+Whereas, acquisition of Temperature HKs is coupled to a SES internal acquisition cycle.
+Therefore, depending on the actual timing between these two events, it may happen that a temperature HK
+value just acquired is a little bit too late for insertion into the actual update of the Ancillary Data (in this case
+the HK Update Status in Table 3.2-11 will indicate no update). The temperature HK will then be updated
+during the next update event (triggered by reception of the next Attitude Data set).
+On the other hand, it may happen that two temperature HK values will be updated at the same time during an
+update of the Ancillary Data.
+In any case, during a 16s interval all Tile ‘n’ and TGU temperature HKs will be updated in the SAR headers.
+The Temperature HK Update Status in Table 3.2-11 identifies the temperature HK values (of Tile ‘n’ or TGU)
+which have been acquired and updated in the latest update of the Ancillary Data.
+
+msb
+bit
+data for word index 42
+
+lsb
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+n/a
+
+TGU
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+Tile
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+Table 3.2-11: Temperature HK Update Status
+Update Status bit value
+
+Description
+
+0
+
+HK not updated
+
+1
+
+HK of relevant Tile ‘n’ or TGU updated
+
+Table 3.2-12 shows the Service field of the Sub-commutation Service providing the Data Word Index and the
+corresponding Data Word.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+Octet
+Offset
+
+bit
+bit 0
+
+26
+27
+28
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+27 of 85
+
+bit 1
+bit 2
+bit 3
+bit 4
+bit 5
+bit 6
+Sub-commutated Ancillary Data Word Index
+Sub-commutated Ancillary Data Word
+
+Table 3.2-12: Sub-commutation Ancillary Data Service Field
+
+Astrium GmbH – All Rights Reserved
+
+bit 7
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+28 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.3.1
+
+Sub-commutated Ancillary Data Word Index
+
+Description:
+
+The Sub-commutated Ancillary Data Word Index is a rotating index which identifies the actual
+16bit data word (see Table 3.2-5 and Table 3.2-6 and Table 3.2-9) in the sub-commutation frame
+of the Service field.
+A combined PVT/Attitude/Temperature HK data set consists of 64 data words which are
+subcommutated in a sequence of SAR packet headers in the sequence from 1 to 64 with one
+word per packet header. To each word the corresponding word index (1 to 64) is assigned in the
+packet header which identifies the significance of the data word.
+A complete and consistent set of PVT, Attitude or Temperature KK data is always
+represented by a contiguous sequence of the word indices in the relevant data set, i.e. 1 to
+22 for PVT data, 23 to 41 for Attitude data and 42 to 64 for Temperature HK data (note also,
+that PVT and Attitude data sets have their own time stamps).
+A word index value equal "0" will indicate invalidity of the inserted data word. A new PVT/Attitude
+data set is received from the platform each second. During the short time of downloading of a new
+data set to RxM the insertion of the old data into the header stops and the word index as well as
+the data word are set to value "0". This indicates that there are no PVT/Attitude/Temperature data
+available in the header. When the download of the new data set is completed, insertion into packet
+headers restarts with the new PVT/Attitude/Temperature data at index=1.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+ADWIDX
+
+Code Name:
+
+ADWIDX code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 26, bit 0
+
+Octet 26, bit 7
+
+8 bit
+
+unsigned int.
+
+0
+
+64
+
+Interpretation:
+
+ADWIDX
+
+ADWIDX code identifies the index of a 16 bit word of the combined
+
+PVT/Attitude/Temperature Ancillary Data (see indices in Table 3.2-5 , Table 3.2-6 and Table
+3.2-9).
+
+ADWIDX code
+
+0 if no Ancillary Data are available in the beginning or during the data take.
+
+ADWIDX code
+
+[1...64] will range from 1 to 64 if Ancillary Data are available and will be
+
+incremented by 1 for each space packet. It will wrap to 1 after 64.
+Dependencies:
+
+Values of ADWIDX code and ADW code are in fixed relation.
+ADWcode is not applicable for ADWIDX code 0 which represents the case of inactive or
+suspended service (no reception of Ancillary Data from platform).
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.3.2
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+29 of 85
+
+Sub-commutated Ancillary Data Word
+
+Description:
+
+The Sub-commutated Ancillary Data Word is a 16bit data word of the S/C Ancillary Data set (see
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+ADW
+
+Code Name:
+
+ADW code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 27, bit 0
+
+Octet 28, bit 7
+
+16 bit
+
+variable
+
+variable
+
+Table 3.2-5 , Table 3.2-6 and Table 3.2-9) identified by ADWIDX .
+
+Interpretation:
+
+The interpretation of ADW depends on the value of ADWIDX code .
+The format and physical units of the ADW values can be referenced in Table 3.2-5 , Table 3.2-6 or
+Table 3.2-9 by index ADWIDX code .
+
+Dependencies:
+
+3.2.4
+
+Values of ADWIDX code and ADW code are in fixed relation.
+
+Counters Service
+
+The Counters Service provides two counters, the Space Packet Count and the PRI Count as shown in Table
+3.2-13.
+Octet
+Offset
+
+bit
+bit 0
+
+29
+30
+31
+32
+33
+34
+35
+36
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+bit 5
+
+Space Packet Count
+
+PRI Count
+
+Table 3.2-13: Counters Service Field
+
+Astrium GmbH – All Rights Reserved
+
+bit 6
+
+bit 7
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+30 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.4.1
+
+Space Packet Count
+
+Description:
+
+In nominal operation, the Space Packet Count represents the actual count of Space Packets
+output by the Instrument from the beginning of the data take. It will be a continuous count and
+supports simple checking for completeness of the number of Space Packets to be expected by
+nominal SAR Measurement Mode execution.
+Exception:
+In anomaly cases that result from a failure to generate a SAR Data space packet caused by
+RxM FIFO overflow caused by a data rate exceeding 640 Mbps
+or Packet length overflow
+or both
+the counter will increment but not be transmitted because the output of failed Space Packets will
+be suppressed by the SAR Instrument during the recovery. In such an anomaly case, the Space
+Packet Count observed by the user in the received packets will not be continuous.
+In this case the number of missing counts of the Mode PRI Count (see 3.2.4.2) indicates the exact
+1
+
+number of Space Packets lost during the anomaly condition .
+The Instrument autonomously resumes nominal operation after the failure conditions.
+Anomaly Detection:
+An anomaly has occured if SPCT increments >1 between adjacent packets k-1 and k.
+The number N of lost packets during the anomaly is:
+
+N PRICTk PRICTk 1 1 with
+PRICTk : the first packet after the anomaly
+PRICTk 1 : the last packet before the anomaly
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+SPCT
+
+Code Name:
+
+SPCT code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 29, bit 0
+
+Octet 32, bit 7
+
+32 bit
+
+unsigned int.
+
+0
+
+32
+
+2 -1
+
+Interpretation:
+
+SPCT
+
+SPCTcode
+
+SPCT code is a progressive count incremented by “1” for each generated Space Packet.
+SPCT code starts with value “0” at the first Space Packet of the data take.
+32
+
+SPCT code wraps to “0” after 2 -1.
+Dependencies:
+
+1
+
+none
+
+The number of missing counts in the Space Packet Count may be ambiguous due to the complexity of the internal
+
+recovery process. Therefore, the number of missing Mode PRI counts shall be used as a precise indicator of missing
+packets.
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+31 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+3.2.4.2
+
+Mode PRI Count
+
+Description:
+
+The PRI Count represents the actual count of PRIs generated by the Instrument from the
+beginning of the data take (ECC execution).
+In the series of down-linked space packets the PRI Count may appear as a broken count between
+downlinked packets. Such a broken PRI Count is an indicator that space packet generation has
+been suppressed in the Instrument for a number of PRIs.
+During nominal operation suppression of space packet generation is a common means during a
+data take to avoid generation of useless packets which would otherwise burden data storage and
+downlink budgets.
+Examples for suppression of useless packets are e.g. during PRIs:
+for warmup or stabilisation
+to fade out any undesired signals from travelling Tx pulses and their echoes before performing a
+noise measurement
+Example:
+
+SPCT
+PRICT
+
+s
+
+s+1
+
+s+2
+
+s+3
+
+s+4
+
+s+5
+
+s+6
+
+p
+
+p+1
+
+p+2
+
+p+16
+
+p+17
+
+p+18
+
+p+19
+
+Between Space Packets (s+2) and (s+3) there is a gap of 13 PRIs for which no Space Packets
+have been recorded.
+Each SAR mode operation starts with a systematic 2 PRI delay wrt. the start of the ECC program
+execution. This means the PRI Count is systematically offset by 2 counts from the beginning (i.e.
+the first PRI in the first ECC program entry will have assigned the Mode PRI Count = 2).
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+PRICT
+
+Code Name:
+
+PRICT code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 33, bit 0
+
+Octet 36, bit 7
+
+32 bit
+
+unsigned int.
+
+0
+
+32
+
+2 -1
+
+Interpretation:
+
+PRICT
+
+PRICTcode
+
+PRICT code is a count incremented by “1” for each PRI of the data take. It may be a broken count in
+the stream of recorded Space Packets.
+32
+
+PRICT code wraps to “0” after 2 -1.
+In the first generated space packet of the data take PRICT code starts with a value >0 since TxM
+gain stabilisation and optional Frontend warm-up take place in the very beginning of ECC
+execution for a number of PRIs with suppression of space packet generation.
+Dependencies:
+
+PRICT code of the first space packet of a data take (i.e. the PRICT code offset in first space packet)
+depends on ECC code and on optional Frontend warm-up. Occurence of Frontend warm-up is not
+flagged in the space packet annotated data, so, the PRICT code offset value can not be predicted.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+32 of 85
+
+Radar Configuration Support Service
+
+The Radar Configuration Support Service provides the reporting of the radar configuration parameters that are
+applicable to the associated measurement data (i.e. the User Data) contained in the packet.
+The Radar Configuration Support Service consists of the fields shown in Table 3.2-14.
+Octet
+Offset
+
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+
+bit
+bit 0
+Error
+Flag
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+n/a
+
+bit 5
+
+bit 6
+
+BAQ Mode
+BAQ Block Length
+n/a
+Range Decimation
+Rx Gain
+Tx Ramp Rate
+Tx Pulse Start Frequency
+
+Tx Pulse Length
+n/a
+
+Rank
+PRI
+
+SWST
+
+SWL
+
+SAS SSB Message
+
+SES SSB Message
+Table 3.2-14: Radar Configuration Support Service Field
+
+Astrium GmbH – All Rights Reserved
+
+bit 7
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+33 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.1
+
+Error Flag
+
+Description:
+
+The Error Flag indicates a parity error in the SES SSB message received by the RxM for the
+
+Performance:
+
+should be always “0”. Value “1” indicates a non-nominal situation.
+
+Short Name:
+
+ERRFLG
+
+Code Name:
+
+ERRFLG code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 37, bit 0
+
+Octet 37, bit 0
+
+1 bit
+
+boolean
+
+0,1
+
+current packet.
+
+Interpretation:
+
+0 for nominal condition
+1 for SES - SSB message parity error
+
+ERRFLGcode
+
+In case of ERRFLGcode
+
+1 the actual packet contents is inconsistent and the packet shall be
+
+discarded (not to be used for SAR image generation).
+Dependencies:
+
+3.2.5.2
+
+None
+
+BAQ Mode
+
+Description:
+
+The BAQ Mode indicates the mode of operation of the FDBAQ compression.
+
+Performance:
+
+variable value during the data take (different values between signal types “Echo”, Noise” and
+“Calibration” but constant value within each signal type)
+
+Short Name:
+
+BAQMOD
+
+Code Name:
+
+BAQMOD code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 37, bit 3
+
+Octet 37, bit 7
+
+5 bit
+
+enumeration
+
+0
+
+31
+
+Interpretation:
+
+Dependencies:
+
+BAQMOD code
+
+BAQMOD
+
+0
+
+BYPASS MODE
+
+1 to 2
+
+-
+
+3
+
+BAQ 3-BIT MODE
+
+No EC
+
+4
+
+BAQ 4-BIT MODE
+
+No EC
+No EC
+
+5
+
+BAQ 5-BIT MODE
+
+6 to 11
+
+-
+
+12
+
+FDBAQ Mode 0
+
+13
+
+FDBAQ Mode 1
+
+14
+
+FDBAQ Mode 2
+
+15 to 31
+
+-
+
+Comment
+not applicable
+
+not applicable
+nominal FDBAQ
+FDBAQ with first alternative rate
+selection thresholds
+FDBAQ with second alternative
+rate selection thresholds
+not applicable
+
+Following dependencies exist with respect to SIGTYP code :
+Calibration data (SIGTYP code >7, all CALTYP code ) are only with BAQMOD code =0
+Noise data (SIGTYP code =1) are only with BAQMOD code =0 or 3 or 4 or 5
+For Echo data (SIGTYP code =0) all BAQMOD code are allowed
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.3
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+34 of 85
+
+BAQ Block Length
+
+Description:
+
+The BAQ Block Length is the number of complex radar samples per BAQ block. The BAQ block
+represents a data block for which the quantisation is adapted according to the block statistics.
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+BAQBL
+
+Code Name:
+
+BAQBL code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 38, bit 0
+
+Octet 38, bit 7
+
+8 bit
+
+unsigned int.
+
+31
+
+Interpretation:
+
+BAQBL 8 BAQBLcode 1
+Only one operational value BAQBL=256 is applicable for Sentinel-1 operation.
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+35 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.4
+
+Range Decimation
+
+Description:
+
+The Range Decimation indicates the used LowPass filter and down-sampling ratio for decimation
+of the radar data in the sampling window according to the needed mode bandwidth. The resulting
+Sampling Frequency after decimation applies to that of the SAR user data in the Space Packet.
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+RGDEC
+
+Code Name:
+
+RGDEC code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 40, bit 0
+
+Octet 40, bit 7
+
+8 bit
+
+enumeration
+
+0
+
+Interpretation:
+
+11
+
+RGDEC code is equivalent to the selected Filter No.
+
+RGDEC code
+(Filter No.)
+
+Decimation
+Filter
+Bandwidth
+[MHz]
+
+0
+
+100.00
+
+1
+
+87.71
+
+2
+
+n/a
+
+3
+
+74.25
+
+4
+
+59.44
+
+5
+
+50.62
+
+6
+
+44.89
+
+7
+
+22.2
+
+8
+
+56.59
+
+9
+
+42.86
+
+10
+
+15.1
+
+11
+
+48.35
+
+with f ref
+
+Decimat.
+Ratio
+L/M
+
+3
+4
+2
+3
+
+Sampling
+Frequency f dec
+after Decimation
+[MHz]
+
+f dec
+f dec
+
+n/a
+
+5
+9
+4
+9
+3
+8
+1
+3
+1
+6
+3
+7
+5
+16
+3
+26
+4
+11
+
+5
+9
+4
+9
+3
+8
+1
+3
+1
+6
+3
+7
+5
+16
+3
+26
+4
+11
+
+f dec
+
+f dec
+f dec
+f dec
+
+f dec
+f dec
+
+f dec
+
+f dec
+
+SAR
+Swath
+
+28
+
+Full Bandwidth
+
+28
+
+S1, WV1
+
+n/a
+
+n/a
+
+4 f ref
+
+32
+
+S2
+
+4 f ref
+
+40
+
+S3
+
+4 f ref
+
+48
+
+S4
+
+4 f ref
+
+52
+
+S5
+
+4 f ref
+
+92
+
+EW1
+
+4 f ref
+
+36
+
+IW1
+
+4 f ref
+
+68
+
+S6, IW3
+
+4 f ref
+
+120
+
+EW2, EW3,
+EW4, EW5
+
+4 f ref
+
+44
+
+IW2, WV2
+
+3
+4 f ref
+4
+2
+4 f ref
+3
+
+n/a
+
+f dec
+
+Filter
+Length N F
+[Samples]
+
+37.53472224 [MHz].
+
+Note: Filter Length N F is given for a sampling frequency of 4 f ref
+Dependencies:
+
+the selected decimation filter influences the number of complex samples after decimation (i.e. the
+number of complex samples in the Space Packet)
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+36 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.5
+
+Rx Gain
+
+Description:
+
+The Rx Gain indicates the applied value of the commandable Rx attenuation in the receiver
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+RXG
+
+Code Name:
+
+RXG code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 41, bit 0
+
+Octet 41, bit 7
+
+8 bit
+
+unsigned int.
+
+0
+
+channel of the SES.
+
+Interpretation:
+
+RXG
+
+0.5 RXGcode [dB]
+
+RXG values in the range from 0 to -31.5dB.
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+63
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.6
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+37 of 85
+
+Tx Pulse Ramp Rate
+
+Description:
+
+The Tx Pulse Ramp Rate indicates the linear FM rate at which the frequency changes over the
+pulse duration.
+The parameter value refers to the Tx pulse transmitted in the PRI when the SAR echo data of this
+Space Packet have been sampled. Hence, due to the travel time from Tx pulse transmission to its
+echo reception this parameter does not describe the originating Tx pulse of the SAR echo data of
+this packet. The number of PRIs occuring from Tx pulse transmission to echo reception is defined
+by parameter “Rank” (see 3.2.5.9). Hence, the Tx pulse parameter fitting to the (transmit)
+properties of the SAR echo data in the actual packet can be found in the packet generated “Rank”
+PRIs earlier (constant PRI assumed).
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+TXPRR
+
+Code Name:
+
+TXPRR code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 42, bit 0
+
+Octet 43, bit 7
+
+16 bit
+
+code
+
+0
+
+65535
+
+Interpretation:
+
+TXPRRcode [0] (bit 0 of TXPRR code ) denotes the polarity of the ramp rate TXPRR .
+TXPRRcode [1 : 15] (bit 1 15 of TXPRR code ) denotes the magnitude of the ramp rate TXPRR .
+
+TXPRRcode 0
+TXPRRcode 0
+
+0 for transmitted Down-Chirp
+1 for for transmitted Up-Chirp
+
+The sign of the ramp rate can be expressed in terms of the polarity P
+
+S
+
+0 for P 1
+1 for P
+
+0
+
+The signed ramp rate TXPRR is then:
+
+TXPRR
+
+1 S TXPRRcode [1 : 15]
+
+2
+f ref
+
+2 21
+
+in [MHz/us]
+
+with
+
+f ref
+Dependencies:
+
+37.53472224 [MHz]
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+TXPRRcode [0] :
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.7
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+38 of 85
+
+Tx Pulse Start Frequency
+
+Description:
+
+The Tx Pulse Start Frequency indicates the start frequency of the pulse.
+The parameter value refers to the Tx pulse transmitted in the PRI when the SAR echo data of this
+Space Packet have been sampled. Hence, due to the travel time from Tx pulse transmission to its
+echo reception this parameter does not describe the originating Tx pulse of the SAR echo data of
+this packet. The number of PRIs occuring from Tx pulse transmission to echo reception is defined
+by parameter “Rank” (see 3.2.5.9). Hence, the Tx pulse parameter fitting to the (transmit)
+properties of the SAR echo data in the actual packet can be found in the packet generated “Rank”
+PRIs earlier (constant PRI assumed).
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+TXPSF
+
+Code Name:
+
+TXPSF code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 44, bit 0
+
+Octet 45, bit 7
+
+16 bit
+
+code
+
+-22527
+
++22527
+
+Interpretation:
+
+TXPSFcode [0] (bit 0 of TXPSF code ) denotes the polarity of TXPSF
+TXPSFcode [1 : 15] (bit 1 15 of TXPSF code ) denotes the magnitude of TXPSF
+TXPSFcode 0
+TXPSFcode 0
+
+0 for negative start frequency
+1 for positive frequency
+
+The sign of the start frequency be expressed in terms of the polarity P
+
+S
+
+TXPSFcode [0] :
+
+0 for P 1
+1 for P 0
+
+The start frequency TXPSF includes an additive term contributing from the ramp rate TXPRR.
+With this, TXPSF is defined:
+
+TXPSF
+
+TXPRR
+4 f ref
+
+1 S TXPSFcode [1 : 15]
+
+f ref
+214
+
+in [MHz]
+
+with
+
+f ref
+Dependencies:
+
+37.53472224 [MHz]
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+3.2.5.8
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+39 of 85
+
+Tx Pulse Length
+
+Description:
+
+The Tx Pulse Length indicates the transmit duration of the Tx pulse.
+The parameter value refers to the Tx pulse transmitted in the PRI when the SAR echo data of this
+Space Packet have been sampled. Hence, due to the travel time from Tx pulse transmission to its
+echo reception this parameter does not describe the originating Tx pulse of the SAR echo data of
+this packet. The number of PRIs occuring from Tx pulse transmission to echo reception is defined
+by parameter “Rank” (see 3.2.5.9). Hence, the Tx pulse parameter fitting to the (transmit)
+properties of the SAR echo data in the actual packet can be found in the packet generated “Rank”
+PRIs earlier (constant PRI assumed).
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+TXPL
+
+Code Name:
+
+TXPL code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 46, bit 0
+
+Octet 48, bit 7
+
+24 bit
+
+unsigned int.
+
+128
+
+Interpretation:
+
+4223
+
+TXPL in units of time:
+
+TXPL
+
+TXPLcode
+[us] with f ref
+f ref
+
+37.53472224 [MHz]
+
+Accordingly, TXPL can be expressed in units of samples depending on the sampling frequency at
+the different stages of the digital processing in the Instrument RxM:
+Stage
+
+Applicability
+
+Number of Tx Samples
+
+1
+
+number of real Tx Pulse samples at
+ADC output
+
+N1Tx
+
+8 TXPLcode
+
+2
+
+number of complex Tx Pulse
+samples (I/Q pairs) at output of
+DDC
+
+N 2Tx
+
+4 TXPLcode
+
+3
+
+number of complex Tx pulse
+samples (I/Q pairs) after the
+decimation (i.e. in Space Packet)
+
+N 3Tx
+
+ceil TXPL f dec
+
+with sampling frequency f dec after
+decimation according to 3.2.5.4
+
+Note: ceil() is rounding to next higher integer value
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+40 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.9
+
+Rank
+
+Description:
+
+The Rank indicates the number of PRIs between Tx pulse transmission and the reception of the
+corresponding echo from the swath of interest.
+The parameter value refers to the PRI value of the present space packet.
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+RANK
+
+Code Name:
+
+RANK code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 49, bit 3
+
+Octet 49, bit 7
+
+5 bit
+
+unsigned int.
+
+0
+
+31
+
+Interpretation:
+
+RANK
+Dependencies:
+
+RANK code
+
+Rank depends on PRI and on the distance to the imaged swath.
+
+3.2.5.10 Pulse Repetition Interval
+Description:
+
+The PRI indicates the interval between transmission of Tx pulses.
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+PRI
+
+Code Name:
+
+PRI code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 50, bit 0
+
+Octet 52, bit 7
+
+24 bit
+
+unsigned int.
+
+0
+
+Interpretation:
+
+PRI
+
+Dependencies:
+
+PRI code
+[us] with f ref
+f ref
+
+37.53472224 [MHz]
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+24
+
+2 -1
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+41 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.11 Sampling Window Start Time
+Descriptio-n:
+
+The Sampling Window Start Time defines the start time of the sampling window within the PRI for
+
+Performance:
+
+variable value during the data take (different values between swathes and varying vaues within
+each swath)
+
+Short Name:
+
+SWST
+
+Code Name:
+
+SWST code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 53, bit 0
+
+Octet 55, bit 7
+
+24 bit
+
+unsigned int.
+
+0
+
+non-calibration signals.
+
+Interpretation:
+
+24
+
+2 -1
+
+SWST in units of time:
+
+SWSTcode
+[us] with f ref
+f ref
+
+SWST
+
+37.53472224 [MHz]
+
+The significance of SWST and SWL is shown in following sketch:
+PRI
+SWST
+
+SWL
+
+Tx Pulse
+
+acquired Sampling Window
+
+Tx Pulse
+
+time
+
+The part of the acquired (commanded) sampling window which is processed and captured in the
+Space Packet is shown in following sketch:
+PRI
+SWST
+
+SWL
+tsuppr
+
+Tx Pulse
+
+suppressed
+
+proc. Sampling Window
+Data in Space Packet (N3Rx)
+
+suppr
+
+Tx Pulse
+
+Decim.Filter Transients
+
+time
+
+The Decimation Filter suppresses the FIR filter transients in the acquired sampling
+window. The captured data in the Space Packet correspond to the data sampled t suppr
+after the start of the acquired sampling window.
+
+t suppr
+
+320
+and N3 Rx as given in 3.2.5.12
+8 f ref
+
+SWST is not applicable for calibration signals (SIGTYP code >7).
+The acquisition timing for calibration signals is shown in the Annex section 5.3.
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+42 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+3.2.5.12 Sampling Window Length
+Description:
+
+The Sampling Window Length defines the duration of the acquired sampling window within the
+
+Performance:
+
+variable value during the data take (different values between swathes and varying vaues within
+each swath)
+
+Short Name:
+
+SWL
+
+Code Name:
+
+SWL code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 56, bit 0
+
+Octet 58, bit 7
+
+24 bit
+
+unsigned int.
+
+0
+
+PRI for non-calibration signals.
+
+Interpretation:
+
+24
+
+2 -1
+
+SWL in units of time:
+
+SWL
+
+SWLcode
+[us] with f ref
+f ref
+
+37.53472224 [MHz] (see also figures in 3.2.5.11)
+
+Accordingly, SWL can be expressed in units of samples depending on the sampling frequency at
+the different stages of the digital processing in the Instrument RxM:
+Stage
+
+Applicability
+
+Number of Rx Samples
+
+1
+
+Number of real ADC
+samples at output of ADC
+
+N1Rx
+
+8 SWLcode
+
+2
+
+Number of complex samples
+(I/Q pairs) at output of DDC
+
+N 2 Rx
+
+4 SWLcode
+
+3
+
+Number of complex samples
+(I/Q pairs) after decimation
+(i.e. in the Space Packet).
+The number of samples
+depends not only on SWL
+but also on the selected filter
+and its related parameters:
+
+N 3 Rx
+
+2
+
+RGDEC code
+
+L int
+
+B
+M
+
+D 1
+
+with parameters L and M according to 3.2.5.4
+with B
+
+2 SWLCode
+
+FilterOutputOffset 17
+
+with FilterOutputOffset according to Table 5.1-2
+
+L
+M
+FilterOutputOffset
+
+with D as a function of C
+
+B M int
+
+B
+M
+
+D is to be addressed as function of C in Table 5.1-1
+
+SWL is applicable for all Signal Types (SIGTYP code ).
+The acquisition timing for calibration signals is shown in the Annex section 5.3.
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+43 of 85
+
+3.2.5.13 SAS SSB Data Field
+The SAS SSB Data field indicates the actual configuration of the SAS. The content of the SAS SSB Data field
+will have one of two possible interpretations depending on whether the Instrument is performing an
+Imaging/Noise operation or a Calibration operation. This is indicated by the value of a Flag in the SAS SSB
+data field (see Table 3.2-15).
+Octet
+Offset
+
+bit
+bit 0
+
+59
+60
+61
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+bit 5
+
+bit 6
+
+bit 7
+
+SSBFLAG
+
+SAS SSB Data
+Table 3.2-15: SAS SSB Data Field
+
+Description:
+
+The Flag in the SAS SSB message indicates both, the type of the message and the related
+operation (imaging/noise or calibration) commanded to the SAS.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+SSBFLAG
+
+Code Name:
+
+SSBFLAG code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 59, bit 0
+
+Octet 59, bit 0
+
+1 bit
+
+boolean
+
+0 or 1
+
+Interpretation:
+
+SSBFLAG
+
+Dependencies:
+
+Imaging or Noise Operation
+Calibration Operation
+
+for SSBFLAG code
+for SSBFLAG code
+
+0
+1
+
+none
+
+3.2.5.13.1 SAS SSB Data Field – Imaging/Noise
+In case of the Flag=”0” the content of the SAS SSB data field is to be interpreted for an Imaging/Noise
+operation as shown in Table 3.2-16.
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+Octet
+Offset
+
+bit
+bit 0
+
+59
+
+SSBFLAG
+=0
+
+60
+61
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+44 of 85
+
+bit 1
+
+bit 2
+Polarisation
+
+bit 3
+
+bit 4
+
+bit 5
+
+Temp Comp
+
+bit 6
+
+bit 7
+n/a
+
+Elevation Beam Address
+n/a
+<--------------------Azimuth Beam Address - - - - - - - - - - - - >
+Table 3.2-16: SAS SSB Data (Imaging/Noise)
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+45 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+3.2.5.13.1.1 Polarisation
+Description:
+
+The Polarisation defines the configuration of the polarisation.
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+POL
+
+Code Name:
+
+POL code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 59, bit 1
+
+Octet 59, bit 3
+
+3 bit
+
+enumeration
+
+0
+
+7
+
+Interpretation:
+POL code
+
+Polarisation
+Tx
+
+Notes
+
+Rx
+
+0
+
+H
+
+-
+
+Tx Only, Horizontal
+
+1
+
+H
+
+H
+
+RxH is co-polar
+
+2
+
+H
+
+V
+
+RxV is cross-polar
+
+3
+
+H
+
+V+H
+
+4
+
+V
+
+-
+
+Tx Only, Vertical
+
+5
+
+V
+
+H
+
+RxH is cross-polar
+
+6
+
+V
+
+V
+
+RxV is co-polar
+
+7
+
+V
+
+V+H
+
+RxH is co-polar, RxV is cross-polar
+
+RxH is cross-polar, RxV is co-polar
+
+Note:
+In the Dual Polarisation case (POL code =3 or POL code =7) the parameter RXCHID (3.2.2.5) the
+indicates the Rx polarisation of the actual Space Packet.
+Dependencies:
+
+There are following dependencies:
+POL code
+
+RXCHID
+
+0
+
+n/a
+
+1
+
+1
+
+2
+
+0
+
+3
+
+0 or 1
+
+4
+
+n/a
+
+5
+
+1
+
+6
+
+0
+
+7
+
+0 or 1
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+46 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.13.1.2 Temperature Compensation
+Description:
+
+The Temperature Compensation indicates the activity of temperature compensation in the SAS.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+TCMP
+
+Code Name:
+
+TCMP code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 59, bit 4
+
+Octet 59, bit 5
+
+2 bit
+
+enumeration
+
+0
+
+3
+
+Interpretation:
+
+Dependencies:
+
+TCMP code
+
+TCMP Description
+
+0
+
+Temperature Compensation Antenna FE: OFF
+Temperature Compensation Antenna TA: OFF
+
+1
+
+Temperature Compensation Antenna FE: ON
+Temperature Compensation Antenna TA: OFF
+
+2
+
+Temperature Compensation Antenna FE: OFF
+Temperature Compensation Antenna TA: ON
+
+3
+
+Temperature Compensation Antenna FE: ON
+Temperature Compensation Antenna TA: ON
+
+none
+
+3.2.5.13.1.3 Elevation Beam Address
+Description:
+
+The Elevation Beam Address addresses the beam excitation coefficients in elevation selected in
+
+Performance:
+
+variable value during the data take for other modes than Stripmap
+
+Short Name:
+
+EBADR
+
+Code Name:
+
+EBADR code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 60, bit 0
+
+Octet 60, bit 3
+
+4 bit
+
+unsigned int.
+
+0
+
+actual PRI.
+
+15
+
+Interpretation:
+EBADR = EBADR code identifies one of 16 available Elevation beams that is applied in actual PRI for
+the SAR imaging of the actual mode swath.
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+47 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.13.1.4 Azimuth Beam Address
+Description:
+
+The Azimuth Beam Address addresses the beam excitation coefficients in azimuth selected in
+
+Performance:
+
+variable value during the data take for other modes than Stripmap and Wave
+
+Short Name:
+
+ABADR
+
+Code Name:
+
+ABADR code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 60, bit 6
+
+Octet 61, bit 7
+
+10 bit
+
+unsigned int.
+
+0
+
+actual PRI.
+
+1023
+
+Interpretation:
+ABADR = ABADR code identifies one of 1024 available Azimuth beams that is applied in actual PRI
+for the SAR imaging of the actual mode swath.
+Dependencies:
+
+none
+
+3.2.5.13.2 SAS SSB Data - Calibration
+In case of the Flag=”1” the content of the SAS SSB data field is to be interpreted for a Calibration operation as
+shown in Table 3.2-17.
+Octet
+Offset
+
+bit
+bit 0
+
+59
+
+bit 1
+
+SSBFLAG
+=1
+
+60
+61
+
+bit 2
+Polarisation
+
+SASTest
+
+------------
+
+bit 3
+
+bit 4
+
+bit 5
+
+Temp Comp
+
+bit 6
+
+bit 7
+n/a
+
+Cal Type
+n/a
+<--------Calibration Beam Address - - - - - - - - - - - - - >
+
+Table 3.2-17: SAS SSB Data (Calibration)
+
+3.2.5.13.2.1 Polarisation
+See section 3.2.5.13.1.1
+
+3.2.5.13.2.2 Temperature Compensation
+See section 3.2.5.13.1.2
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+48 of 85
+
+3.2.5.13.2.3 SAS Test Mode
+Description:
+
+The SAS Test Mode parameter is a specific mode for onground testing that allows to operate the
+Antenna Frontend with a specific pattern of disabled TRMs. The SAS Test Mode is only applicable
+during calibration operation.
+Application of SAS Test Mode is not planned for nominal in-orbit operation (i.e. nominal SASTM code
+=1).
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+SASTM
+
+Code Name:
+
+SASTM code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 60, bit 0
+
+Octet 60, bit 0
+
+1 bit
+
+boolean
+
+0 or 1
+
+Interpretation:
+
+SAS Test Mode active
+
+SASTM
+
+normal calibration mode
+
+for SASTM code
+for SASTM code
+
+0
+1
+
+Dependencies:
+SASTM code
+
+SSBFLAG code
+
+CALMOD code
+
+SIGTYP cod
+
+Comment
+
+e
+
+0
+
+1
+
+don’t care
+
+8
+
+SAS Test Mode active
+
+1
+
+1
+
+all applicable
+
+8
+
+normal calibration
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+49 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.13.2.4 Cal Type
+Description:
+
+The Cal Type defines the type of applied internal calibration operation in actual PRI. There are
+several internal calibration operations which are characterised by the different routings of the cal
+signal through the RF network.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+CALTYP
+
+Code Name:
+
+CALTYP code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 60, bit 1
+
+Octet 60, bit 3
+
+3 bit
+
+enumeration
+
+0
+
+7
+
+Interpretation:
+
+Dependencies:
+
+CALTYP code
+
+CALTYP Description
+
+0
+
+Tx Cal
+
+1
+
+Rx Cal
+
+2
+
+EPDN Cal
+
+3
+
+TA Cal
+
+4
+
+APDN Cal
+
+5 to 6
+
+-
+
+7
+
+TxH Cal Iso
+
+Notes
+
+not applicable
+Tx Cal Isolation at Tx-Polarisation H
+
+CALTYP is part of the parameter SIGTYP (see 3.2.5.14.3) and is identical with the values for
+SIGTYP > 7.
+Calibration data (CALTYP code >7) are only with BAQMOD code =0
+
+3.2.5.13.2.5 Calibration Beam Address
+Description:
+
+The Calibration Beam Address addresses the beam excitation coefficients for a calibration
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+CBADR
+
+Code Name:
+
+CBADR code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 60, bit 6
+
+Octet 61, bit 7
+
+10 bit
+
+unsigned int.
+
+0
+
+operation selected in actual PRI.
+
+Interpretation:
+
+1023
+
+CBADR = CBADR code identifies one of 1024 available Calibration beams, that is applied in actual
+PRI for standard calibration or as part of RF characterisation by means of PCC coded calibration
+beam sequences.
+
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+50 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+3.2.5.14 SES SSB Data Field
+The SES SSB data field indicates the actual SES configuration. The SES SSB data field is shown in Table
+3.2-18.
+Octet
+Offset
+
+62
+63
+64
+
+Bit Offset
+bit 0
+bit 1
+bit 2
+Cal Mode
+n/a
+Signal Type
+
+bit 3
+
+bit 4
+bit 5
+bit 6
+Tx Pulse Number
+n/a
+Swath Number
+
+bit 7
+Swap
+
+Table 3.2-18: SES SSB Data Field
+
+3.2.5.14.1 Calibration Mode
+Description:
+
+The Calibration Mode is information which is only relevant in case of a calibration operation. It
+indicates the type of PCC sequence applied for the actual calibration operation.
+
+Performance:
+
+constant value during the data take
+
+Short Name:
+
+CALMOD
+
+Code Name:
+
+CALMOD code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 62, bit 0
+
+Octet 62, bit 1
+
+2 bit
+
+enumeration
+
+0
+
+3
+
+Interpretation:
+CALMOD code
+0
+1
+2
+3
+
+Dependencies:
+
+CALMOD Description
+
+Comment
+
+Interleaved Internal Calibration based
+
+supports monitoring of Phase/Gain
+
+on PCC2 sequence
+Internal Calibration in Preamble/
+
+drift in Imaging Modes
+used for Replica extraction and
+
+Postamble based on PCC2 sequence
+
+generation in Imaging Modes
+
+Phase Coded Characterisation based
+
+used for characterisation of Tile
+
+on PCC32 sequence
+Phase Coded Characterisation based
+on RF672 sequence
+
+Amplifiers in RFC Mode
+used for characterisation of Tile
+EFE TRMs in RFC Mode
+
+CALMOD code =0 and 1 applies for internal calibration within SAR measurement modes based on a
+PCC2 sequence
+CALMOD code = 2 and 3 applies for dedicated RFC mode (ECC code =15).
+Don’t care CALMOD in case of SSBFLAG code =0 (see 3.2.5.13.1) and SIGTYP code <2 (see
+3.2.5.14.3).
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+51 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.14.2 Tx Pulse Number
+Description:
+
+The Tx Pulse Number defines the address of the Tx Pulse selected in the Chirp Generator of the
+SES.
+The parameter value refers to the Tx pulse transmitted in the PRI when the SAR echo data of this
+Space Packet have been sampled. Hence, due to the travel time from Tx pulse transmission to its
+echo reception this parameter does not describe the originating Tx pulse of the SAR echo data of
+this packet. The number of PRIs occuring from Tx pulse transmission to echo reception is defined
+by parameter “Rank” (see 3.2.5.9). Hence, the Tx pulse parameter fitting to the (transmit)
+properties of the SAR echo data in the actual packet can be found in the packet generated “Rank”
+PRIs earlier (constant PRI assumed).
+
+Performance:
+
+variable value during the data take (different values between swathes but constant value within
+each swath)
+
+Short Name:
+
+TXPNO
+
+Code Name:
+
+TXPNO code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 62, bit 3
+
+Octet 62, bit 7
+
+5 bit
+
+unsigned int.
+
+0
+
+Interpretation:
+TXPNO = TXPNO code identifies the Tx pulse applied in actual PRI.
+Dependencies:
+
+The related Tx pulse parameters are given in 3.2.5.6, 3.2.5.7 and 3.2.5.8.
+
+Astrium GmbH – All Rights Reserved
+
+31
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+52 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.2.5.14.3 Signal Type
+Description:
+
+The Signal Type defines the kind of signal acquired in the actual PRI (e.g. echo, noise, calibration
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+SIGTYP
+
+Code Name:
+
+SIGTYP code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 63, bit 0
+
+Octet 63, bit 3
+
+4 bit
+
+enumeration
+
+0
+
+).
+
+15
+
+Interpretation:
+
+Dependencies:
+
+SIGTYP code
+
+SIGTYP Description
+
+Notes
+
+0
+
+Echo
+
+Radar echo signal (nominal SAR imaging)
+Noise measurement
+
+1
+
+Noise
+
+2 to 7
+
+-
+
+8
+
+Tx Cal
+
+9
+
+Rx Cal
+
+10
+
+EPDN Cal
+
+11
+
+TA Cal
+
+12
+
+APDN Cal
+
+13 to 14
+
+-
+
+15
+
+TxH Cal Iso
+
+not applicable
+
+not applicable
+Tx Cal Isolation at Tx-Polarisation H
+
+SIGTYP for SIGTYP code >7 corresponds to CALTYP (see 3.2.5.13.2.4).
+Calibration data (SIGTYP code >7) are only with BAQMOD code =0
+Noise data (SIGTYP code =1) are only with BAQMOD code =0 or 3 or 4 or 5
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+53 of 85
+
+3.2.5.14.4 Swap Flag
+Description:
+
+The transiton of the Swap Flag indicates the event of potential updating of dynamic swath
+
+Performance:
+
+variable value during the data take (see notes in below)
+
+Short Name:
+
+SWAP
+
+Code Name:
+
+SWAP code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 63, bit 7
+
+Octet 63, bit 7
+
+1 bit
+
+boolean
+
+0 or 1
+
+parameters.
+
+Interpretation:
+The transition of SWAP code from “0” to “1” and vice versa indicates the potential updating of values
+of one or more of the following parameters as a result of varying flight altitude round the orbit:
+TXPNO
+TXPL
+TXPSF
+TXPRR
+RGDEC
+SWL
+SWST
+PRI
+RANK
+The update occurs at the PRI that indicates the transition of SWAP.
+Note 1: The SWAP flag indicates updating of parameters by the implemented Instrument update
+mechanism, however, the updated parameter need not to change values.
+Note 2: The Instrument implementation allows updating of all above parameters. However, the
+actual measurement mode design has been optimised, so that only SWST and SWL are planned to
+change values in a swath along the data take.
+Note 3: The above parameters will also change due to the transitions between subswathes in
+measurement modes in EW, IW and Wave . These changes are indicated by transitions of the
+swath number SWATH (see 3.2.5.14.5).
+Dependencies:
+
+none
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+54 of 85
+
+3.2.5.14.5 Swath Number
+Description:
+
+The Swath Number indicates the swath in use in the actual PRI.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+SWATH
+
+Code Name:
+
+SWATH code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 64, bit 0
+
+Octet 64, bit 7
+
+8 bit
+
+unsigned int.
+
+0
+
+127
+
+Interpretation:
+SWATH = SWATH code
+The swath number SWATH identifies an ensemble of swath specific radar parameters:
+TXPNO
+TXPL
+TXPSF
+TXPRR
+RGDEC
+SWL
+SWST
+PRI
+RANK
+RXGAIN
+EBADR
+Dependencies:
+
+3.2.6
+
+none
+
+Radar Sample Count Service
+Octet
+Offset
+
+bit
+bit 0
+
+bit 1
+
+bit 2
+
+bit 3
+
+bit 4
+
+bit 5
+
+65
+66
+
+Number of Quads (NQ)
+
+67
+
+n/a
+
+bit 6
+
+Table 3.2-19: Radar Sample Count Service Field
+
+Astrium GmbH – All Rights Reserved
+
+bit 7
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+55 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+Description:
+
+A Quad is defined as a quadrupel of sample values, namely:
+1 I-Part even sample value
+1 I-part odd sample value
+1 Q-Part even sample value
+1 Q-part odd sample value
+A complex radar sample is composed of one I-part and one Q-part sample value, respectively.
+Consequently, the number of overall complex radar samples in the packet can be expressed as
+the doubled value of the Number of Quads.
+
+Performance:
+
+variable value during the data take
+
+Short Name:
+
+NQ
+
+Code Name:
+
+NQ code
+
+Code Properties
+
+Start Position:
+
+End Position:
+
+Size of Code
+
+Data Type
+
+Applicable Range of Code:
+
+Octet 65, bit 0
+
+Octet 66, bit 7
+
+16 bit
+
+unsigned int.
+
+0
+
+52378
+
+1
+
+Interpretation:
+NQ = NQ code
+The number NSAMP of complex radar samples can be expressed as NSAMP
+Dependencies:
+
+2 NQ
+
+none
+
+1
+
+The upper limit of the applicable range is based on a min. FDBAQ bitrate of 2.5. This leads to the max. possible number
+of samples NSAMPmax (65534 62)octets 8bit /( 2 2.5bit ) 104755 and with this NQmax 52378
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.3
+
+User Data Field
+
+3.3.1
+
+User Data Field Length
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+56 of 85
+
+The User Data Field may have a variable length LEN UD from PRI to PRI. The total length LEN SP of the
+Space Packet is always a multiple of 4 octets.
+LEN SP is composed of following contributions:
+LEN SP
+
+LEN PH
+
+LEN SH
+
+LEN UD
+
+with
+LEN SP : Total Length of Space Packet
+LEN PH : Length of Primary Header (6 octets)
+
+LEN SH : Length of Secondary Header (62 octets)
+LEN UD : Variable Length of User Data Field
+
+With the parameter “Packet Data Length” (PDL) in the Packet Primary Header (see Table 3.1-1) LEN UD can
+be expressed as:
+LEN UD
+
+PDL
+
+LEN SH
+
+1
+
+Since LEN PH
+
+LEN SH
+
+68 octets is a multiple of 4 octets, LEN UD also has to be a multiple of 4 octets to
+
+ensure that the total Space Packet length LEN SP is a multiple of 4 octets.
+
+3.3.2
+
+User Data Format Types
+
+The User Data Field contains one of four different format types of digitized data. The different format types are
+the result of applying or bypassing specific digital processing functions in the Instrument digital Rx chain.
+For each format type the ADC and SAR Packetisation functions are always active. They cannot be bypassed.
+The term “digital processing functions” hereafter refers only to those functions that can be controlled for
+bypassing.
+Table 3.3-1 gives an overview of the possible data format types for the different types of acquired SAR data.
+Table 3.3-2 lists the criteria for identification of the data format types in the User Data Field.
+The detailed data formats together with the decoding algorithms are described in section 4.
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+57 of 85
+
+C
+
+Decimation Only
+
+Decimation + BAQ
+
+X
+
+User Data
+
+SAR Echo Data
+
+D
+
+X
+
+(including EC)
+
+B
+
+Decimation + FDBAQ
+
+A
+
+Bypass Data
+
+Data Format Types
+
+Format Type D will be the nominal option
+
+SAR Calibration Data
+
+X
+
+SAR Noise Data
+
+X
+
+X
+
+X
+
+For noise data different format options
+may be applicable
+
+X
+
+X
+
+X
+
+For test mode data all format options may
+be applicable
+
+X
+
+Test Mode Data
+
+Calibration Data only in Format Type B
+
+Table 3.3-1: SAR Data versus Data Format Type
+
+Data Format
+Type
+
+BAQMOD code
+(3.2.5.1)
+
+TSTMOD code
+(0)
+
+A
+
+0
+
+5;7
+
+B
+
+0
+
+0;4;6
+
+C
+
+3;4;5
+
+0;4;6
+
+D
+
+12;13;14
+
+0;4;6
+
+Comment
+only in Test Mode
+
+TSTMOD code = 0 indicates measurement mode operation
+TSTMOD code = 0 indicates measurement mode operation
+TSTMOD code = 0 indicates measurement mode operation
+
+Table 3.3-2: Data Format Type Identification
+
+3.3.2.1
+
+Data Format Type A “Bypass”
+
+This format type refers to digitized data with all digital processing functions in the Rx chain bypassed (see Fig.
+3-1). Typically, this format type is output in Test Mode for test and debugging purposes.
+
+Fig. 3-1: Active Functions for Bypass applied
+3.3.2.2
+
+Data Format Type B “Decimation Only”
+
+This format type refers to digitized data with digital downconversion and decimation function applied (see Fig.
+3-2). The data are digitally downconverted to baseband, low pass filtered and down-sampled accordingly.
+Typically, this format type is output during the acquisisiton of calibration data.
+
+Fig. 3-2: Active Functions for “Decimation only” applied
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+3.3.2.3
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+58 of 85
+
+Data Format Type C “Decimation + BAQ”
+
+This format type refers to digitized data with all digital processing functions applied except the Entropy Coder
+(see Fig. 3-3). This format type is not foreseen for typical nominal operation. It offers a fix BAQ quantisation
+(not FDBAQ) with a fixed number of bits (according to BAQMOD) and without using the Entropy Coding and
+hence, without the impact of a VBR (variable bit rate).
+
+Fig. 3-3: Active Functions for “Decimation + BAQ” applied
+3.3.2.4
+
+Data Format Type D “Decimation + FDBAQ”
+
+This format type refers to digitized data with all digital processing functions active (see Fig. 3-4). The FDBAQ
+introduces a VBR compression. This format type is nominally used to output radar echo data.
+
+Fig. 3-4: Active Functions for “Decimation + FDBAQ” applied
+
+3.3.3
+
+User Data Organisation
+
+The user data are originating from a number of ADC samples per PRI which are digitally processed in the
+Instrument SES Rx chain in 4 data channels. Consequently, the user data are organised in the Space Packet
+User Data Field as 4 individual data sections.
+The data channels/sections are defined in Table 4-1:
+Channel
+/Section
+
+Description
+
+Comment
+
+IE
+
+I-parts of Even
+Samples
+
+In-Phase Components originating from Decimation Filter even output
+1
+samples 0, 2, 4, 6 ...
+
+IO
+
+I-parts of Odd
+Samples
+
+In-Phase Components originating from Decimation Filter odd output
+samples 1, 3, 5, 7 ...
+
+QE
+
+Q-parts of Even
+Samples
+
+Quadrature Components originating from Decimation Filter even
+output samples 0, 2, 4, 6 ...
+
+QO
+
+Q-parts of Odd
+Samples
+
+Quadrature Components originating from Decimation Filter odd output
+samples 1, 3, 5, 7 ...
+Table 3.3-3: SAR Data Channel Definition
+
+1
+
+The terminology “even“ and “odd“ samples originates from the Hardware counting scheme of the Decimation Filter
+
+which starts with the sample count=0 per PRI. So, e.g. the (demultiplexed) counts 0, 2,4,6,
+samples or “even” channel and the (demultiplexed) counts 1,3,5,
+
+represent the “even”
+
+the “odd” samples or “odd” channel.
+
+In section 4, for reasons of description, the sample enumeration is always starting with sample or code number=1 for each
+channel.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+59 of 85
+
+The data sections are aligned to an integer number of 16 bit words. The sections may have different sizes in
+case of FDBAQ and BAQ compression applied. E.g. in these cases some sections include extra control
+information which are not contained in other sections. In addition, the FDBAQ compression function provides
+a variable bit rate in each of the 4 data channels which leads to variable data volumes.
+However, the number of SAR data samples in each data section will be the same.
+The number of complex samples in the packet (sampled at the output of the Decimation Filter) is recorded as a
+16bit parameter value NQ (Number of Quads) which is part of the Radar Samples Count Service (section
+3.2.6). The number of complex radar samples in the packets is expressed in terms of so-called “Quads” where
+a Quad is defined as:
+1 Quad = 1 IE sample + 1 IO sample + 1 QE sample + 1 QO sample.
+Consequently, the total number of complex radar samples equals 2*NQ (see also section 3.2.6).
+Table 3.3-4 shows the overview of the sequence of the packetized data sections in the User Data Field.
+IE channel Data
+(data section may be padded with filler bits to complete last 16 bit word)
+IO Channel Data
+(data section may be padded with filler bits to complete last 16 bit word)
+QE Channel Data
+(data section may be padded with filler bits to complete last 16 bit word)
+QO Channel Data
+(data section may be padded with filler bits to complete last 16 bit word)
+Filler
+(2 filler octets may be padded to make overall Space Packet length a multiple
+of 4 octets)
+Table 3.3-4: Overview of Packetisation in User Data Field
+Each of the four data sections (IE, IO, QE, QO) contains NQ code elements which are packed as a number of
+16bit words.
+In case the NQ code elements of a section do not end at a 16 bit word boundary, filler bits will be padded in the
+section up to the next word boundary.
+For specific data format types specific sections also contain interleaved control information needed for the
+decoding process. The details for this are described in the decoding section 4.
+Finally, the total number of octets in the User Data Field must be divisible by 4. In case the cumulated number of
+16bit words in the four data sections would become an odd number two filler octets will be attached at the end of
+the User Data Field to make its length a multiple of 4 octets.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+4
+
+User Data Field Decoding
+
+4.1
+
+General
+
+4.1.1
+
+Notations used for Decoding
+
+NRL
+SF
+
+H Code
+
+Normalised Reconstruction Level
+Sigma Factor
+Threshold Index
+Bit Rate Code
+Huffman Code (Sign + Huffman coded Magnitude)
+
+M Code
+
+Magnitude Code
+
+M Value
+
+Magnitude Value
+
+S Code
+
+Sample Code
+
+SValue
+
+Sample Value
+
+NQ
+
+Number of Quads
+
+NB
+NW
+Sign
+
+Number of BAQ Blocks
+Number of (16bit) Words
+Sign
+
+b
+
+BAQ Block Index
+
+k
+
+Number of Quantisation Levels for Quantisation of Magnitude
+
+THIDX
+BRC
+
+4.1.2
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+60 of 85
+
+Principle of Decoding
+
+The principle of decoding a compressed radar sample (I- or Q-component) is shown in Fig. 4-1.
+For “Bypass” or “Decimation Only” user data (format types A and B) a specific radar sample value
+reconstruction is not needed since the magnitude code ( M Code ) of the sample is identical with the magnitude
+value ( M Value ).
+Huffman Code (HCode)
+
+Sign
+
+Magnitude Code (MCode)
+
+Sample Value
+Reconstruction
+
+Sample Value (SValue)
+Sign
+
+Magnitude Value
+
+Bypass and Decimation Only
+(Format Type A & B)
+
+Sample Code (SCode)
+Sign
+
+BAQ Decoding
+(Format Type C)
+
+Huffman
+Decoding
+
+FDBAQ Decoding
+(Format Type D)
+
+Sign
+
+Fig. 4-1: Principle of Decoding of Compression Code
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+4.2
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+61 of 85
+
+Decoding of Data Format Type A and B (“Bypass” or “Decimation Only”)
+
+The Data Format Type A and B is described in Table 4.2-1.
+
+Table 4.2-1: Packetisation for Data Format Type A and B
+The number NW of 16bit words in each channel is the same and is given by:
+
+NW
+
+ceil
+
+10
+NQ
+16
+
+The 10bit sample code (SCode) consists of 1 bit sign followed by 9 bit Magnitude Code (MCode).
+The reconstruction of a sample value in each of the IE, IO, QE, QO channels is:
+
+SValue
+
+1
+
+Sign
+
+M Code .
+
+Example:
+SCode(binary) = 10 1011 1100 bin
+SCode w/o sign = MCode = 188
+Sign =1
+SValue = -188
+
+Sample Alignment:
+The sequence of the complex samples in the PRI rangeline will be obtained by arranging the sample values of
+the 4 channels (IE,IO,QE,QO) in the following way:
+
+complex _ SValue (2 j 1)
+complex _ SValue (2 j )
+
+IE _ SValue ( j ) ; QE _ SValue ( j )
+
+IO _ SValue ( j ) ; QO _ SValue ( j )
+
+for j 1,2,3...NQ
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+4.3
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+62 of 85
+
+Decoding of Data Format Type C (“Decimation + BAQ”)
+
+The Data Format Type C is similar to that of as described in section 4.2. However, the SCodes are shorter
+due to BAQ compression.
+In addition, within the channel data sections, the BAQ encoded data are organised in BAQ blocks. Each BAQ
+block has an 8-bit Threshold Index associated with it that is included in the QE channel data.
+The arrangement of the format type C data is shown in Table 4.3-1.
+The number NB of BAQ Blocks is
+2 NQ
+NB ceil
+256
+
+The number NW of 16bit words in the IE, IO and QO channels is:
+
+3 NQ
+16
+4 NQ
+ceil
+16
+5 NQ
+ceil
+16
+ceil
+
+NW IE , IO,QO
+
+for 3bit BAQ
+for 4bit BAQ
+for 5bit BAQ
+
+The number NW of 16bit words in the QE channel is different from that of the other channels since it includes
+the 8bit Threshold Index value for each BAQ block:
+
+3 NQ 8 NB
+16
+4 NQ 8 NB
+ceil
+16
+5 NQ 8 NB
+ceil
+16
+ceil
+
+NWQE
+
+for 3bit BAQ
+for 4bit BAQ
+for 5bit BAQ
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+63 of 85
+
+Table 4.3-1: Packetisation of Format Type C User Data Field (for N bit BAQ with N [3; 4; 5])
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+64 of 85
+
+The proposed decoding scheme of the User Data Field of a Space Packet is shown in Fig. 4-2 with the SCode
+extraction shown in Fig. 4-3 and sample value reconstruction shown in Fig. 4-4.
+Start
+
+Start Decoding with
+BAQ Block b=1
+
+b=1
+
+Extract IE data
+
+Extract QE data
+
+Extract SCode of
+BAQ block b
+
+Extract and store
+8 bit THIDX(b)
+
+No
+No
+
+b = b +1
+
+Extract SCode of
+BAQ block b
+
+b > NB ?
+
+b = b +1
+
+Yes
+
+b > NB ?
+
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+Yes
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+b=1
+
+b=1
+
+Extract IO data
+Extract SCode of
+BAQ block b
+No
+
+Extract QO data
+Extract SCode of
+BAQ block b
+
+b = b +1
+No
+b > NB ?
+
+b = b +1
+
+b > NB ?
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+Yes
+Go to end of Space Packet.
+Last octet of Space Packet is
+deducible from „Packet Data
+Length“ parameter in Primary
+Header.
+
+Reconstruct Sample Values
+of all BAQ blocks
+
+Align IE, IO, QE, QO samples
+
+End
+
+Fig. 4-2: Proposed Decoding of Data Format Type C
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+65 of 85
+
+Decode SCode
+of BAQ block b
+Start with first
+SCode of BAQ
+block b
+
+Extract SCode
+(Sign and MCode)
+
+No
+
+BAQMOD
+
+Store SCodes of
+BAQ block b
+
+All SCodes
+of a BAQ block
+processed ?
+
+Yes
+
+Fig. 4-3: SCode Extraction per BAQ Block b
+Each of the NB BAQ blocks contains 128 SCodes except the last BAQ block which contains
+NQ 128 ( NB 1) SCodes.
+
+Sample Value Reconstruction for IE, IO, QE or QO Data Channel
+
+Start with SCodes
+of BAQ block b=1
+BRC(b)
+BAQMOD
+(for FDBAQ)
+
+MCode
+Reconstruct
+Sample Values of
+BAQ block b
+No
+
+NRL Table
+
+THIDX(b)
+
+SF Table
+
+THIDX(b)
+
+Specific Parameters
+A, B for Simple
+Reconstruction
+
+NRL(b, MCode)
+SF(b)
+Simple Reconstruction Parameters A, B
+
+b = b +1
+
+b > NB ?
+
+Yes
+
+Fig. 4-4: Sample Value Reconstruction from SCode
+
+Astrium GmbH – All Rights Reserved
+
+BRC(b)
+BAQMOD
+(for FDBAQ)
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+66 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+The sample value reconstruction in Fig. 4-4 is performed either as a Simple Reconstruction or a Nominal
+Reconstruction depending on the value the Threshold Index THIDX of the BAQ block b.
+The detailed sample reconstruction law for all BAQ modes is defined as follows:
+
+for 3bit BAQ
+
+SValue
+
+for 4bit BAQ
+
+Simple Reconstruction for THIDX (b) 3 :
+
+Sign
+
+Normal Reconstruction for THIDX (b) 3 :
+
+1
+
+Simple Reconstruction for THIDX (b) 5 :
+
+1 Sign M Code
+1 Sign A4 THIDX
+
+Normal Reconstruction for THIDX (b) 5 :
+
+for 5bit BAQ
+
+1 Sign M Code
+1 Sign A3THIDX
+
+Simple Reconstruction for THIDX (b) 10 :
+Normal Reconstruction for THIDX (b) 10 :
+
+Sign
+
+1
+
+1
+
+3
+
+for M Code
+
+3
+
+NRL BAQMOD
+
+3, M Code
+
+SFTHIDX (b )
+
+for M Code
+
+7
+
+for M Code
+
+7
+
+NRL BAQMOD
+
+1 Sign M Code
+1 Sign A5THIDX
+Sign
+
+for M Code
+
+4, M Code
+
+SFTHIDX (b )
+
+for M Code
+
+15
+
+for M Code
+
+15
+
+NRL BAQMOD
+
+5, M Code
+
+SFTHIDX (b )
+
+The values A3 THIDX , A4 THIDX and A5 THIDX depend on the value THIDX and are defined in the Annex section
+5.2.1.
+The values NRL and SF are to be addresed in the corresponding tables in the Annex section 5.2.2.
+
+Example 1 (normal reconstruction):
+3bit BAQ (BAQMOD=3)
+THIDX=130
+SCode = 6
+SCode(binary) = 110 bin
+Sign =1
+MCode=2
+NRL=1.344
+SF=100.58
+
+SValue
+
+1 1 1.344 100.58
+
+135.1795
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+67 of 85
+
+Example 2 (simple reconstruction):
+5bit BAQ (BAQMOD=5)
+THIDX=9
+SCode = 27
+SCode (binary) = 11011 bin
+Sign =1
+MCode=11
+
+SValue
+
+1 1 11
+
+11
+
+Example 3 (simple reconstruction):
+5bit BAQ (BAQMOD=5)
+THIDX=9
+SCode = 15
+SCode (binary) = 01111 bin
+Sign =0
+MCode=15
+
+SValue
+
+1 0 A5THIDX
+
+9
+
+16.3800
+
+Sample Alignment:
+The sequence of the complex samples in the PRI rangeline will be obtained by arranging the sample values of
+the 4 channels (IE, IO, QE, QO) in the following way:
+
+complex _ SValue (2 j 1)
+complex _ SValue (2 j )
+
+IE _ SValue ( j ) ; QE _ SValue ( j )
+
+IO _ SValue ( j ) ; QO _ SValue ( j )
+
+for j 1,2,3...NQ
+
+4.4
+
+Decoding of Data Format Type D (“Decimation + FDBAQ”)
+
+The data of format type D is also structured in BAQ blocks as described in section 4.3.
+However, the format type D data is Huffman encoded which introduces a non-predictable variable length
+HCode in each BAQ block.
+The arrangement of the format type D data is shown in Table 4.4-1. Values for HCode lengths and numbers
+NW are given with “question marks” in the table because they are not predicitable and have to be determined
+during the Huffman decoding process (see Fig. 4-6, Fig. 4-7, Fig. 4-8, Fig. 4-9, Fig. 4-10, Fig. 4-11).
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+Table 4.4-1: Packetisation of Format Type D User Data Field
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+68 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+69 of 85
+
+The proposed decoding scheme of the User Data Field of a Space Packet is shown in Fig. 4-5 with the HCode
+decoding shown in Fig. 4-6 and with the applicable Huffman decoding trees in Fig. 4-7 to Fig. 4-11.
+Start
+
+Start Decoding with
+BAQ Block b=1
+
+b=1
+
+Extract QE data
+
+Extract IE data
+
+Extract and store
+8 bit THIDX(b)
+
+Extract and store
+3 bit BRC(b)
+
+No
+
+Decode HCode of
+BAQ block b
+
+No
+
+Decode HCode of
+BAQ block b
+
+b = b +1
+
+b = b +1
+
+b > NB ?
+
+b > NB ?
+
+Yes
+
+Yes
+
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+b=1
+
+b=1
+
+Extract QO data
+
+Extract IO data
+
+Decode HCode of
+BAQ block b
+
+Decode HCode of
+BAQ block b
+No
+
+No
+b = b +1
+
+b = b +1
+
+b > NB ?
+
+b > NB ?
+
+Yes
+
+Yes
+
+If not on a 16bit word
+boundary go on processing on
+next 16bit word boundary
+
+Go to end of Space Packet.
+Last octet of Space Packet is
+deducible from „Packet Data
+Length“ parameter in Primary
+Header.
+Reconstruct Sample Values
+of all BAQ blocks of IE, QE,
+IO, QO channels
+
+Align IE, IO, QE, QO samples
+
+End
+
+Fig. 4-5: Proposed Decoding of Data Format Type D
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+70 of 85
+
+Decode HCode
+of BAQ block b
+Start with first
+HCode of BAQ
+block b
+
+Extract Sign bit
+
+Sign
+No
+
+Perform Huffman
+Decoding
+
+BRC(b)
+
+MCode
+Store SCodes of
+BAQ block b
+
+All HCodes
+of a BAQ block
+processed ?
+
+Yes
+
+Fig. 4-6: Huffman Decoding of BAQ Block b
+Each of the NB BAQ blocks contains 128 HCodes except the last BAQ block which contains
+NQ 128 ( NB 1) HCodes.
+The Huffman binary decoding trees are shown for the five applicable values of BRC in Fig. 4-7 to Fig. 4-11.
+The relevant MCode can be recovered by stepping through each bit of the HCode (without sign) and following
+the same bit pattern in the top-down binary Huffman decoding tree accordingly until the relevant MCode is
+being deteced.
+The detection of a MCode indicates the end of a HCode pattern. The next bit then indicates the sign bit of the
+next following HCode pattern, etc
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+Start Huffman
+Decoding
+
+1
+
+0
+0
+
+M-Code
+
+0
+
+1
+
+1
+
+0
+
+1
+
+2
+
+3
+
+Fig. 4-7: Huffman Decoding for BRC=0, (k=4)
+
+Start Huffman
+Decoding
+
+1
+
+0
+0
+
+1
+0
+
+M-Code
+
+0
+
+1
+
+2
+
+1
+0
+
+1
+
+3
+
+4
+
+Fig. 4-8: Huffman Decoding for BRC=1, (k=5)
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+71 of 85
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+72 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+Start Huffman
+Decoding
+
+1
+
+0
+0
+
+1
+0
+
+1
+0
+
+1
+1
+
+0
+
+M-Code
+
+4
+
+3
+
+2
+
+1
+
+0
+
+0
+
+1
+
+5
+
+6
+
+Fig. 4-9: Huffman Decoding for BRC=2, (k=7)
+
+Start Huffman
+Decoding
+
+0
+0
+
+1
+1
+
+0
+
+1
+0
+
+1
+0
+
+1
+0
+
+1
+0
+
+1
+1
+
+0
+
+M-Code
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+0
+
+1
+
+8
+
+9
+
+Fig. 4-10: Huffman Decoding for BRC=3, (k=10)
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+73 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+Start Huffman
+Decoding
+
+1
+1
+1
+
+0
+0
+
+1
+
+0
+
+0
+
+1
+
+0
+0
+
+1
+
+0
+
+1
+
+0
+
+1
+
+1
+0
+
+1
+0
+0
+0
+
+1
+
+1
+0
+
+M-Code
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+1
+
+0
+
+1
+
+0
+
+1
+
+12
+
+13
+
+14
+
+15
+
+Fig. 4-11: Huffman Decoding for BRC=4 (k=16)
+
+The sample reconstruction from SCode (Sign and MCode) follows the similar flow as shown in Fig. 4-4 of
+section 4.3.
+The detailed sample reconstruction law for each bitrate of the FDBAQ mode (indicated by the BRC value) is
+defined as follows:
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+74 of 85
+
+Sign
+
+for BRC(b)
+
+0
+
+Simple Reconstruction for THIDX (b )
+
+3:
+
+Normal Reconstruction for THIDX (b)
+
+3:
+
+M Code
+1
+for M Code 3
+Sign
+B 0THIDX for M Code 3
+1
+Sign
+NRLBRC (b ) 0, M Code SFTHIDX (b )
+1
+Sign
+
+for BRC(b) 1
+
+SValue
+
+for BRC(b)
+
+for BRC(b)
+
+for BRC(b)
+
+2
+
+3
+
+4
+
+Simple Reconstruction for THIDX (b)
+
+3:
+
+Normal Reconstruction for THIDX (b)
+
+3 :
+
+Simple Reconstruction for THIDX (b)
+
+5:
+
+Normal Reconstruction for THIDX (b)
+
+5:
+
+Simple Reconstruction for THIDX (b)
+
+6:
+
+Normal Reconstruction for THIDX (b)
+
+6 :
+
+Simple Reconstruction for THIDX (b)
+
+8:
+
+Normal Reconstruction for THIDX (b)
+
+8 :
+
+M Code
+1
+for M Code 4
+Sign
+B1THIDX for M Code 4
+1
+Sign
+NRLBRC (b ) 1, M Code SFTHIDX (b )
+1
+1
+
+Sign
+
+M Code
+
+Sign
+
+B 2 THIDX
+1
+Sign
+NRLBRC (b )
+1
+1
+
+Sign
+Sign
+
+1
+Sign
+1
+
+1
+
+Sign
+Sign
+
+1
+Sign
+1
+
+for M Code 6
+for M Code 6
+2 , M Code SFTHIDX ( b )
+
+M Code
+
+for M Code 9
+B3THIDX for M Code 9
+NRLBRC (b ) 3, M Code SFTHIDX ( b )
+M Code
+
+for M Code 15
+B 4 THIDX for M Code 15
+NRLBRC ( b ) 4, M Code SFTHIDX ( b )
+
+The values B0 THIDX , B1 THIDX , B2 THIDX , B3 THIDX and B4 THIDX depend on the value THIDX and are defined in the
+Annex, section 5.2.1.
+The values NRL and SF are to be addresed in the corresponding tables in the Annex section 5.2.2.
+Example 1 (normal reconstruction):
+BRC = 2, k=7
+THIDX=239
+HCode(binary) = 011 1110 bin
+Sign = 0
+HCode(binary) w/o Sign = 11 1110 bin
+MCode=5
+NRL=2.5084
+SF=237.19
+
+SValue
+
+( 1) 0 2.5084 237.19 594.96
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+75 of 85
+
+Example 2 (simple reconstruction):
+BRC = 3, k=10
+THIDX=3
+HCode(binary) = 1 1111 1111 bin
+Sign = 1
+HCode(binary) w/o Sign = 1111 1111 bin
+MCode=9
+
+SValue
+
+( 1)1 9
+
+9
+
+Example 3 (simple reconstruction):
+BRC = 3, k=10
+THIDX=5
+HCode(binary) = 1 1111 1111 bin
+Sign = 1
+HCode(binary) w/o Sign = 1111 1111 bin
+MCode=9
+
+SValue
+
+( 1)1 9.4800
+
+9.4800
+
+Sample Alignment:
+The sequence of the complex samples in the PRI rangeline will be obtained by arranging the sample values of
+the 4 channels (IE, IO, QE, QO) in the following way:
+
+complex _ SValue (2 j 1)
+complex _ SValue (2 j )
+
+IE _ SValue ( j ) ; QE _ SValue ( j )
+
+IO _ SValue ( j ) ; QO _ SValue ( j )
+
+for j 1,2,3...NQ
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+76 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+5
+
+Annexes
+
+5.1
+
+Support Tables for Computation of Number of Samples after Decimation
+
+There are two look-up-tables needed to compute the number of complex samples after the decimation (or in
+the Space Packet):
+Table of values “D” which will be addressed by values “C” (see 3.2.5.12) and the Filter No. (see 3.2.5.4).
+Table of values “FilterOutputOffset” which will be addressed by the Filter No.
+The tables are shown in Table 5.1-1 and Table 5.1-2.
+The Filter No. is equivalent to the header parameter “RGDEC code ” (see 3.2.5.4).
+
+Values C
+
+Values D
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+
+0
+
+1
+
+1
+1
+2
+3
+
+1
+1
+2
+
+2
+
+1
+
+3
+
+4
+
+1
+1
+2
+2
+3
+3
+4
+4
+5
+
+0
+1
+1
+2
+2
+3
+3
+4
+4
+
+for Filter No.
+5
+6
+7
+8
+0
+1
+1
+1
+2
+2
+3
+3
+
+0
+0
+1
+
+0
+0
+0
+0
+0
+1
+
+0
+1
+1
+2
+2
+3
+3
+
+9
+
+10
+
+11
+
+0
+0
+1
+1
+1
+2
+2
+2
+2
+3
+3
+3
+4
+4
+4
+5
+
+0
+0
+0
+0
+0
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+2
+2
+2
+2
+2
+2
+2
+2
+3
+3
+
+0
+1
+1
+1
+2
+2
+3
+3
+3
+4
+4
+
+Table 5.1-1: Table of Values D
+
+1
+
+not applicable
+
+2
+
+not applicable
+
+Astrium GmbH – All Rights Reserved
+
+12
+
+16
+
+2
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+Filter Output Offsets
+
+0
+87
+
+1
+87
+
+2
+n/a
+
+3
+88
+
+4
+90
+
+5
+92
+
+Filter No.
+6
+7
+93
+103
+
+8
+89
+
+9
+97
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+77 of 85
+
+10
+110
+
+11
+91
+
+12 16
+n/a
+
+Table 5.1-2: Table of Filter Output Offset Values
+
+Note, that the filters and the corresponding values “Filter Output Offset” are configurable parameters in the
+SES Radar Database.
+For information: The values “Filter Output Offset” depend on the length N F of each filter:
+
+FilterOutputOffset
+
+80
+
+NF
+(the value N F for each filter is given in section 3.2.5.4)
+4
+
+5.2
+
+Sample Reconstruction Tables
+
+5.2.1
+
+Table for Simple Reconstruction Method
+
+For certain THIDX values simple reconstruction will be applied. The simple reconstruction is described as part
+of reconstruction laws in the sections 4.3 and 4.4. The simple reconstruction law needs additional parameters
+A or B which are defined for the relevant THDIX values of the different compression modes in the following
+Table 5.2-1.
+
+Astrium GmbH – All Rights Reserved
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+BAQ 3bit
+THIDX
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+
+BAQ 4bit
+
+BAQ 5bit
+
+BRC = 0
+(k = 4)
+
+BRC = 1
+(k = 5)
+
+BRC = 2
+(k = 7)
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+78 of 85
+
+BRC = 3
+(k = 10)
+
+BRC = 4
+(k = 16)
+
+A3
+
+A4
+
+A5
+
+B0
+
+B1
+
+B2
+
+B3
+
+B4
+
+for M Code =3
+
+for M Code =7
+
+for M Code =15
+
+for M Code =3
+
+for M Code =4
+
+for M Code =6
+
+for M Code =9
+
+for M Code =15
+
+3.0000
+3.0000
+3.1200
+3.5500
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+7.0000
+7.0000
+7.0000
+7.1700
+7.4000
+7.7600
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+15.0000
+15.0000
+15.0000
+15.0000
+15.0000
+15.0000
+15.4400
+15.5600
+16.1100
+16.3800
+16.6500
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+3.0000
+3.0000
+3.1600
+3.5300
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+4.0000
+4.0000
+4.0800
+4.3700
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+6.0000
+6.0000
+6.0000
+6.1500
+6.5000
+6.8800
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+9.0000
+9.0000
+9.0000
+9.0000
+9.3600
+9.5000
+10.1000
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+15.0000
+15.0000
+15.0000
+15.0000
+15.0000
+15.0000
+15.2200
+15.5000
+16.0500
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+n/a
+
+Table 5.2-1: Simple Reconstruction Parameter Values A, B
+
+5.2.2
+
+Tables for Normal Reconstruction Method
+
+Compressed radar samples for which the Simple Reconstruction Scheme will not apply will be decompressed
+by the Normal Reconstruction Scheme. The Normal Reconstruction scheme needs values of the Normalized
+Reconstruction Levels (NRL) and the Sigma Factors (SF). These values are defined in the following
+subsections.
+5.2.2.1
+
+Normalised Reconstruction Levels (NRL)
+
+The selected NRL values represent the reconstructed sample values normalised to standard deviation = 1.
+Up-scaling to the true standard deviation as measured in the SAR raw data will be performed with the Sigma
+Factors in Table 5.2-3.
+The NRL table is listed in Table 5.2-2 and will be addressed by the Magnitude Code of the quantised radar
+sample and the BAQ mode (see 3.2.5.1)
+in case of BAQ compression :
+indicated by BAQMOD Code = 3 or 4 or 5 (indicating 3bit, 4bit or 5bit BAQ)
+
+in case of FDBAQ compression (indicated by BAQMOD Code = 12 or 13 or 14):
+by the BRC value which is part of the IE channel data of the User Data Field
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+79 of 85
+
+Normalised Reconstruction Levels (NRL)
+BAQ
+Magnitude
+Code
+(M code )
+
+3-Bit
+
+4-Bit
+
+FDBAQ
+5-Bit
+
+BRC = 0
+(k = 4)
+
+BRC = 1
+(k = 5)
+
+BRC = 2
+(k = 7)
+
+BRC = 3
+(k = 10)
+
+BRC = 4
+(k = 16)
+
+0
+
+0.2490
+
+0.1290
+
+0.0660
+
+0.3637
+
+0.3042
+
+0.2305
+
+0.1702
+
+0.1130
+
+1
+
+0.7681
+
+0.3900
+
+0.1985
+
+1.0915
+
+0.9127
+
+0.6916
+
+0.5107
+
+0.3389
+
+2
+
+1.3655
+
+0.6601
+
+0.3320
+
+1.8208
+
+1.5216
+
+1.1528
+
+0.8511
+
+0.5649
+
+3
+
+2.1864
+
+0.9471
+
+0.4677
+
+2.6406
+
+2.1313
+
+1.6140
+
+1.1916
+
+0.7908
+
+4
+
+n/a
+
+1.2623
+
+0.6061
+
+n/a
+
+2.8426
+
+2.0754
+
+1.5321
+
+1.0167
+
+5
+
+n/a
+
+1.6261
+
+0.7487
+
+n/a
+
+n/a
+
+2.5369
+
+1.8726
+
+1.2428
+
+6
+
+n/a
+
+2.0793
+
+0.8964
+
+n/a
+
+n/a
+
+3.1191
+
+2.2131
+
+1.4687
+
+7
+
+n/a
+
+2.7467
+
+1.0510
+
+n/a
+
+n/a
+
+n/a
+
+2.5536
+
+1.6947
+
+8
+
+n/a
+
+n/a
+
+1.2143
+
+n/a
+
+n/a
+
+n/a
+
+2.8942
+
+1.9206
+
+9
+
+n/a
+
+n/a
+
+1.3896
+
+n/a
+
+n/a
+
+n/a
+
+3.3744
+
+2.1466
+
+10
+
+n/a
+
+n/a
+
+1.5800
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+2.3725
+
+11
+
+n/a
+
+n/a
+
+1.7914
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+2.5985
+
+12
+
+n/a
+
+n/a
+
+2.0329
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+2.8244
+
+13
+
+n/a
+
+n/a
+
+2.3234
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+3.0504
+
+14
+
+n/a
+
+n/a
+
+2.6971
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+3.2764
+
+15
+
+n/a
+
+n/a
+
+3.2692
+
+n/a
+
+n/a
+
+n/a
+
+n/a
+
+3.6623
+
+Table 5.2-2: Normalised Reconstruction Levels
+
+5.2.2.2
+
+Sigma Factors (SF)
+
+The Sigma Factors are used for up-scaling the sample values normalised to standard deviation = 1 to original
+power levels in the BAQ block. The Sigma Factors are listed in Table 5.2-3 and will be addressed by THIDX
+which is part of the QE channel data of the User Data Field.
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+80 of 85
+
+Doc. No.:
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Issue:
+Date:
+Page
+
+THIDX
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+
+SF
+0.00
+0.63
+1.25
+1.88
+2.51
+3.13
+3.76
+4.39
+5.01
+5.64
+6.27
+6.89
+7.52
+8.15
+8.77
+9.40
+10.03
+10.65
+11.28
+11.91
+12.53
+13.16
+13.79
+14.41
+15.04
+15.67
+16.29
+16.92
+17.55
+18.17
+18.80
+19.43
+20.05
+20.68
+21.31
+21.93
+22.56
+23.19
+23.81
+24.44
+25.07
+25.69
+26.32
+26.95
+27.57
+28.20
+28.83
+
+THIDX
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+
+SF
+29.45
+30.08
+30.71
+31.33
+31.96
+32.59
+33.21
+33.84
+34.47
+35.09
+35.72
+36.35
+36.97
+37.60
+38.23
+38.85
+39.48
+40.11
+40.73
+41.36
+41.99
+42.61
+43.24
+43.87
+44.49
+45.12
+45.75
+46.37
+47.00
+47.63
+48.25
+48.88
+49.51
+50.13
+50.76
+51.39
+52.01
+52.64
+53.27
+53.89
+54.52
+55.15
+55.77
+56.40
+57.03
+57.65
+58.28
+
+THIDX
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+
+SF
+
+THIDX
+
+58.91
+59.53
+60.16
+60.79
+61.41
+62.04
+62.98
+64.24
+65.49
+66.74
+68.00
+69.25
+70.50
+71.76
+73.01
+74.26
+75.52
+76.77
+78.02
+79.28
+80.53
+81.78
+83.04
+84.29
+85.54
+86.80
+88.05
+89.30
+90.56
+91.81
+93.06
+94.32
+95.57
+96.82
+98.08
+99.33
+100.58
+101.84
+103.09
+104.34
+105.60
+106.85
+108.10
+109.35
+110.61
+111.86
+113.11
+
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+
+SF
+
+THIDX
+
+114.37
+115.62
+116.87
+118.13
+119.38
+120.63
+121.89
+123.14
+124.39
+125.65
+126.90
+128.15
+129.41
+130.66
+131.91
+133.17
+134.42
+135.67
+136.93
+138.18
+139.43
+140.69
+141.94
+143.19
+144.45
+145.70
+146.95
+148.21
+149.46
+150.71
+151.97
+153.22
+154.47
+155.73
+156.98
+158.23
+159.49
+160.74
+161.99
+163.25
+164.50
+165.75
+167.01
+168.26
+169.51
+170.77
+172.02
+
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+
+SF
+173.27
+174.53
+175.78
+177.03
+178.29
+179.54
+180.79
+182.05
+183.30
+184.55
+185.81
+187.06
+188.31
+189.57
+190.82
+192.07
+193.33
+194.58
+195.83
+197.09
+198.34
+199.59
+200.85
+202.10
+203.35
+204.61
+205.86
+207.11
+208.37
+209.62
+210.87
+212.13
+213.38
+214.63
+215.89
+217.14
+218.39
+219.65
+220.90
+222.15
+223.41
+224.66
+225.91
+227.17
+228.42
+229.67
+230.93
+
+THIDX
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+
+SF
+232.18
+233.43
+234.69
+235.94
+237.19
+238.45
+239.70
+240.95
+242.21
+243.46
+244.71
+245.97
+247.22
+248.47
+249.73
+250.98
+252.23
+253.49
+254.74
+255.99
+255.99
+
+Table 5.2-3: Sigma Factors
+
+5.3
+
+Calibration Signal Acqusition Timing
+
+The timing for acquisition of calibration signals is based on a fixed timing depending only on the Tx pulse
+length TPL of the transmitted pulses selected in a data take. It does not depend on the commanded
+parameters SWST and SWL.
+The timing is shown in Fig. 5-1.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+81 of 85
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+time of Rx
+sampling
+
+time of Tx pulse
+generation in TxM
+
+CWL
+tguard1
+
+TPL
+
+tsuppr
+
+tguard2
+
+Tx Pulse
+acquired Sampling Window
+
+suppressed
+
+Data in Space Packet (NCal)
+
+suppr
+
+Decim.Filter Transients
+
+time
+
+Fig. 5-1: Timing of Calibration Signal Sampling Window (CWL)
+
+1
+
+In a calibration PRI the value CWL will be automatically selected by the Instrument to
+
+CWL TPL CWL _ Delta (in time units)
+
+CWL _ Delta is a Mission Parameter defined in the Instrument Radar Database [IRD 07].
+
+t guard 1
+
+t 9 t 26
+
+t 9 and t 26 are also Mission Parameters defined in the Instrument Radar Database [IRD 07].
+
+With this it follows from Fig. 5-1 :
+
+t guard 2
+
+CWL TPL
+
+It can be seen that
+
+t guard 1
+
+CWL _ Delta t 9 t 26
+
+t guard 2 is always a fixed value as defined by Mission Parameters and independent of the
+
+Tx pulse length.
+It has to be noted that the Tx pulse signal will not be sampled at its generation time in the TxM module since
+the Tx signal has to propopagate through the Instrument signal pathes (e.g. those of the antenna) before
+being received, digitized and processed in the RxM module. For this reason t guard 2 is applied to cover this
+signal latency.
+
+The number of captured calibration samples in the Space Packet can be expressed as
+
+1
+
+the figure shows the timing of Tx Pulse generation and Rx Sampling without taking into consideration electronical
+
+roundtrip delays of the Tx pulse via SAS and SES. These may cause a different position of the Tx Pulse signal within the
+Space Packet than indicated in the figure. The Instrument timing is adjusted to compensate for these delays.
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+N Cal
+
+2
+
+L int
+
+B
+M
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+82 of 85
+
+D 1
+
+with parameters L and M according to 3.2.5.4
+with B
+
+2 TPLcode
+
+CWL _ Deltacode
+
+FilterOutputOffset 17
+
+with FilterOutputOffset according to Table 5.1-2
+D is to be addressed as function of C in Table 5.1-1 with C
+
+B M int
+
+B
+M
+
+The Decimation Filter suppresses the FIR filter transients in the acquired sampling window. The captured data
+in the Space Packet correspond to the data sampled t suppr after the start of the acquired sampling window.
+
+t suppr
+
+320
+in units of [us] with f ref
+8 f ref
+
+37.53472224 [MHz]
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+5.4
+
+EFE and TGU Temperature Calibration
+
+5.4.1
+
+TGU Temperature Calibration
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+83 of 85
+
+Code
+
+TGU Temp.
+degC
+
+Code
+
+TGU Temp.
+degC
+
+Code
+
+TGU Temp.
+degC
+
+Code
+
+TGU Temp.
+degC
+
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+
+116.14
+115.02
+113.9
+112.78
+111.66
+110.54
+109.42
+108.3
+107.18
+106.06
+104.94
+103.82
+102.7
+101.58
+100.46
+99.34
+98.22
+97.1
+95.98
+94.86
+93.74
+92.62
+91.5
+90.38
+89.26
+88.14
+87.02
+85.9
+84.78
+83.66
+82.54
+81.42
+
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+
+80.3
+79.18
+78.06
+76.94
+75.82
+74.7
+73.58
+72.46
+71.34
+70.22
+69.1
+67.98
+66.86
+65.74
+64.62
+63.5
+62.38
+61.26
+60.14
+59.02
+57.9
+56.78
+55.66
+54.54
+53.42
+52.3
+51.18
+50.06
+48.94
+47.82
+46.7
+45.58
+
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+
+44.46
+43.34
+42.22
+41.1
+39.98
+38.86
+37.74
+36.62
+35.5
+34.38
+33.26
+32.14
+31.02
+29.9
+28.78
+27.66
+26.54
+25.42
+24.3
+23.18
+22.06
+20.94
+19.82
+18.7
+17.58
+16.46
+15.34
+14.22
+13.1
+11.98
+10.86
+9.74
+
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+
+8.62
+7.5
+6.38
+5.26
+4.14
+3.02
+1.9
+0.78
+-0.34
+-1.46
+-2.58
+-3.7
+-4.82
+-5.94
+-7.06
+-8.18
+-9.3
+-10.42
+-11.54
+-12.66
+-13.78
+-14.9
+-16.02
+-17.14
+-18.26
+-19.38
+-20.5
+-21.62
+-22.74
+-23.86
+-24.98
+-26.1
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+5.4.2
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+84 of 85
+
+EFE Temperature Calibration
+
+Code
+
+EFE Temp.
+degC
+
+Code
+
+EFE Temp.
+degC
+
+Code
+
+EFE Temp.
+degC
+
+Code
+
+EFE Temp.
+degC
+
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+
+not defined
+not defined
+not defined
+not defined
+-51.38
+-47.38
+-44.38
+-41.5
+-38.75
+-36.75
+-34.88
+-32.88
+-31
+-29.63
+-28
+-27
+-25.5
+-24.13
+-23.13
+-22
+-21
+-20
+-19
+-18.13
+-17
+-16
+-15
+-14.38
+-13.88
+-13
+-12
+-11.38
+-10.88
+-10
+-9
+-8.5
+-8
+-7
+-6.5
+-6
+-5.38
+-4.88
+-4
+-3.5
+-3
+
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+
+7
+7.5
+8
+8.5
+9
+9.5
+9.88
+10.13
+10.5
+11
+11.5
+11.88
+12.13
+12.63
+13
+13.5
+14
+14.5
+14.88
+15.13
+15.5
+16
+16.5
+16.88
+17.13
+17.5
+17.88
+18.13
+18.5
+19
+19.5
+19.88
+20.13
+20.5
+21
+21.5
+21.88
+22.13
+22.5
+22.88
+23.13
+23.5
+24
+24.5
+24.5
+
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+
+32
+32.5
+32.75
+33.13
+33.5
+33.88
+34.13
+34.5
+34.88
+35.13
+35.5
+36
+36.5
+36.88
+37.13
+37.5
+37.88
+38.13
+38.5
+39
+39.5
+39.75
+40.13
+40.5
+40.88
+41.13
+41.75
+42.13
+42.5
+42.88
+43.13
+43.5
+43.88
+44.25
+44.75
+45.13
+45.5
+45.88
+46.25
+46.75
+47.13
+47.5
+47.88
+48.25
+48.75
+
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+
+57.5
+57.88
+58.25
+58.88
+59.25
+59.88
+60.25
+60.88
+61.25
+61.88
+62.25
+62.88
+63.25
+63.88
+64.25
+64.88
+65.25
+65.88
+66.5
+67.13
+67.75
+68.13
+68.88
+69.25
+69.88
+70.5
+71.13
+71.88
+72.25
+73
+73.75
+74.25
+74.88
+75.5
+76.25
+76.88
+77.5
+78.5
+79.13
+79.88
+80.5
+81.25
+82
+82.88
+83.63
+
+Astrium GmbH – All Rights Reserved
+
+Sentinel-1 SAR Space
+Packet Protocol Data Unit
+
+Doc. No.:
+Issue:
+Date:
+Page
+
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+
+-2.5
+-2
+-1.38
+-1
+-0.13
+0.25
+1
+1.5
+2
+2.5
+3
+3.5
+3.88
+4.25
+4.88
+5.13
+5.88
+6.13
+6.63
+
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+
+25
+25.5
+25.88
+26.13
+26.5
+26.88
+27.13
+27.5
+28
+28.5
+28.75
+29.13
+29.5
+29.88
+30.13
+30.5
+30.88
+31.13
+31.5
+
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+
+49.13
+49.5
+49.88
+50.25
+50.88
+51.13
+51.75
+52.13
+52.5
+52.88
+53.25
+53.88
+54.25
+54.88
+55.13
+55.75
+56.13
+56.75
+57.13
+
+Astrium GmbH – All Rights Reserved
+
+S1-IF-ASD-PL-0007
+12
+07.03.2014
+85 of 85
+
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+
+84.5
+85.5
+86.88
+87
+87.88
+88.63
+89.63
+90.63
+91.63
+92.63
+93.63
+95
+96
+97
+98.5
+99.88
+100.88
+102
+103.5
+
+
