@@ -1,0 +1,307 @@
+\documentclass[a4paper]{article}      % base article class
+\usepackage[utf8]{inputenc}           % allow utf8 input
+\usepackage{graphicx}                 % includegraphics
+
+\usepackage{amsmath,amsthm}           % fancier math
+
+\usepackage[osf,sups]{Baskervaldx} % lining figures
+%\usepackage[bigdelims,cmintegrals,vvarbb,baskervaldx]{newtxmath} % math font
+\usepackage[baskervaldx]{newtxmath} % math font
+%\usepackage{cabin}                  % monospace font
+%\usepackage[cal=boondoxo]{mathalfa} % mathcal from STIX, unslanted a bit
+
+
+% global settings
+\setlength{\parindent}{0pt}           % no paragraph indentation
+\setlength{\parskip}{7pt}             % spacing between paragraphs
+\pdfimageresolution 200               % change the default for included png files
+\pdfinfoomitdate=1\pdftrailerid{}     % ensure reproducible PDF
+
+% theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% enric's macros
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\N}{\mathbf{N}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\pairing}[2]{\left\langle #1,#2\right\rangle}
+
+
+
+\begin{document}
+
+{\Large Focusing of Sentinel 1 images}
+
+\vspace{2em}
+
+\section{Context}
+
+Sentinel~1 images are typically used in their SLC form (Single Look Complex),
+which are complex-valued rectangular images, whose pixels correspond to
+well-determined points on the surface of the Earth.  However, the images they
+are also distributed in SAFE form (Standard Archive Format for Europe), which
+is the datastream directly acquired from the ground stations.
+
+We are interested in focusing for several reasons
+%\begin{itemize}
+%	\item 
+%\end{itemize}«»
+
+\section{Documentation}
+
+
+
+\section{Decoding}
+
+\section{Stripmap focusing}
+
+\section{Topsar focusing}
+
+\section{Other algorithms}
+
+\clearpage
+\appendix
+\section{The math goes here}
+
+This is a tiny course about radar for people who do not know what an antenna
+is.
+
+\paragraph{Basic idea}
+A~\emph{linear chirp} is a function of the form~$h(x)=e^{-i\pi x^2}$.  It is
+called linear because the instantaneous frequency increases linearly.
+The linear chirp is very interesting because it is a square root of
+the Dirac delta
+\begin{equation}
+	h\star h=\delta.
+	\label{eq:sqrt}
+\end{equation}
+
+Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar antenna
+emits a single chirp~$h(x)$.  Then, reflectors at different distances reflect
+the chirp, and the antenna receives back a linear superposition of chirps:
+$$
+f(x)=\sum_n b_n h(x-a_n).
+$$
+The function~$f$ is a mess because the supports of the chirps overlap.
+However, by correlating~$f$ with the original chirp~$h$ and
+using equation~(\ref{eq:sqrt}), we can recover the position and intensity of
+each reflector:
+$$
+f\star h (x) = \sum_n b_n \delta(x - a_n)
+$$
+This process is called~\emph{focusing} or compression, because it
+compresses the support of each chirp into a single impulse.
+
+\paragraph{Computation in the sense of distributions}
+Equation~\ref{eq:sqrt} makes no sense because the chirp is not integrable,
+and convolution of two non-integrable functions is not a well-defined
+function.
+
+However, we can interpret~$h\star h$ in the sense of distributions (see
+Equation~(\ref{eq:dirac}) below):
+$$
+h\star h (y)
+=
+\int e^{i\pi x^2}e^{-i\pi(x+y)^2}\ud x
+=
+e^{-i\pi y^2}
+\int e^{-2i\pi xy}
+\ud x
+=
+e^{-i\pi y^2}\sqrt{2\pi}\, \widehat{1}\paren{2\pi y}
+$$
+$$
+=
+e^{-i\pi y^2}2\pi\delta\paren{2\pi y}
+=
+e^{-i\pi y^2}\delta(y)
+=\delta(y)
+$$
+thus~$h\star h=\delta$.
+
+
+\paragraph{Computation on a finite window}
+The computation above is somewhat whimsical, but sets the right spirit.  By
+multiplying the chirp by a compactly supported window, we can perform all the
+computations in the classical sense,  at the price of obtaining an
+approximation of a finite impulse, instead of a clean Dirac.
+
+We will consider a windowed linear chirp
+$$
+h(x)
+=
+e^{iKx^2}
+\,
+\1_{[-T,T]}(x)
+$$
+The parameter~$T$ is the support, and~$K$ is the~\emph{ramp rate}
+of the chirp.
+
+\begin{proposition}
+	Let~$h$ be a windowed linear chirp as above.  Then
+	\[
+		h\star h(y)=
+		2\paren{T-\abs{y}}
+		\,
+		\mathrm{sinc}\paren{ Ky\paren{T-\abs{y}} }
+		\,
+		\1_{[-2T,2T]}(y)
+	\]
+	(a chirped sinc multiplied by a triangular window).
+\end{proposition}
+
+\begin{proof}
+	First, we assume that~$y\ge0$ and then we will extend the result to all
+	values of~$y$ by symmetry.  We start with the definition of correlation:
+	\[
+		h\star h (y)
+		=
+		\int
+		h(x)\overline{h(x+y)}\,\ud x
+		=
+		\int
+		e^{iKx^2}
+		e^{-iK\paren{x+y}^2}
+		\1_{[-T,T]} (x)
+		\1_{[-T,T]} (x+y)
+		\ud x
+	\]
+	\[
+		=
+		e^{-iKy^2}
+		\int
+		e^{-2iKxy}
+		\,
+		\1_{[-T,T]} (x)
+		\,
+		\1_{[-T-y,T-y]} (x)
+		\,
+		\ud x
+	\]
+	Now, using the hypothesis that~$y\ge0$, we have
+	\[
+		\1_{[-T,T]} \1_{[-T-y,T-y]}
+		=
+%		\1_{[\max(-T,-T-y),\ \min(T,T-y)]}
+%		=
+		\1_{[-T,\ T-y]}
+	\]
+	using the convention that~$\1_{[a,b]}=0$ if~$b<a$.
+	Thus, for~$y\in[0,2T]$:
+	\[
+		h\star h (y)
+		=
+		e^{-iKy^2}
+		\int_{-T}^{T-y}
+		e^{-2iKxy}
+		\ud x
+	\]
+	and this integral can be computed explicitly and arranged into a convenient
+	form:
+	\[
+		=
+		e^{-iKy^2}
+		\left[
+			\frac{\displaystyle e^{-2iKxy}}{-2iKy}
+		\right]_{-T}^{T-y}
+	\]
+	\[
+		=
+		\frac{1}{2iKy}
+		e^{-iKy^2}
+		\paren{
+			e^{2iKyT}-e^{-2iKy(T-y)}
+		}
+	\]
+	\[
+		=
+		2\paren{T-y}
+		\frac{
+			e^{i\left[2Ky\paren{T-y}\right]}-e^{-i\left[2Ky\paren{T-y}\right]}
+			}{
+				2i\left[2Ky\paren{T-y}\right]
+		}
+	\]
+	\[
+		=
+		2\paren{T-y}\mathrm{sinc}\paren{2Ky\paren{T-y}}
+	\]
+	This gives the result for~$h\star h(y)$ when~$y\in[0,2T]$.  For~$y>2T$ the
+	value is~$0$, and by symmetry we can extend the result to~$y<0$ obtaining
+	the following expression, valid for any~$y\in\R$:
+	\[
+		h\star h(y)=\paren{T-\abs{y}}_+
+		\,
+		\mathrm{sinc}\paren{ Ky\paren{T-\abs{y}} }
+	\]
+\end{proof}
+
+
+\paragraph{The two-dimensional case}
+
+\clearpage
+\paragraph{Fourier analysis reminder}
+
+We use the unitary convention of Fourier transforms
+$$ \hat{u}(y)=\frac{1}{\sqrt{2\pi}}\int u(x)e^{-ixy}\ud x $$
+$$ \check{u}(y)=\frac{1}{\sqrt{2\pi}}\int u(x)e^{ixy}\ud x $$
+and the following notation for convolution and correlation
+$$ f*g(y)=\int f(x)g(y-x)\ud x $$
+$$ f\star g(y)=\int f(x)\overline{g(y+x)}\ud x $$
+both operations are commutative and covariant to shifts, but only the
+convolution is associative.
+
+
+%The tempered distributions are defined as the dual of the Schwartz space
+%$(which is closed by the Fourier transform).
+The Fourier transform of a tempered distribution~$T$ is defined by its action
+over Schwartz test functions~$\varphi\in\mathcal{S}$ (smooth functions
+all of whose derivatives are rapidly decreasing):
+$$
+\pairing{\hat{T}}\varphi
+=
+\pairing{T}{\hat{\varphi}}
+$$
+For example, the Fourier transform of the constant~$1$ is
+$$
+\pairing{\hat 1}{\varphi}
+=
+\pairing{1}{\hat \varphi}
+=
+\int 1\hat\varphi
+=
+\sqrt{2\pi}\frac{1}{\sqrt{2\pi}}\int 1\hat\varphi
+=\sqrt{2\pi}\check{\hat{\varphi}}(0)
+=\sqrt{2\pi}\varphi(0)
+$$
+thus
+\begin{equation}
+	\hat 1=\sqrt{2\pi}\delta.
+	\label{eq:dirac}
+\end{equation}
+
+The convolution of two tempered distributions cannot be defined in general
+(otherwise you could compute the product of any two distributions via the
+convolution theorem).  However, for some particular pairs of
+distributions~$S,T$ the following expression makes sense
+$$
+\pairing{S*T(x)}{\varphi(x)}
+=
+\pairing{\,S(t)\,}{\,\pairing{T(x)}{\varphi(x+t)}\,}
+$$
+and in that case, the right hand side can be used as the definition of~$S*T$.
+
+
+
+\end{document}
+
+% vim:set tw=77 filetype=tex spell spelllang=en sw=2 ts=2:
