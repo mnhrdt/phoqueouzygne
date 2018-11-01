@@ -2,6 +2,7 @@
 
 // TODO: compile-time asserts to verify exact struct sizes
 #define FILTER_REF_FREQ 37.53472224
+#define SPEED_OF_LIGHT 299792458
 
 struct s1a_isp { // Instrument Source Packet
 
@@ -183,6 +184,10 @@ int    s1a_extract_datum_TXPL3 (struct s1a_isp *);
 int    s1a_extract_datum_NF    (struct s1a_isp *);
 double s1a_extract_datum_SWL   (struct s1a_isp *);
 int    s1a_extract_datum_SWL3  (struct s1a_isp *);
+double s1a_extract_datum_Fr    (struct s1a_isp *);
+double s1a_extract_datum_SWST  (struct s1a_isp *);
+double s1a_extract_datum_PRI   (struct s1a_isp *);
+double s1a_extract_datum_PRF   (struct s1a_isp *); // inverse of PRI
 
 // s1a_focus.c
 int s1a_focus_decoded_line(complex float *out, complex float *in,
@@ -191,3 +196,6 @@ int s1a_focus_band(complex float *out, complex float *in,
 		struct s1a_file *f, int first, int last);
 int s1a_focus_column(complex float *out,complex float *in,int n,
 		double,double,double,int);
+
+void fft(complex float *X, complex float *x, int n);
+void ifft(complex float *x, complex float *X, int n);

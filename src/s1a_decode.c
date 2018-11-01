@@ -582,6 +582,20 @@ double s1a_extract_datum_SWL2(struct s1a_isp *t)
 	return 4 * x;
 }
 
+// Fr : Range Sampling Frequency
+// XXX TODO FIXME CHECK whether this datum is O.K.
+// This is used for the algorithm matched filter
+double s1a_extract_datum_Fr(struct s1a_isp *t)
+{
+	return s1a_extract_datum_TXPL3(t) / s1a_extract_datum_TXPL(t);
+}
+
+// PULSE REPETITION FREQUENCY
+double s1a_extract_datum_PRF(struct s1a_isp *t)
+{
+	return 1.0 / s1a_extract_datum_PRI(t);
+}
+
 // S1-IF-ASD-PL-0007 page 42, third row of table
 int s1a_extract_datum_SWL3(struct s1a_isp *t)
 {

@@ -57,12 +57,15 @@ static void float_write_wcrop(char *s, float *x, int w, int h, int pd,
 #include "pickopt.c"
 int main(int c, char *v[])
 {
+	// process named arguments
 	// x: raw image
 	// y: range-focused image
 	// z: azimuth-focused image
 	char *filename_x = pick_option(&c, &v, "x", "");
 	char *filename_y = pick_option(&c, &v, "y", "");
 	char *filename_z = pick_option(&c, &v, "z", "");
+
+	// process positional parameters
 	if (c != 4 && c != 6) return fprintf(stderr, "usage:\n\t"
 			"%s raw.dat lin0 linf [col0 colf]\n", *v);
 	//                0 1       2    3     4    5
@@ -71,7 +74,6 @@ int main(int c, char *v[])
 	int n_last  = atoi(v[3]);
 	int col_first  = c > 5 ? atoi(v[4]) : 0 ;
 	int col_last   = c > 5 ? atoi(v[5]) : 0 ;
-
 	if (n_first > n_last)
 		return fprintf(stderr, "first(%d) > last(%d)\n",n_first,n_last);
 
@@ -90,15 +92,12 @@ int main(int c, char *v[])
 	int h = 1 + n_last - n_first;
 	complex float *x = xmalloc(w * h * sizeof*x);
 	complex float *y = xmalloc(w * h * sizeof*y);
+	complex float *Y = xmalloc(w * h * sizeof*y);
 	complex float *z = xmalloc(w * h * sizeof*z);
-	for (int i = 0; i < w*h; i++) x[i] = y[i] = z[i] = 0;
-	//uint8_t *x_block = xmalloc(w*h);
-	//uint8_t *x_brc   = xmalloc(w*h);
-	//uint8_t *x_thidx = xmalloc(w*h);
-	//for (int i = 0; i < w*h; i++) x_block[i]=x_brc[i]=x_thidx[i]=42;
+	for (int i = 0; i < w*h; i++) x[i] = y[i] = Y[i] = z[i] = 0;
 
 
-	// read focusing parameters
+	// debug focusing parameters
 	{
 	double param_TXPSF = s1a_extract_datum_TXPSF (f->t + n_first);
 	double param_TXPRR = s1a_extract_datum_TXPRR (f->t + n_first);
@@ -118,7 +117,6 @@ int main(int c, char *v[])
 
 	// decode and focus lines (RANGE FOCUSING)
 	fprintf(stderr, "w = %d\n", w);
-
 	for (int i = 0; i < h; i++)
 	{
 		s1a_decode_line_fancy(x + w*i,
@@ -129,26 +127,92 @@ int main(int c, char *v[])
 				f->t + n_first + i);
 	}
 
-	// azimuth zero-padding
-	;
-
-	// azimuth FFT
-	;
-
-	// focus columns (AZIMUTH FOCUSING)
+	// select columns of concern (AZIMUTH BLOCK)
 	int wmin = 0;
 	int wmax = w;
 	if (col_first || col_last) {
 		wmin = col_first;
 		wmax = col_last+1;
 	}
+
+	// compute DC frequency polynomial, needed later
+	// formula 5-18
+	complex double ACCC[wmax];
+	for (int i = 0; i < wmax; i++) ACCC[i] = 0;
+	for (int i = wmin; i < wmax; i++)
+	{
+		complex double c = 0;
+		for (int j = 0; j < h-1; j++)
+			c += y[w*j+i] * conj(y[w*(j+1)+i]);
+		fprintf(stderr, "c[i] = %g %g, angle = %g\n",
+				creal(c), cimag(c), carg(c));
+		ACCC[i] = c;
+	}
+	complex long double ACCC_avg = 0;
+	for (int i = wmin; i < wmax; i++)
+		ACCC_avg += ACCC[i];
+	ACCC_avg /= (wmax - wmin);
+	fprintf(stderr, "ACCC_avg = %g %g, angle = %g\n",
+			creal(ACCC_avg), cimag(ACCC_avg), carg(ACCC_avg));
+
+	double phi_accc = carg(ACCC_avg); // TODO: use a more robust average
+
+	// formula 5-19
+	double f_eta_c = -s1a_extract_datum_PRF(f->t+n_first)*phi_accc/(2*M_PI);
+	fprintf(stderr, "f_eta_c = %g\n", f_eta_c);
+	double D
+
+	// azimuth zero-padding
+	;
+
+	// azimuth FFT
+	for (int i = wmin; i < wmax; i++)
+	{
+		complex float t[h], T[h];
+		for (int j = 0; j < h; j++) t[j] = y[w*j + i];
+		fft(T, t, h);
+		for (int j = 0; j < h; j++) Y[w*j + i] = T[j];
+	}
+
+	// secondary range compression SRC (TODO)
+	;
+
+	// range cell migration correction RCMC (TODO)
+	;
+
+
+	// page 6-22 section 6.3.4.1.2
+	//
+	// XXX TODO FIXME CHECK wether SWST is indeed the fast time
+	// (and that it is always the same inside this azimuth block)
+	//
+	double tau0 = s1a_extract_datum_SWST(f->t + n_first);
+	double Fr = s1a_extract_datum_Fr(f->t + n_first);
+	for (int j = wmin; j < wmax; j++)
+	{
+		double tau = tau0 + j / Fr; // 6-37 (contains ERROR)
+		double R = tau * SPEED_OF_LIGHT / 2.0;
+		complex float H[h]; // azimuth matched filter 6-35 page 6-22
+		for (int i = 0; i < h; i++)
+		{
+			// formula 6-29
+			double f_eta = 1;
+			double f_0 = 1; // ERROR FIXME UNKNOWN XXX TODO
+			double V_r = 1;
+			double q = SPEED_OF_LIGHT * f_eta / (2 * V_r * f_0);
+			double D_f_theta_V_r = sqrt(1 - pow(q, 2));
+			H[j] = 0;
+		}
+	}
+
+	// focus columns (AZIMUTH FOCUSING)
 	for (int i = wmin; i < wmax; i++)
 	{
 		fprintf(stderr, "focusing column %d\n", i);
 		complex float t1[h], t2[h];
 		for (int j = 0; j < h; j++)
 			t1[j] = y[w*j + i];
-		s1a_focus_column(t2, t1, h, 0, 0, 0, 30);
+		s1a_focus_column(t2, t1, h, 0, 0, 0, 50);
 		for (int j = 0; j < h; j++)
 			z[w*j + i] = t2[j];
 	}
@@ -169,71 +233,11 @@ int main(int c, char *v[])
 	if (*filename_z) float_write_wcrop(filename_z, (float*)z, w,h,2, x0,xf);
 
 
-//	if (!col_first && !col_last) {
-//		iio_write_image_float_vec(filename_out, (float*)x, w, h, 2);
-//		iio_write_image_float_vec(filename_ynorm, (float*)y, w, h, 2);
-//	}
-//	else {
-//		int w2 = 1 + col_last - col_first;
-//		int h2 = h;
-//		if (w2 < 0 || w2 > 50000) return fprintf(stderr, "ERROR:bad w2=%d\n", w2);
-//		if (h2 < 0 || h2 > 50000) return fprintf(stderr, "ERROR:bad h2=%d\n", h2);
-//		fprintf(stderr, "output file of size %dx%d\n", w2, h2);
-//		complex float *x2 = xmalloc(w2 * h2 * sizeof*x2);
-//		complex float *y2 = xmalloc(w2 * h2 * sizeof*y2);
-//		fprintf(stderr, "a\n");
-//		for (int j = 0; j < h2; j++)
-//		for (int i = 0; i < w2; i++) {
-//			x2[j*w2 + i] = x[j*w + i + col_first];
-//			y2[j*w2 + i] = y[j*w + i + col_first];
-//		}
-//		fprintf(stderr, "a\n");
-//		iio_write_image_float_vec(filename_out, (float*)x2, w2, h2, 2);
-//		iio_write_image_float_vec(filename_y, (float*)y2, w2, h2, 2);
-//		iio_write_image_float_vec(filename_z, (float*)x2, w2, h2, 2);
-//		fprintf(stderr, "a\n");
-//		free(y2);
-//		free(x2);
-//		fprintf(stderr, "a\n");
-//	}
-
-	//for (int i = 0; i < w*h; i++)
-	//{
-	//	x_norm[i] = cabs(x[i]);
-	//	x_real[i] = creal(x[i]);
-	//	x_imag[i] = cimag(x[i]);
-	//	y_norm[i] = cabs(y[i]);
-	//}
-	//free(x);
-	//fprintf(stderr, "i freed more mem!\n");
-	////if (isfinite(FHACK2()))
-	////	iio_write_image_float(filename_ynorm, y_norm, w, h);
-
-	//int x0 = 0;
-	//int xf = w - 1;
-	//if (col_last)
-	//{
-	//	x0 = col_first;
-	//	xf = col_last;
-	//}
-	//pgm_write_wcrop("x_block.pgm", x_block, w, h, x0, xf);
-	//pgm_write_wcrop("x_brc.pgm"  , x_brc  , w, h, x0, xf);
-	//pgm_write_wcrop("x_thidx.pgm", x_thidx, w, h, x0, xf);
-	//fprintf(stderr, "going to write stuff\n");
-	//iio_write_image_float("x_norm.tif", x_norm, w, h);
-	//iio_write_image_float("x_real.tif", x_real, w, h);
-	//iio_write_image_float("x_imag.tif", x_imag, w, h);
-	//iio_write_image_float("y_norm.tif", y_norm, w, h);
-	////asc_write("x_real.asc", x_real, w, h);
-	////asc_write("x_imag.asc", x_imag, w, h);
 
 
 	free(x);
 	free(y);
 	free(z);
-	//free(x_block);
-	//free(x_brc);
-	//free(x_thidx);
 
 	return 0;
 }

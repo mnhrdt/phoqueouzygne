@@ -6,14 +6,14 @@
 
 #include "s1a.h"
 
-static void fft(complex float *X, complex float *x, int n)
+void fft(complex float *X, complex float *x, int n)
 {
 	fftwf_plan p = fftwf_plan_dft_1d(n, x, X, FFTW_FORWARD, FFTW_ESTIMATE);
 	fftwf_execute(p);
 	fftwf_destroy_plan(p);
 }
 
-static void ifft(complex float *x, complex float *X, int n)
+void ifft(complex float *x, complex float *X, int n)
 {
 	fftwf_plan p = fftwf_plan_dft_1d(n, X, x, FFTW_BACKWARD,FFTW_ESTIMATE);
 	fftwf_execute(p);
@@ -90,7 +90,7 @@ static void focus_one_line(
 {
 	complex float c[n];
 	fill_chirp(c, n, TXPRR, TXPSF, TXPL, NF);
-	for (int i = 0; i < NF; i++)
+	for (int i = 0; i < n; i++)
 		c[i] = conj(c[i]);
 
 	complex float C[n], X[n], Y[n];
@@ -111,11 +111,11 @@ int s1a_focus_decoded_line(complex float *out, complex float *in,
 	int n = 2 * x->secondary_header.field.number_of_quads;
 
 	// chirp parameters
-	double param_TXPSF = s1a_extract_datum_TXPSF(x);
-	double param_TXPRR = s1a_extract_datum_TXPRR(x);
-	double param_TXPL  = s1a_extract_datum_TXPL(x);
-	int    param_NF    = s1a_extract_datum_NF(x);
-	int    param_NS    = s1a_extract_datum_TXPL3(x);
+	double param_TXPSF = s1a_extract_datum_TXPSF(x); // pulse start frequency
+	double param_TXPRR = s1a_extract_datum_TXPRR(x); // pulse ramp rate
+	double param_TXPL  = s1a_extract_datum_TXPL(x);  // pulse length, us/Mhz
+	int    param_NF    = s1a_extract_datum_NF(x);    // width of the filter
+	int    param_NS    = s1a_extract_datum_TXPL3(x); // pulse length, samples
 
 	// focus
 	focus_one_line(out, in, n,
