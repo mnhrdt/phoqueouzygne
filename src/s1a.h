@@ -159,6 +159,18 @@ struct s1a_index_file {
 	struct s1a_index *t;
 };
 
+struct s1a_subcommutated_block {
+	union {
+		unsigned char byte[128];
+		struct __attribute__((packed)) {
+			uint16_t dummy;
+			double position[3];
+			float  velocity[3];
+			uint16_t GPS_time[4];
+		} field;
+	} block;
+};
+
 // s1a_io.c
 void s1a_load_whole_datafile(struct s1a_file *x, char *fname);
 void s1a_load_whole_annot_file(struct s1a_annot_file *x, char *fname);

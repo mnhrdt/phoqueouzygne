@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <complex.h>
 #include <math.h>
 #include <stdio.h>
@@ -154,16 +155,13 @@ int main(int c, char *v[])
 	ACCC_avg /= (wmax - wmin);
 	fprintf(stderr, "ACCC_avg = %g %g, angle = %g\n",
 			creal(ACCC_avg), cimag(ACCC_avg), carg(ACCC_avg));
-
 	double phi_accc = carg(ACCC_avg); // TODO: use a more robust average
 
-	// formula 5-19
-	double f_eta_c = -s1a_extract_datum_PRF(f->t+n_first)*phi_accc/(2*M_PI);
-	fprintf(stderr, "f_eta_c = %g\n", f_eta_c);
-	double D
+	double TXPSF = s1a_extract_datum_TXPSF(f->t + n_first);
+	double TXPRR = s1a_extract_datum_TXPRR(f->t + n_first);
+	double TXPL  = s1a_extract_datum_TXPL (f->t + n_first);
+	double phi_1 = TXPSF + TXPRR*TXPL / 2; // TODO: check!
 
-	// azimuth zero-padding
-	;
 
 	// azimuth FFT
 	for (int i = wmin; i < wmax; i++)
@@ -174,12 +172,19 @@ int main(int c, char *v[])
 		for (int j = 0; j < h; j++) Y[w*j + i] = T[j];
 	}
 
+
+	// azimuth zero-padding
+
+
 	// secondary range compression SRC (TODO)
 	;
 
 	// range cell migration correction RCMC (TODO)
 	;
 
+	// formula 5-19
+	double f_eta_c = -s1a_extract_datum_PRF(f->t+n_first)*phi_accc/(2*M_PI);
+	fprintf(stderr, "f_eta_c = %g\n", f_eta_c);
 
 	// page 6-22 section 6.3.4.1.2
 	//
@@ -188,38 +193,103 @@ int main(int c, char *v[])
 	//
 	double tau0 = s1a_extract_datum_SWST(f->t + n_first);
 	double Fr = s1a_extract_datum_Fr(f->t + n_first);
+	double V_s = 7500;
+	double V_g = 0.88 * V_s;
+	double V_r = sqrt(V_s*V_g); // TODO: obtain from metadata
 	for (int j = wmin; j < wmax; j++)
 	{
 		double tau = tau0 + j / Fr; // 6-37 (contains ERROR)
 		double R = tau * SPEED_OF_LIGHT / 2.0;
+
+		// Compute the azimuth frequency vector AFV
+		// page 6-23, first line
+		int Mfft = h;//100; // should be h, or maybe smaller
+		double AFV[Mfft];
+		double Dvec[h];
+		for (int i = 0; i < Mfft; i++)
+		{
+			double Fa = s1a_extract_datum_PRF(f->t + n_first);
+			AFV[i] = f_eta_c - Fa/2 + i*Fa/Mfft;
+		}
+
 		complex float H[h]; // azimuth matched filter 6-35 page 6-22
-		for (int i = 0; i < h; i++)
+		for (int i = 0; i < Mfft; i++)
 		{
 			// formula 6-29
-			double f_eta = 1;
-			double f_0 = 1; // ERROR FIXME UNKNOWN XXX TODO
-			double V_r = 1;
+			double f_eta = AFV[i];
+			double f_0 = phi_1; // ERROR FIXME UNKNOWN XXX TODO
 			double q = SPEED_OF_LIGHT * f_eta / (2 * V_r * f_0);
-			double D_f_theta_V_r = sqrt(1 - pow(q, 2));
-			H[j] = 0;
+			if (q*q > 1) {
+				fprintf(stderr, "f_eta = %g\n", f_eta);
+				fprintf(stderr, "V_r = %g\n", V_r);
+				fprintf(stderr, "f_0 = %g\n", f_0);
+				fprintf(stderr, "q = %g\n", q);
+				fflush(stderr);
+			}
+			assert(q*q <= 1);
+			double D_f_theta_V_r = sqrt(1 - q*q);
+			double DD = pow(D_f_theta_V_r, 2);
+			Dvec[i] = DD;
+			double W = 1;
+			H[i] = W * cexp(I * 4*M_PI*R*DD*f_0 / SPEED_OF_LIGHT);
 		}
+		assert(h == Mfft);
+
+		// normalize the match filter, formula 6-39 page 6-23
+		long double N = 0;
+		for (int i = 0; i < Mfft; i++)
+			N += H[i] * conj(H[i]);
+		double E = sqrt(N / Mfft);
+		for (int i = 0; i < Mfft; i++)
+			H[i] /= E;
+
+		static int iHvals_saved = 0;
+		if (!iHvals_saved)
+		{
+			iHvals_saved = 1;
+			complex float iH[h];
+			ifft(iH, H, h);
+			FILE *ff = fopen("/tmp/iHvals.txt", "w");
+			for (int i = 0; i < h; i++)
+				fprintf(ff, "%g %g\n", creal(iH[i]),
+						cimag(iH[i]));
+			fclose(ff);
+			ff = fopen("/tmp/DDvals.txt", "w");
+			for (int i = 0; i < h; i++)
+				fprintf(ff, "%g\n", Dvec[i]);
+			fclose(ff);
+		}
+
+		// apply the filter, step 2 of page 6-21 section 6.3.4
+		for (int i = 0; i < Mfft; i++)
+			Y[w*j + i] *= conj(H[i]);
 	}
 
-	// focus columns (AZIMUTH FOCUSING)
+	// azimuth iFFT
 	for (int i = wmin; i < wmax; i++)
 	{
-		fprintf(stderr, "focusing column %d\n", i);
-		complex float t1[h], t2[h];
-		for (int j = 0; j < h; j++)
-			t1[j] = y[w*j + i];
-		s1a_focus_column(t2, t1, h, 0, 0, 0, 50);
-		for (int j = 0; j < h; j++)
-			z[w*j + i] = t2[j];
+		complex float t[h], T[h];
+		for (int j = 0; j < h; j++) t[j] = Y[w*j + i];
+		ifft(T, t, h);
+		for (int j = 0; j < h; j++) z[w*j + i] = T[j];
 	}
 
-	fprintf(stderr, "going to free header mem\n");
-	s1a_file_free_memory(f);
-	fprintf(stderr, "i freed the mem!\n");
+
+	//// focus columns (AZIMUTH FOCUSING)
+	//for (int i = wmin; i < wmax; i++)
+	//{
+	//	fprintf(stderr, "focusing column %d\n", i);
+	//	complex float t1[h], t2[h];
+	//	for (int j = 0; j < h; j++)
+	//		t1[j] = y[w*j + i];
+	//	s1a_focus_column(t2, t1, h, 0, 0, 0, 50);
+	//	for (int j = 0; j < h; j++)
+	//		z[w*j + i] = t2[j];
+	//}
+
+	fprintf(stderr, "not going to free header mem\n");
+	//s1a_file_free_memory(f);
+	//fprintf(stderr, "i freed the mem!\n");
 
 	int x0 = 0;
 	int xf = w - 1;
@@ -231,8 +301,6 @@ int main(int c, char *v[])
 	if (*filename_x) float_write_wcrop(filename_x, (float*)x, w,h,2, x0,xf);
 	if (*filename_y) float_write_wcrop(filename_y, (float*)y, w,h,2, x0,xf);
 	if (*filename_z) float_write_wcrop(filename_z, (float*)z, w,h,2, x0,xf);
-
-
 
 
 	free(x);

@@ -172,8 +172,8 @@ of the chirp.
 %SCRIPT set term pdf
 %SCRIPT set zeroaxis
 %SCRIPT sinc(x)=sin(x)/x
-%SCRIPT plot [-15:15] [-2:12] (abs(x)<5)*cos(x*x),\
-%SCRIPT  2*(abs(x)<10)*(5-abs(x))*sinc(1*x*(5-abs(x)))
+%SCRIPT plot [-15:15] [-2:12] (abs(x)<5)*cos(1*x*x),\
+%SCRIPT  2*(abs(x)<10)*(10-abs(x))*sinc(1*x*(10-abs(x)))
 %SCRIPT END
 
 \clearpage

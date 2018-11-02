@@ -470,6 +470,7 @@ static double s1a_extract_datum_TFINE(struct s1a_isp *t)
 	return (t->secondary_header.field.fine_time + 0.5) / 0x10000;
 }
 
+
 // S1-IF-ASD-PL-0007 page 36
 static double s1a_extract_datum_RXG(struct s1a_isp *t)
 {
@@ -484,7 +485,7 @@ double s1a_extract_datum_TXPRR(struct s1a_isp *t)
 	int txprr  = x & (0xffff >> 1); // remove first bit
 	int sign   = pole ? 1 : -1;
 	double factor  = FILTER_REF_FREQ * FILTER_REF_FREQ / (1<<21);
-	return sign * factor * txprr;// * 1e12;
+	return sign * factor * txprr * 1e12;
 }
 
 // S1-IF-ASD-PL-0007 page 38
@@ -496,7 +497,7 @@ double s1a_extract_datum_TXPSF(struct s1a_isp *t)
 	int sign   = pole ? 1 : -1;
 	double factor  = FILTER_REF_FREQ / (1<<14);
 	double TXPRR = s1a_extract_datum_TXPRR(t);
-	return /*1e6*(1e-12*/(TXPRR/(4*FILTER_REF_FREQ) + sign * factor * txpsf);
+	return 1e6*(1e-12*TXPRR/(4*FILTER_REF_FREQ) + sign * factor * txpsf);
 }
 
 // S1-IF-ASD-PL-0007 page 39
@@ -504,7 +505,7 @@ double s1a_extract_datum_TXPL(struct s1a_isp *t)
 {
 	// WARNING: 3 bytes! (TODO : check endianness)
 	uint32_t x = t->secondary_header.field.tx_pulse_length;
-	return (x / FILTER_REF_FREQ);// * 1e-6;
+	return (x / FILTER_REF_FREQ) * 1e-6;
 }
 
 // width of the filter (chirp)
@@ -617,6 +618,4 @@ int s1a_extract_datum_SWL3(struct s1a_isp *t)
 	assert(D <= 5);
 	return 2*(L*(B/M) + D + 1);
 }
-
-
 
