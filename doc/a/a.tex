@@ -2,8 +2,10 @@
 \usepackage[utf8]{inputenc}                % allow utf8 input
 \usepackage{graphicx}                      % includegraphics
 \usepackage{amsmath,amsthm}                % fancier math
-\usepackage{Baskervaldx}                   % fancy font for letters and numbers
-\usepackage[baskervaldx,upint]{newtxmath}  % fancy math font
+\usepackage{Baskervaldx}                   % beautiful font for text
+\usepackage[baskervaldx,upint]{newtxmath}  % beautiful font for math
+\usepackage{cabin}                         % beautiful font for code
+\usepackage[cache=false]{minted}           % code syntax highlighting
 
 % global settings
 \setlength{\parindent}{0pt}                % no paragraph indentation
@@ -23,6 +25,7 @@
 \newcommand{\Z}{\mathbf{Z}}
 \newcommand{\N}{\mathbf{N}}
 \newcommand{\R}{\mathbf{R}}
+\newcommand{\C}{\mathbf{C}}
 \newcommand{\ud}{\mathrm{d}}
 \newcommand{\ds}{\displaystyle}
 \newcommand{\abs}[1]{\left|#1\right|}
@@ -78,10 +81,10 @@ In this report we document the efforts of the CMLA team towards this goal.
 This is a tiny course about radar for people who do not know what an antenna
 is.
 
-\paragraph{Basic idea}
-A~\emph{linear chirp} is a function of the form~$h(x)=e^{-i\pi x^2}$.  It is
+\subsection{Basic idea}
+A~\emph{linear chirp} is a function of the form~$h(x)=e^{i\pi x^2}$.  It is
 called linear because the instantaneous frequency increases linearly.
-The linear chirp is very interesting because it is a square root of
+The linear chirp is very interesting because it is a ``square root'' of
 the Dirac delta
 \begin{equation}
 	h\star h=\delta.
@@ -92,7 +95,7 @@ the Dirac delta
 %SCRIPT cat <<END | gnuplot > o/chirp.pdf
 %SCRIPT set term pdf
 %SCRIPT set zeroaxis
-%SCRIPT plot [-8:8] [-2:2] cos(x*x),sin(x*x)
+%SCRIPT plot [-4:4] [-2:2] cos(pi*x*x),sin(pi*x*x)
 %SCRIPT END
 
 Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar antenna
@@ -111,7 +114,7 @@ $$
 This process is called~\emph{focusing} or compression, because it
 compresses the support of each chirp into a single impulse.
 
-\paragraph{Computation in the sense of distributions}
+\subsection{Computation in the sense of distributions}
 Equation~\ref{eq:sqrt} makes no sense because the chirp is not integrable,
 and convolution of two non-integrable functions is not well-defined
 in general.
@@ -121,25 +124,25 @@ Equation~(\ref{eq:dirac}) below):
 $$
 h\star h (y)
 =
-\int e^{i\pi x^2}e^{-i\pi(x+y)^2}\ud x
+\int e^{-i\pi x^2}e^{i\pi(x+y)^2}\ud x
 =
-e^{-i\pi y^2}
-\int e^{-2i\pi xy}
+e^{i\pi y^2}
+\int e^{2i\pi xy}
 \ud x
 =
-e^{-i\pi y^2}\sqrt{2\pi}\, \widehat{1}\paren{2\pi y}
+e^{i\pi y^2}\sqrt{2\pi}\, \widehat{1}\paren{-2\pi y}
 $$
 $$
 =
-e^{-i\pi y^2}2\pi\delta\paren{2\pi y}
+e^{i\pi y^2}2\pi\delta\paren{-2\pi y}
 =
-e^{-i\pi y^2}\delta(y)
+e^{i\pi y^2}\delta(y)
 =\delta(y)
 $$
 thus~$h\star h=\delta$.
 
 
-\paragraph{Computation on a finite window}
+\subsection{Computation on a finite window}
 The computation above is somewhat whimsical, but sets the right spirit.  By
 multiplying the chirp by a compactly supported window, we can perform all the
 computations in the classical sense,  at the price of obtaining an
@@ -171,11 +174,11 @@ of the chirp.
 %SCRIPT cat <<END | gnuplot > o/wchirp.pdf
 %SCRIPT set term pdf
 %SCRIPT set zeroaxis
-%SCRIPT sinc(x)=sin(x)/x
-%SCRIPT plot [-12:12] [-3:11] (abs(x)<5)*cos(1*x*x),\
-%SCRIPT  (abs(x)<5)*sin(1*x*x),\
-%SCRIPT  (abs(x)<10)*(10-abs(x))*sinc(1*x*(10-abs(x))) lw 3
+%SCRIPT set title "windowed linear chirp with T=5, K=1"
+%SCRIPT plot [-8:8] [-2:2] (abs(x)<5)*cos(1*x*x), (abs(x)<5)*sin(1*x*x)
 %SCRIPT END
+
+ %%SCRIPT  (abs(x)<10)*(10-abs(x))*sinc(1*x*(10-abs(x))) lw 3
 
 \clearpage
 \begin{proposition}
@@ -192,7 +195,7 @@ of the chirp.
 \end{proposition}
 
 \begin{proof}
-	First, we assume that~$y\ge0$ and then we will extend the result to all
+	First, we assume that~$y\ge0$ and later we will extend the result to all
 	values of~$y$ by symmetry.  We start with the definition of correlation:
 	\[
 		h\star h (y)
@@ -279,11 +282,116 @@ of the chirp.
 	\]
 \end{proof}
 
+\subsection{The discrete case}
+
+The computations above model the chirp as a function~$\R\mapsto\C$.  In
+practice, the signals are sampled at a discrete set of points.  How close
+many points do we need?  Well, notice that the instantaneous frequency at the
+end of the interval is~$KT$, thus to sample above the Nyquist frequency we
+need a rate higher than~$2KT$, or equivalently more than~$4KT^2$ regular
+samples inside the window.  Notice that since the chirp can be discontinuous,
+even a good sampling according to this criterion may exhibit some Gibbs
+effects near the end of the interval (see the figure for $N=101$ below).
+%To avoid this discontinuity, and thus this Gibbs effect, it is better to
+%chose~$K$ and~$T$ such that~$KT^2$ is an integer multiple of~$2\pi$.
+
+The following Octave code can be used to test the precision of the impulse
+response.  The same code has been used to produce the figures (see the
+comments inside the source \TeX\ file).
+
+\begin{minted}{octave}
+# code to verify the correctness of the formula for the impulse response
+K = 0.6;                              # ramp rate
+T = 5;                                # support
+N = 1001;                             # number of samples
+x = linspace(-3*T, 3*T, N);           # sample positions
+d = (x(2)-x(1));                      # sampling step
+h = exp(i*K*x.*x) .* (abs(x) < T);    # windowed chirp
+f = conv(h, conj(h), "same") * dx;    # discrete correlation (normalized)
+w = (abs(x) < 2*T) .* (2*T - abs(x)   # triangular window
+s = w .* sinc(K*x.*(2*T-abs(x))/pi);  # impulse response
+plot(x,real(f),'+',x,s,'-');          # both curves should look the same
+\end{minted}
+
+%SCRIPT cat <<END | octave
+%SCRIPT K = 0.6;
+%SCRIPT T = 5;
+%SCRIPT N = 51;
+%SCRIPT x = linspace(-3*T, 3*T, N);
+%SCRIPT dx = (x(2)-x(1));
+%SCRIPT h = exp(i*K*x.*x) .* (abs(x)<T);
+%SCRIPT f = conv(h, conj(h), "same") * dx;
+%SCRIPT xf = [x ; real(f) ];
+%SCRIPT dlmwrite("o/xf", xf', " ");
+%SCRIPT END
+%SCRIPT
+%SCRIPT cat <<END | gnuplot > o/chirpsamples_51.pdf
+%SCRIPT set term pdf
+%SCRIPT set zeroaxis
+%SCRIPT set title "T=5, K=0.6, N=51, just below Nyquist"
+%SCRIPT sinc(x)=sin(x)/x
+%SCRIPT K=0.6
+%SCRIPT T=5
+%SCRIPT plot [-12:12] [-2.5:11] \
+%SCRIPT 	"o/xf" using 1:2 w points title "Re(h*h)" lt 2 pt 1, \
+%SCRIPT 	(abs(x)<2*T)*(2*T-abs(x))*sinc(K*x*(2*T-abs(x))) w lines title "s" lt 1
+%SCRIPT END
+\includegraphics{o/chirpsamples_51.pdf}
+\includegraphics{o/chirpsamples_101.pdf}
+\includegraphics{o/chirpsamples_1001.pdf}
+%SCRIPT cat <<END | octave
+%SCRIPT K = 0.6;
+%SCRIPT T = 5;
+%SCRIPT N = 101;
+%SCRIPT x = linspace(-3*T, 3*T, N);
+%SCRIPT dx = (x(2)-x(1));
+%SCRIPT h = exp(i*K*x.*x) .* (abs(x)<T);
+%SCRIPT f = conv(h, conj(h), "same") * dx;
+%SCRIPT xf = [x ; real(f) ];
+%SCRIPT dlmwrite("o/xf", xf', " ");
+%SCRIPT END
+%SCRIPT
+%SCRIPT cat <<END | gnuplot > o/chirpsamples_101.pdf
+%SCRIPT set term pdf
+%SCRIPT set zeroaxis
+%SCRIPT set title "T=5, K=0.6, N=101, a bit above Nyquist"
+%SCRIPT sinc(x)=sin(x)/x
+%SCRIPT K=0.6
+%SCRIPT T=5
+%SCRIPT plot [-12:12] [-2.5:11] \
+%SCRIPT 	"o/xf" using 1:2 w points title "Re(h*h)" lt 2 pt 1, \
+%SCRIPT 	(abs(x)<2*T)*(2*T-abs(x))*sinc(K*x*(2*T-abs(x))) w lines title "s" lt 1
+%SCRIPT END
+
+%SCRIPT cat <<END | octave
+%SCRIPT K = 0.6;
+%SCRIPT T = 5;
+%SCRIPT N = 1001;
+%SCRIPT x = linspace(-3*T, 3*T, N);
+%SCRIPT dx = (x(2)-x(1));
+%SCRIPT h = exp(i*K*x.*x) .* (abs(x)<T);
+%SCRIPT f = conv(h, conj(h), "same") * dx;
+%SCRIPT xf = [x ; real(f) ];
+%SCRIPT dlmwrite("o/xf", xf', " ");
+%SCRIPT END
+%SCRIPT
+%SCRIPT cat <<END | gnuplot > o/chirpsamples_1001.pdf
+%SCRIPT set term pdf
+%SCRIPT set zeroaxis
+%SCRIPT set title "T=5, K=0.6, N=1001, way above Niqyist frequency"
+%SCRIPT sinc(x)=sin(x)/x
+%SCRIPT K=0.6
+%SCRIPT T=5
+%SCRIPT plot [-12:12] [-2.5:11] \
+%SCRIPT 	"o/xf" using 1:2 w points title "Re(h*h)" lt 2 pt 1, \
+%SCRIPT 	(abs(x)<2*T)*(2*T-abs(x))*sinc(K*x*(2*T-abs(x))) w lines title "s" lt 1
+%SCRIPT END
+
 
 %\paragraph{The two-dimensional case}
 
 \clearpage
-\paragraph{Fourier analysis reminder}
+\subsection{Fourier analysis reminder}
 
 We use the unitary convention of Fourier transforms
 $$ \hat{u}(y)=\frac{1}{\sqrt{2\pi}}\int u(x)e^{-ixy}\ud x $$

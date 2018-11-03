@@ -5,5 +5,5 @@ pdf: a.pdf #p.pdf
 	latexmk $<
 
 clean:
-	$(RM) o/*png o/*pdf
+	$(RM) o/*
 	latexmk -quiet -C a p

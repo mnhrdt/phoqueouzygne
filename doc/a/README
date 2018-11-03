@@ -1,4 +1,4 @@
 a.tex : TeX source code for the CMLA report about focusing
 p.tex : TeX source code for a presentation about focusing
 
-Requirements for compilation: latexmk, gnuplot
+Requirements for compilation: latexmk, gnuplot, octave
