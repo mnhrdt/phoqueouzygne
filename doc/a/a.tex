@@ -182,9 +182,9 @@ of the chirp.
 	Let~$h$ be a windowed linear chirp as above.  Then
 	\[
 		h\star h(y)=
-		2\paren{T-\abs{y}}
+		\paren{2T-\abs{y}}
 		\,
-		\mathrm{sinc}\paren{ Ky\paren{T-\abs{y}} }
+		\mathrm{sinc}\paren{ Ky\paren{2T-\abs{y}} }
 		\,
 		\1_{[-2T,2T]}(y)
 	\]
@@ -198,20 +198,20 @@ of the chirp.
 		h\star h (y)
 		=
 		\int
-		h(x)\overline{h(x+y)}\,\ud x
+		\overline{h(x)}h(x+y)\,\ud x
 		=
 		\int
-		e^{iKx^2}
-		e^{-iK\paren{x+y}^2}
+		e^{-iKx^2}
+		e^{iK\paren{x+y}^2}
 		\1_{[-T,T]} (x)
 		\1_{[-T,T]} (x+y)
 		\ud x
 	\]
 	\[
 		=
-		e^{-iKy^2}
+		e^{iKy^2}
 		\int
-		e^{-2iKxy}
+		e^{2iKxy}
 		\,
 		\1_{[-T,T]} (x)
 		\,
@@ -225,55 +225,57 @@ of the chirp.
 		=
 %		\1_{[\max(-T,-T-y),\ \min(T,T-y)]}
 %		=
-		\1_{[-T,\ T-y]}
+		\1_{[-T,\ T-y]}.
 	\]
-	using the convention that~$\1_{[a,b]}=0$ if~$b<a$.
+	%using the convention that~$\1_{[a,b]}=0$ if~$b<a$.
 	Thus, for~$y\in[0,2T]$:
 	\[
 		h\star h (y)
 		=
-		e^{-iKy^2}
+		e^{iKy^2}
 		\int_{-T}^{T-y}
-		e^{-2iKxy}
+		e^{2iKxy}
 		\ud x
 	\]
 	and this integral can be computed explicitly and arranged into a convenient
 	form:
 	\[
 		=
-		e^{-iKy^2}
+		e^{iKy^2}
 		\left[
-			\frac{\displaystyle e^{-2iKxy}}{-2iKy}
+			\frac{\displaystyle e^{2iKxy}}{2iKy}
 		\right]_{-T}^{T-y}
 	\]
 	\[
 		=
 		\frac{1}{2iKy}
-		e^{-iKy^2}
+		e^{iKy^2}
 		\paren{
-			e^{2iKyT}-e^{-2iKy(T-y)}
+			e^{2iKy(T-y)}
+			-
+			e^{-2iKyT}
 		}
 	\]
 	\[
 		=
-		2\paren{T-y}
+		\paren{2T-y}
 		\frac{
-			e^{i\left[2Ky\paren{T-y}\right]}-e^{-i\left[2Ky\paren{T-y}\right]}
+			e^{i\left[Ky\paren{2T-y}\right]}-e^{-i\left[Ky\paren{T-y}\right]}
 			}{
-				2i\left[2Ky\paren{T-y}\right]
+				2i\left[Ky\paren{2T-y}\right]
 		}
 	\]
 	\[
 		=
-		2\paren{T-y}\mathrm{sinc}\paren{2Ky\paren{T-y}}
+		\paren{2T-y}\mathrm{sinc}\paren{Ky\paren{2T-y}}
 	\]
 	This gives the result for~$h\star h(y)$ when~$y\in[0,2T]$.  For~$y>2T$ the
 	value is~$0$, and by symmetry we can extend the result to~$y<0$ obtaining
 	the following expression, valid for any~$y\in\R$:
 	\[
-		h\star h(y)=\1_{[-2T,2T]}(x)\,\paren{T-\abs{y}}
+		h\star h(y)=\1_{[-2T,2T]}(x)\,\paren{2T-\abs{y}}
 		\,
-		\mathrm{sinc}\paren{ Ky\paren{T-\abs{y}} }
+		\mathrm{sinc}\paren{ Ky\paren{2T-\abs{y}} }
 	\]
 \end{proof}
 
@@ -288,9 +290,9 @@ $$ \hat{u}(y)=\frac{1}{\sqrt{2\pi}}\int u(x)e^{-ixy}\ud x $$
 $$ \check{u}(y)=\frac{1}{\sqrt{2\pi}}\int u(x)e^{ixy}\ud x $$
 and the following notation for convolution and correlation
 $$ f*g(y)=\int f(x)g(y-x)\ud x $$
-$$ f\star g(y)=\int f(x)\overline{g(y+x)}\ud x $$
-both operations are commutative and covariant to shifts, but only the
-convolution is associative.
+$$ f\star g(y)=\int \overline{f(x)}g(y+x)\ud x $$
+both operations are covariant to shifts, but only the
+convolution is commutative and associative.
 
 
 %The tempered distributions are defined as the dual of the Schwartz space
