@@ -92,7 +92,7 @@ the Dirac delta
 %SCRIPT cat <<END | gnuplot > o/chirp.pdf
 %SCRIPT set term pdf
 %SCRIPT set zeroaxis
-%SCRIPT plot [-8:8] [-2:2] cos(x*x)
+%SCRIPT plot [-8:8] [-2:2] cos(x*x),sin(x*x)
 %SCRIPT END
 
 Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar antenna
@@ -172,8 +172,9 @@ of the chirp.
 %SCRIPT set term pdf
 %SCRIPT set zeroaxis
 %SCRIPT sinc(x)=sin(x)/x
-%SCRIPT plot [-15:15] [-2:12] (abs(x)<5)*cos(1*x*x),\
-%SCRIPT  2*(abs(x)<10)*(10-abs(x))*sinc(1*x*(10-abs(x)))
+%SCRIPT plot [-12:12] [-3:11] (abs(x)<5)*cos(1*x*x),\
+%SCRIPT  (abs(x)<5)*sin(1*x*x),\
+%SCRIPT  (abs(x)<10)*(10-abs(x))*sinc(1*x*(10-abs(x))) lw 3
 %SCRIPT END
 
 \clearpage

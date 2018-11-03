@@ -1,24 +1,29 @@
 #!/bin/sh
 
 cat <<END | octave
-K = 1;
+K = 0.6;
 T = 5;
-N = 1000;
+N = 101;
 x = linspace(-3*T, 3*T, N);
-dx = (x(2)-x(1))*2;
-h = cos(K*x.*x) .* (abs(x)<T);
-f = conv(h, h, "same") * dx;
-s = 2*(abs(x)<2*T) .* (5-abs(x)) .* sinc(K.*x.*(5-abs(x)/pi));
+dx = (x(2)-x(1));
+h = exp(i*K*x.*x) .* (abs(x)<T);
+f = conv(h, conj(h), "same") * dx;
+s = (abs(x)<2*T) .* sinc(K*x.*(2*T-abs(x))/pi);
+s = (abs(x)<2*T) .* (2*T-abs(x)) .* sinc(K*x.*(2*T-abs(x))/pi);
 dlmwrite("o/x.txt", x, "\n");
-dlmwrite("o/h.txt", h, "\n");
-dlmwrite("o/f.txt", f, "\n");
+dlmwrite("o/hr.txt", real(h), "\n");
+dlmwrite("o/hi.txt", imag(h), "\n");
+dlmwrite("o/fr.txt", real(f), "\n");
+dlmwrite("o/fi.txt", imag(f), "\n");
 dlmwrite("o/s.txt", s, "\n");
 END
 
-paste o/x.txt o/h.txt > o/h
-paste o/x.txt o/f.txt > o/f
+paste o/x.txt o/hr.txt > o/hr
+paste o/x.txt o/hi.txt > o/hi
+paste o/x.txt o/fr.txt > o/fr
+paste o/x.txt o/fi.txt > o/fi
 paste o/x.txt o/s.txt > o/s
 
 cat <<END | gnuplot -persist
-plot [-15:15] [-2:12] "o/h" w lines, "o/f" w lines, "o/s" w lines
+plot [:] [-3:12] "o/hr" w lines, "o/hi" w lines, "o/fr" w lines, "o/fi" w lines, "o/s" w points pt 1
 END
