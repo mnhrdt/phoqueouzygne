@@ -42,7 +42,7 @@
 
 Sentinel-1 images are typically used in their SLC form (Single Look Complex),
 which are complex-valued rectangular images, whose pixels correspond to
-well-determined points on the surface of the Earth.  However, the images they
+well-determined points on the surface of the Earth.  However, the images
 are also distributed in SAFE form (Standard Archive Format for Europe), which
 is the datastream directly acquired from the ground stations.
 
@@ -98,12 +98,16 @@ the Dirac delta
 %SCRIPT plot [-4:4] [-2:2] cos(pi*x*x),sin(pi*x*x)
 %SCRIPT END
 
-Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar antenna
-emits a single chirp~$h(x)$.  Then, reflectors at different distances reflect
-the chirp, and the antenna receives back a linear superposition of chirps:
+Equation~(\ref{eq:sqrt}) is the central idea of radar imaging.  The radar
+antenna emits a single chirp~$h(x)$.  Then, reflectors at different distances
+reflect echoes the chirp, and the antenna receives back a linear
+superposition of chirps:
 $$
 f(x)=\sum_n b_n h(x-a_n).
 $$
+The number~$a_n$ is the distance of the~$n$th reflector, and the
+coefficient~$b_n\in[0,1]$ is the amount of signal reflected back to the
+antenna.
 The function~$f$ is a mess because the supports of the chirps overlap.
 However, by correlating~$f$ with the original chirp~$h$ and
 using equation~(\ref{eq:sqrt}), we can recover the position and intensity of
@@ -281,6 +285,16 @@ of the chirp.
 		\mathrm{sinc}\paren{ Ky\paren{2T-\abs{y}} }
 	\]
 \end{proof}
+
+\begin{proposition}
+	Let~$h$ be a windowed linear chirp as above, and let~$s_{K,T}(y)=h\star
+	h(y)$.  The following families of functions are approximations of the
+	identity (they converge to~$\delta$ in the sense of distributions):
+	\begin{enumerate}
+		\item For a fixed~$K>0$, the functions~$\varphi_n=s_{K,n}$
+		\item For a fixed~$T>0$, the functions~$\varphi_n=s_{n,Kn}$
+	\end{enumerate}
+\end{proposition}
 
 \subsection{The discrete case}
 
