@@ -4,6 +4,34 @@
 #define FILTER_REF_FREQ 37.53472224
 #define SPEED_OF_LIGHT 299792458
 
+
+struct s1a_unsubcommutated_block { // Subcommutated Data Block
+	union {
+		unsigned char byte[2+64*2];
+		struct __attribute__((packed)) {    // indexed by 16-bit words
+			uint16_t dummy;             // 0
+
+			// P.V.T. ANCILLARY DATA
+			double position[3];         // 1-4, 5-8, 9-12
+			float  velocity[3];         // 13-14, 15-16, 17-18
+			uint16_t GPS_time_POD[4];   // 19-22
+
+			// ATTITUDE ANCILLARY DATA
+			float Q[4];                 // 23-30
+			float w[3];                 // 31-35
+			uint16_t GPS_time_DTS[4];   // 37-40
+			uint16_t pointing_status;   // 41
+
+			// ANTENNA & TGU TEMPERATURE HK DATA
+			uint16_t temp_status;       // 42
+			uint8_t  temp_tile[14][3];  // 43-63
+			uint16_t temp_TGU;          // 64
+		} field;
+	} block;
+
+	int last_idx;
+};
+
 struct s1a_isp { // Instrument Source Packet
 
 	// packet primary header
@@ -104,6 +132,7 @@ struct s1a_isp { // Instrument Source Packet
 	} secondary_header;
 	unsigned char *data;
 	int data_size;
+	struct s1a_unsubcommutated_block SC[1];
 };
 
 struct s1a_file { // Measurement Data Component, page 64
@@ -159,17 +188,6 @@ struct s1a_index_file {
 	struct s1a_index *t;
 };
 
-struct s1a_subcommutated_block {
-	union {
-		unsigned char byte[128];
-		struct __attribute__((packed)) {
-			uint16_t dummy;
-			double position[3];
-			float  velocity[3];
-			uint16_t GPS_time[4];
-		} field;
-	} block;
-};
 
 // s1a_io.c
 void s1a_load_whole_datafile(struct s1a_file *x, char *fname);

@@ -32,7 +32,7 @@ static bool bitstream_pop(struct bitstream *s)
 {
 	// check if there is still available data
 	if (s->byte >= s->total_bytes)
-		fail("got too much bits from a bitstream!");
+		fail("got too many bits from a bitstream!");
 
 	// extract bit
 	bool r = s->data[s->byte] & (1 << (7 - s->bit));

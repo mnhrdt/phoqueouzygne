@@ -2,7 +2,7 @@ CFLAGS  = -march=native -O3 -Wall -Wno-unused
 LDLIBS  = -lfftw3f -lm -ljpeg -lpng -ltiff
 
 OBJ     = s1a_io.o s1a_decode.o s1a_focus.o iio.o
-BIN     = dump_headers decode_line extract_img btt
+BIN     = dump_headers decode_line extract_img unsubcommutate btt
 
 default : $(BIN)
 

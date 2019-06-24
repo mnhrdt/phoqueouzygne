@@ -89,6 +89,7 @@ static long get_file_size(FILE *f)
 
 void s1a_load_whole_datafile_trunc(struct s1a_file *x, char *fname, int max_rec)
 {
+	// TODO: load only the required part of the file, using the "index" file
 	FILE *f = xfopen(fname, "r");
 	long sf = get_file_size(f);
 
