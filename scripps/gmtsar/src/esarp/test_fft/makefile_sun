@@ -1,9 +1,0 @@
-#
-SLIB = ../../../lib/sun4/libgmtsar.a
-LIBS = -lm -xlic_lib=sunperf -lsunmath -lF77
-CFLAGS = -O -dalign -Bstatic
-ld = /usr/ucb/ld
-
-testcfft1d:	testcfft1d.o
-	cc $(CFLAGS) testcfft1d.o $(SLIB) $(LIBS) -lm -o testcfft1d
-	rm -f *.o

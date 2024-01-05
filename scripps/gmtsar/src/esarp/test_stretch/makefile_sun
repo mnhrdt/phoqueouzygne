@@ -1,9 +1,0 @@
-#
-SLIB = ../../../lib/sun4/libsiosar.a
-LIBS = -lm -xlic_lib=sunperf -lsunmath -lF77
-CFLAGS = -O -dalign -Bstatic
-ld = /usr/ucb/ld
-
-test_aastretch:	test_aastretch.o aastretch.o
-	cc $(CFLAGS) test_aastretch.o aastretch.o $(SLIB) $(LIBS) -lm -o test_aastretch
-	rm -f *.o
