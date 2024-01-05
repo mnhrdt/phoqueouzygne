@@ -196,9 +196,10 @@ int main(int c, char *v[])
 	double V_s = 7500;
 	double V_g = 0.88 * V_s;
 	double V_r = sqrt(V_s*V_g); // TODO: obtain from metadata
-	for (int j = wmin; j < wmax; j++)
+	//for (int j = wmin; j < wmax; j++)
+	for (int j = 0; j < h; j++)
 	{
-		double tau = tau0 + j / Fr; // 6-37 (contains ERROR)
+		double tau = tau0 + (j + n_first) / Fr; // 6-37 (contains ERROR)
 		double R = tau * SPEED_OF_LIGHT / 2.0;
 
 		// Compute the azimuth frequency vector AFV
