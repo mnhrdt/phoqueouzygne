@@ -1,0 +1,3 @@
+
+Other people are playing with L0 images, this is the one that seems to have
+gone further: https://github.com/jmfriedt/sentinel1_level0
