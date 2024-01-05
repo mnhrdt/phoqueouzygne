@@ -1,6 +1,8 @@
 CMLA experiments with focusing
 ==============================
 
+The goal of this repository is to gather some experiments with decoding and
+focusing sentinel 1 raw data.
+
 doc      miscellaneous documentation
-scripps  SAR focusing code from Scripps Institution of Oceanography
 src      source code of CMLA experiments
