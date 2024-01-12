@@ -1,10 +1,14 @@
 to test, you only need the raw.dat image
 
-./extract_img raw.dat 3000 4000
+./extract_img raw.dat 3000 4000 -x x.npy -z z.npy
 
-creates the following images, corresponding to records 3000-4000
+creates the following two complex images, corresponding to records 3000-4000
 
-x_real.tiff  # raw data, real part
-x_imag.tiff  # raw data, imaginary part
-x_norm.tiff  # raw data, norm
-y_norm.tiff  # focused data, norm
+x.npy : raw data (decoded)
+z.npy : horizontal focused raw data
+
+
+
+to extract the whole medatada series (one datum per record):
+
+./dump_headers img.dat annot.dat index.dat dummy > metadata.txt
