@@ -1,6 +1,16 @@
-to test, you only need the raw.dat image
+to decode some lines from the the L0 datum
+------------------------------------------
 
-./extract_img raw.dat 3000 4000 -x x.npy -z z.npy
+Only decoding, no focusing attempts:
+
+	./decode_only 3000 4000 img.dat lines.npy
+
+
+
+to try the focusing, you only need the raw.dat image
+----------------------------------------------------
+
+	./extract_img raw.dat 3000 4000 -x x.npy -z z.npy
 
 creates the following two complex images, corresponding to records 3000-4000
 
@@ -10,5 +20,6 @@ z.npy : horizontal focused raw data
 
 
 to extract the whole medatada series (one datum per record):
+------------------------------------------------------------
 
-./dump_headers img.dat annot.dat index.dat dummy > metadata.txt
+	./dump_headers img.dat annot.dat index.dat dummy > metadata.txt
