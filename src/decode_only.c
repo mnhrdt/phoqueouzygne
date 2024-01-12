@@ -83,10 +83,7 @@ int main(int c, char *v[])
 	int w = 2 * max_nq;
 	int h = 1 + n_last - n_first;
 	complex float *x = xmalloc(w * h * sizeof*x);
-	complex float *y = xmalloc(w * h * sizeof*y);
-	complex float *Y = xmalloc(w * h * sizeof*y);
-	complex float *z = xmalloc(w * h * sizeof*z);
-	for (int i = 0; i < w*h; i++) x[i] = y[i] = Y[i] = z[i] = 0;
+	for (int i = 0; i < w*h; i++) x[i] = 0;
 
 
 	// debug focusing parameters
@@ -110,7 +107,7 @@ int main(int c, char *v[])
 	// decode lines (RANGE FOCUSING)
 	//fprintf(stderr, "w = %d\n", w);
 	for (int i = 0; i < h; i++)
-		s1a_decode_line_fancy(x + w*i,
+		s1a_decode_line_fancy(x + w*(long)i,
 				//x_block + w*i, x_brc   + w*i, x_thidx + w*i,
 				NULL, NULL, NULL,
 				f->t + n_first + i);
